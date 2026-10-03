@@ -87,6 +87,8 @@ h3{margin:0 0 6px;font-size:17px}
   border:1px solid rgba(255,255,255,.08);position:relative;overflow:hidden}
 .dayhead:after{content:"";position:absolute;left:-30px;bottom:-30px;width:140px;height:140px;border-radius:50%;
   border:2px solid rgba(217,180,74,.25)}
+.wx{position:absolute;left:12px;top:12px;z-index:2;display:flex;align-items:center;gap:6px;background:rgba(10,22,51,.65);border:1px solid rgba(217,180,74,.45);border-radius:999px;padding:5px 11px;color:#fff;text-decoration:none;font-weight:700;font-size:14px;direction:ltr;-webkit-tap-highlight-color:transparent}
+.wx .e{font-size:20px;line-height:1}.wx:active{transform:scale(.96)}.wx.old{opacity:.8}
 .dayhead .num{font-size:12px;color:var(--gold2);font-weight:700;letter-spacing:.1em}
 .dayhead .ttl{font-size:24px;font-weight:900;margin:2px 0}
 .dayhead .dt{color:var(--muted);font-size:14px}
@@ -208,8 +210,15 @@ h3{margin:0 0 6px;font-size:17px}
 
 .ballegg{position:absolute;top:14px;left:14px;width:30px;height:30px;color:rgba(243,210,122,.55);background:none;border:0;padding:0;z-index:2}
 .ballegg svg{width:100%;height:100%}
-.ov{position:fixed;inset:0;z-index:60;display:flex;flex-direction:column;align-items:center;justify-content:safe center;overflow-y:auto;text-align:center;padding:24px;direction:rtl;background:rgba(6,12,30,.93);color:#fff}
+.ov{position:fixed;inset:0;z-index:60;display:flex;flex-direction:column;align-items:center;justify-content:safe center;overflow-y:auto;text-align:center;padding:24px;direction:rtl;background:rgba(6,12,30,.98);color:#fff}
 .ov h2{font-size:30px;margin:10px 0}
+.gframe{position:relative;margin:6px auto 14px;width:230px;padding:7px;border-radius:18px;background:linear-gradient(145deg,#f3d27a,#b98a2c 45%,#f3d27a);box-shadow:0 0 0 1px rgba(255,236,170,.35),0 10px 34px rgba(217,180,74,.28),0 4px 14px rgba(0,0,0,.6);display:none;animation:gfade .9s ease both}
+.gframe:before{content:"";position:absolute;inset:3px;border-radius:15px;border:1px solid rgba(10,22,51,.55);pointer-events:none;z-index:2}
+.gframe .mat{border-radius:12px;padding:4px;background:#0a1633}
+.gframe img{display:block;width:100%;height:auto;border-radius:9px}
+.gframe i{position:absolute;width:11px;height:11px;background:#fff3c4;border:1px solid #b98a2c;transform:rotate(45deg);z-index:3;border-radius:2px}
+.gframe i:nth-of-type(1){top:-5px;left:-5px}.gframe i:nth-of-type(2){top:-5px;right:-5px}.gframe i:nth-of-type(3){bottom:-5px;left:-5px}.gframe i:nth-of-type(4){bottom:-5px;right:-5px}
+@keyframes gfade{from{opacity:0;transform:translateY(8px) scale(.97)}to{opacity:1;transform:none}}
 .ov p{font-size:18px;line-height:1.7;max-width:340px;white-space:pre-line}
 .ov .btn{margin-top:20px;display:inline-flex}
 #cfv{position:fixed;inset:0;z-index:70;pointer-events:none;width:100%;height:100%}
@@ -553,6 +562,7 @@ details.st ol{margin:0 0 12px;padding-inline-start:22px;line-height:1.75;font-si
     <div class="panel cl" id="packList">
       <h3>🎒 רשימת אריזה</h3>
     </div>
+  <button class="surbtn" id="surBtn">💌 הברכה של אבא ואמא</button>
   </section>
 
   <!-- ====== FOOD ====== -->
@@ -572,7 +582,6 @@ details.st ol{margin:0 0 12px;padding-inline-start:22px;line-height:1.75;font-si
   </section>
 
   <button class="surbtn" id="eggBtn">🥚 כל ה-Easter eggs</button>
-  <button class="surbtn" id="surBtn">💌 הברכה של אבא ואמא</button>
   <div id="syncLine" style="text-align:center;font-size:12px;color:var(--muted);padding:6px 0;cursor:pointer"></div>
   <div class="foot">נבנה באהבה לבר המצווה של נועם ⚽<br>כל השעות לפי שעון מדריד, אלא אם כתוב אחרת.<br>האפליקציה היא מעריץ של הקבוצה ולא אתר רשמי שלה.</div>
 </main>
@@ -841,13 +850,44 @@ function actsHTML(key,nav,cal,isDone){
     ${cal?`<a class="btn cal" target="_blank" rel="noopener" href="${cal}">${ico('cal')}ליומן</a>`:''}
     <button class="btn chk" data-k="${key}">${ico('check')}${isDone?'בוצע!':'סמן כבוצע'}</button></div>`;
 }
+/* ---------- weather (Open-Meteo, cached) ---------- */
+const WX_URL='https://www.google.com/search?q='+encodeURIComponent('מזג אוויר מדריד');
+function wxInfo(c){
+  if(c===0)return['☀️','שמשי'];if(c<=2)return['⛅','מעונן חלקית'];if(c===3)return['☁️','מעונן'];
+  if(c===45||c===48)return['🌫️','ערפל'];if(c>=51&&c<=57)return['🌦️','טפטוף'];
+  if((c>=61&&c<=67)||(c>=80&&c<=82))return['🌧️','גשם'];if((c>=71&&c<=77)||c===85||c===86)return['❄️','שלג'];
+  if(c>=95)return['⛈️','סופת רעמים'];return['🌡️','מזג אוויר'];
+}
+function wxHTML(date){
+  const w=store.get('wx',null),x=w&&w.days&&w.days[date];if(!x)return'';
+  const i=wxInfo(x.c),when=new Date(w.ts).toLocaleString('he-IL',{day:'numeric',month:'numeric',hour:'2-digit',minute:'2-digit'});
+  return `<a class="wx${Date.now()-w.ts>6*3600e3?' old':''}" data-date="${date}" href="${WX_URL}" target="_blank" rel="noopener" title="${i[1]} · עודכן ${when}"><span class="e">${i[0]}</span><span>${Math.round(x.max)}°</span></a>`;
+}
+function wxPaint(){
+  document.querySelectorAll('.wx').forEach(a=>a.remove());
+  const h=document.querySelector('.dayhead');const d=DAYS.find(x=>x.id===window.__day);
+  if(h&&d){const t=document.createElement('div');t.innerHTML=wxHTML(d.date);if(t.firstChild)h.insertBefore(t.firstChild,h.firstChild)}
+}
+async function wxSync(){
+  try{
+    const ac=new AbortController();const to=setTimeout(()=>ac.abort(),8000);
+    const r=await fetch('https://api.open-meteo.com/v1/forecast?latitude=40.4168&longitude=-3.7038&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=Europe%2FMadrid&start_date='+DAYS[0].date+'&end_date='+DAYS[DAYS.length-1].date,{signal:ac.signal});clearTimeout(to);
+    if(!r.ok)throw 0;const j=await r.json(),D=j.daily,old=store.get('wx',{days:{}}),days=Object.assign({},old.days||{});
+    D.time.forEach((t,i)=>{days[t]={c:D.weather_code[i],max:D.temperature_2m_max[i],min:D.temperature_2m_min[i]}});
+    store.set('wx',{ts:Date.now(),days});wxPaint();
+  }catch(e){/* offline or blocked: keep the last saved forecast */}
+}
+function wxInit(){
+  wxSync();setInterval(()=>{if(document.visibilityState==='visible')wxSync()},1800000);
+  document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')wxSync()});
+}
 function renderDay(id){
   window.__day=id;renderChips(id);
   const d=DAYS.find(x=>x.id===id)||DAYS[0];
   const dt=new Date(d.date+'T12:00:00');
   const dateStr=dt.toLocaleDateString('he-IL',{weekday:'long',day:'numeric',month:'long'});
   const st=STATUS[d.status];
-  let h=`<div class="dayhead"><div class="num">${d.num} מתוך 6</div><div class="ttl">${d.title}</div><div class="dt">${dateStr}</div>
+  let h=`<div class="dayhead">${wxHTML(d.date)}<div class="num">${d.num} מתוך 6</div><div class="ttl">${d.title}</div><div class="dt">${dateStr}</div>
     <span class="badge ${st[0]}">${st[1]}</span></div>`;
   if(d.alert)h+=`<div class="alert">${d.alert}</div>`;
   if(d.tipText)h+=`<div class="tip">${d.tipText}</div>`;
@@ -1096,12 +1136,24 @@ function kickCheck(){
   }
 }
 /* 5: parents' surprise, unlocked after landing */
-const SUR_ENC='15HXqNeb15Qg157XkNeR15Ag15XXkNee15A6INee15bXnCDXmNeV15Eg16DXldei150hINeQ16DXl9eg15Ug15LXkNeZ150g15HXmiDXnteQ15XXky4g8J+SmQ==';
+const SUR_ENC='16DXldei157Xmden15Ug15fXnteV15Mg16nXnNeg15UhIOKdpO+4j+KciO+4jwoK15DXoNeX16DXlSDXqNeV16bXmdedINec15DXl9ecINec15og15jXmdeV15wg157XlNeg15Qg15XXl9eV15XXmdeUINeR15zXqteZINeg16nXm9eX16ouCgrXqteZ15TXoNeULCDXqteW16jXldedLCDXldeq15bXm9eV16gg16nXm9ecINeU157XodeiINeU15bXlCDXlNeV15Ag15vXldec15Ug15zXm9eR15XXk9eaIOKAkyDXldeW15Qg157XntepINec15Ag157XldeR158g157XkNec15nXlSEg15DXqteUINeW15XXm9eUINec16LXqdeV16og15DXqiDXlNeY15nXldecINeU157XmNeV16jXoyDXlNeW15Qg16LXnSDXodeR15Ag16DXmdeh158g15XXodeR16rXkCDXk9ec15nXlCwg15DXliDXqteg16bXnNeVINeb15wg16jXkteiLCDXqtem15HXqNeVINeX15XXldeZ15XXqiDXldeq15HXmdeQ15Ug15DXmdeq15vXnSDXlNee15XXnyDXlteZ15vXqNeV16DXldeqINee16rXlden15nXnSAo15XXkNecINeq16TXodeZ16fXlSDXnNeU16rXqNeS16kg15HXodeg15jXmdeQ15LXlSDXkdeo16DXkdeQ15UhIOKavfCflKUpLgoK15DXldeU15HXmdedINeQ15XXqteaINeU157XldefINeU157XldefLCDXldee15fXm9eZ150g15vXkdeoINec16nXnteV16Ig15fXldeV15nXldeqIQoK15DXlCwg15XXm9ee15XXkdefLi4uINeU15DXnNeUINee15PXqNeZ15MhIOKaqu+4j/Cfh6rwn4e4CgrXkdeX15nXkdeV16cg15XXkdeQ15TXkdeUINei16DXp9eZ16oK15DXnteQINeV15DXkdeQ';
 const SUR_AT=LAND_HOME;
 function surText(){try{return decodeURIComponent(escape(atob(SUR_ENC)))}catch(e){return ''}}
 function surShow(first){
   if(first){confetti(160);whistle()}
-  overlay('<div style="font-size:56px">💌</div><h2>מזל טוב, נועם!</h2><p>'+surText().replace(/</g,'&lt;')+'</p><button class="btn gold" data-close>סגירה</button>');
+  overlay('<div style="font-size:56px">💌</div><h2>מזל טוב, נועם!</h2>'+(GR_IMG?'<div class="gframe" id="grFrame"><i></i><i></i><i></i><i></i><div class="mat"><img id="grImg" alt=""></div></div>':'')+'<p>'+surText().replace(/</g,'&lt;')+'</p><button class="btn gold" data-close>סגירה</button>');
+  greetImg();
+}
+const GR_IMG='./greeting.dat';
+async function greetImg(){
+  if(!GR_IMG)return;
+  try{
+    const r=await fetch(GR_IMG);if(!r.ok)throw 0;
+    const k='madrid-noam-2026',t=atob((await r.text()).trim()),u=new Uint8Array(t.length);
+    for(let i=0;i<t.length;i++)u[i]=t.charCodeAt(i)^k.charCodeAt(i%k.length);
+    const img=document.getElementById('grImg'),fr=document.getElementById('grFrame');if(!img||!fr)return;
+    img.onload=()=>{fr.style.display='block'};img.src=URL.createObjectURL(new Blob([u],{type:'image/jpeg'}));
+  }catch(e){/* no image: the greeting still shows */}
 }
 const QUIZ_AT=new Date('2026-10-13T05:30:00+02:00');
 function eggMenu(){
@@ -1211,7 +1263,8 @@ function syncInit(){
 
 /* ---------- INIT ---------- */
 (function(){
-  syncInit();
+  syncInit();wxInit();
+  try{if(new URLSearchParams(location.search).get('preview')==='dad2026')setTimeout(()=>surShow(false),700)}catch(e){}
   const today=madridToday();
   const todayDay=DAYS.find(d=>d.date===today);
   renderDay(todayDay?todayDay.id:store.get('day','d1'));
