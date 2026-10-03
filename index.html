@@ -1136,7 +1136,7 @@ document.getElementById('surBtn').onclick=()=>surShow(false);
 setInterval(()=>{kickCheck();quizCheck();surCheck()},1000);kickCheck();quizCheck();surCheck();
 
 /* ---------- SYNC (Google Sheet, optional) ---------- */
-const SHEET_URL='';
+const SHEET_URL='./content.dat';
 (function(){DAYS.forEach(d=>d.items.forEach((it,i)=>{const k=d.id+'_'+i;if(ALTS[k])it.altkey=k}))})();
 function parseCSV(t){
   const rows=[];let r=[],f='',q=false;
@@ -1182,13 +1182,15 @@ function rerender(){
   const ids=DAYS.map(d=>d.id);const cur=ids.includes(window.__day)?window.__day:ids[0];
   renderDay(cur);renderMeals();
 }
+function decDat(b){const k='madrid-noam-2026',t=atob(b.trim()),u=new Uint8Array(t.length);for(let i=0;i<t.length;i++)u[i]=t.charCodeAt(i)^k.charCodeAt(i%k.length);return new TextDecoder().decode(u)}
 async function syncNow(manual){
   if(!SHEET_URL)return;
   try{
     const ac=new AbortController();const to=setTimeout(()=>ac.abort(),8000);
     const res=await fetch(SHEET_URL+(SHEET_URL.includes('?')?'&':'?')+'_='+Date.now(),{cache:'no-store',signal:ac.signal});clearTimeout(to);
     if(!res.ok)throw new Error('http '+res.status);
-    const text=await res.text();
+    let text=await res.text();
+    if(/\.dat($|\?)/.test(SHEET_URL))text=decDat(text);
     const cache=store.get('sheet',null);
     if(!cache||cache.text!==text){applySheet(text);store.set('sheet',{ts:Date.now(),text});rerender();if(cache)toast('הלוז עודכן ✔')}
     else store.set('sheet',{ts:Date.now(),text});
