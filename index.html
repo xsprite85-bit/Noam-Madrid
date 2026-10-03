@@ -1,0 +1,1222 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0a1633">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="מדריד של נועם">
+<title>מדריד של נועם</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme:dark;
+  --navy:#0a1633; --navy2:#12224a; --navy3:#1b2f5e;
+  --gold:#d9b44a; --gold2:#f3d27a; --white:#ffffff; --cream:#f6f3ea;
+  --muted:#9fb0d4; --pitch:#1f7a46; --red:#e2554f; --ok:#3ccf7a;
+  --card:#ffffff; --ink:#0d1a38; --ink2:#4a5878;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{
+  font-family:"Rubik",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+  background:var(--navy); color:var(--white);
+  background-image:
+    radial-gradient(120% 60% at 15% -10%, rgba(243,210,122,.18), transparent 60%),
+    radial-gradient(120% 60% at 85% -10%, rgba(255,255,255,.10), transparent 55%),
+    linear-gradient(180deg,#0a1633 0%,#0d1c40 60%,#0a1633 100%);
+  background-attachment:fixed; min-height:100vh;
+  padding-bottom:calc(84px + env(safe-area-inset-bottom));
+}
+a{color:inherit}
+.wrap{max-width:560px;margin:0 auto;padding:0 16px}
+svg.i{width:22px;height:22px;flex:none}
+
+/* HERO */
+.hero{position:relative;padding:22px 0 18px;text-align:center;overflow:hidden}
+.lights{position:absolute;inset:0;pointer-events:none}
+.lights span{position:absolute;top:-40px;width:140px;height:260px;
+  background:linear-gradient(180deg,rgba(255,255,255,.22),transparent 70%);
+  filter:blur(6px);transform-origin:top center}
+.lights span:nth-child(1){right:-20px;transform:rotate(28deg)}
+.lights span:nth-child(2){left:-20px;transform:rotate(-28deg)}
+.crown{width:64px;height:48px;margin:0 auto 4px;display:block;filter:drop-shadow(0 4px 10px rgba(217,180,74,.45))}
+.kicker{letter-spacing:.35em;font-size:12px;color:var(--gold2);font-weight:700}
+h1{margin:4px 0 2px;font-size:34px;font-weight:900;line-height:1.05}
+h1 em{font-style:normal;color:var(--gold)}
+.sub{color:var(--muted);font-size:14px}
+.hala{display:inline-block;margin-top:10px;font-weight:900;letter-spacing:.12em;font-size:13px;
+  padding:6px 14px;border:1.5px solid var(--gold);border-radius:999px;color:var(--gold2)}
+
+/* SCOREBOARD */
+.board{margin:16px 0 4px;background:linear-gradient(180deg,#071026,#0f1f47);border:1px solid rgba(217,180,74,.45);
+  border-radius:18px;padding:14px 12px;box-shadow:0 10px 30px rgba(0,0,0,.35), inset 0 0 0 1px rgba(255,255,255,.04)}
+.board .lbl{font-size:13px;color:var(--gold2);font-weight:700;margin-bottom:8px}
+.digits{display:flex;justify-content:center;gap:8px;direction:ltr}
+.dg{min-width:62px;background:#030a1c;border-radius:10px;padding:8px 4px 6px;border:1px solid #1d2d57}
+.dg b{display:block;font-size:30px;font-weight:900;font-variant-numeric:tabular-nums;color:#fff;
+  text-shadow:0 0 12px rgba(243,210,122,.5)}
+.dg small{font-size:11px;color:var(--muted)}
+.board .note{font-size:12px;color:var(--muted);margin-top:8px}
+
+/* SECTIONS */
+.view{display:none;animation:fade .25s ease}
+.view.on{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+h2{font-size:22px;margin:20px 0 10px;display:flex;align-items:center;gap:8px}
+h2 svg{color:var(--gold)}
+h3{margin:0 0 6px;font-size:17px}
+
+/* DAY CHIPS */
+.chips{display:flex;gap:8px;overflow-x:auto;padding:4px 0 10px;scrollbar-width:none;margin:0 -16px;padding-inline:16px}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;border:1.5px solid #2a3d70;background:var(--navy2);color:#fff;border-radius:14px;padding:8px 12px;
+  font:inherit;font-size:13px;cursor:pointer;text-align:center;min-width:76px}
+.chip b{display:block;font-size:15px}
+.chip.on{background:linear-gradient(180deg,var(--gold2),var(--gold));color:var(--navy);border-color:var(--gold)}
+.chip .dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--ok);margin-inline-start:4px;vertical-align:middle}
+.chip .dot.draft{background:#f0a23b}
+
+.dayhead{background:linear-gradient(135deg,var(--navy3),var(--navy2));border-radius:20px;padding:16px;
+  border:1px solid rgba(255,255,255,.08);position:relative;overflow:hidden}
+.dayhead:after{content:"";position:absolute;left:-30px;bottom:-30px;width:140px;height:140px;border-radius:50%;
+  border:2px solid rgba(217,180,74,.25)}
+.dayhead .num{font-size:12px;color:var(--gold2);font-weight:700;letter-spacing:.1em}
+.dayhead .ttl{font-size:24px;font-weight:900;margin:2px 0}
+.dayhead .dt{color:var(--muted);font-size:14px}
+.badge{display:inline-block;font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;margin-top:8px}
+.badge.final{background:rgba(60,207,122,.15);color:#7fe8a8;border:1px solid rgba(60,207,122,.4)}
+.badge.partial{background:rgba(240,162,59,.15);color:#ffc77a;border:1px solid rgba(240,162,59,.45)}
+.badge.draft{background:rgba(240,162,59,.15);color:#ffc77a;border:1px solid rgba(240,162,59,.45)}
+
+.alert{margin-top:12px;background:rgba(226,85,79,.12);border:1px solid rgba(226,85,79,.45);color:#ffd2cf;
+  border-radius:14px;padding:10px 12px;font-size:14px;line-height:1.5}
+.tip{margin-top:12px;background:rgba(217,180,74,.12);border:1px solid rgba(217,180,74,.4);color:#f8e7b5;
+  border-radius:14px;padding:10px 12px;font-size:14px;line-height:1.5}
+
+/* TIMELINE */
+.tl{position:relative;margin:16px 0 0;padding:0}
+.tl:before{content:"";position:absolute;right:27px;top:6px;bottom:6px;width:2px;
+  background:repeating-linear-gradient(180deg,rgba(255,255,255,.25) 0 6px,transparent 6px 12px)}
+.it{position:relative;display:flex;gap:12px;margin-bottom:12px}
+.it .ic{width:56px;flex:none;display:flex;flex-direction:column;align-items:center;z-index:1}
+.it .bub{width:40px;height:40px;border-radius:50%;background:var(--navy);border:2px solid var(--gold);
+  display:flex;align-items:center;justify-content:center;color:var(--gold2)}
+.it.done .bub{background:var(--ok);border-color:var(--ok);color:var(--navy)}
+.it .tm{font-size:12px;font-weight:700;margin-top:4px;color:var(--gold2);font-variant-numeric:tabular-nums;direction:ltr}
+.card{flex:1;background:var(--card);color:var(--ink);border-radius:16px;padding:12px 14px;
+  box-shadow:0 6px 18px rgba(0,0,0,.25)}
+.it.sug .card{background:#eef1f8;border:1.5px dashed #9aa7c7}
+.it.done .card{opacity:.6}
+.card .t{font-weight:700;font-size:16px;line-height:1.3}
+.card .d{font-size:14px;color:var(--ink2);margin-top:4px;line-height:1.5}
+.card .tz{font-size:11px;color:#7b88a8;margin-top:4px}
+.tag{display:inline-block;font-size:11px;font-weight:700;background:#ffe2b8;color:#8a4b00;border-radius:6px;padding:1px 7px;margin-inline-start:6px;vertical-align:middle}
+.acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.btn{display:inline-flex;align-items:center;gap:6px;border:none;cursor:pointer;font:inherit;font-size:13px;font-weight:700;
+  border-radius:10px;padding:8px 12px;text-decoration:none}
+.btn svg{width:16px;height:16px}
+.btn.nav{background:var(--navy);color:#fff}
+.btn.chk{background:#e8edf7;color:var(--ink)}
+.it.done .btn.chk{background:var(--ok);color:var(--navy)}
+.btn.gold{background:linear-gradient(180deg,var(--gold2),var(--gold));color:var(--navy)}
+.btn.ghost{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.35)}
+
+/* PANELS */
+.panel{background:var(--card);color:var(--ink);border-radius:18px;padding:16px;margin-bottom:12px;box-shadow:0 6px 18px rgba(0,0,0,.25)}
+.panel.dark{background:var(--navy2);color:#fff;border:1px solid rgba(255,255,255,.08)}
+.row{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px solid #e6eaf3;font-size:14px}
+.panel.dark .row{border-color:rgba(255,255,255,.1)}
+.row:last-child{border:none}
+.row span:first-child{color:var(--ink2)}
+.panel.dark .row span:first-child{color:var(--muted)}
+.row span:last-child{font-weight:700;text-align:left}
+.ltr{direction:ltr;unicode-bidi:isolate}
+
+/* MATCH */
+.match{background:
+  repeating-linear-gradient(90deg,#1e7b45 0 34px,#23884d 34px 68px);
+  border-radius:20px;padding:18px 14px;position:relative;overflow:hidden;border:2px solid rgba(255,255,255,.6)}
+.match:before{content:"";position:absolute;inset:10px;border:2px solid rgba(255,255,255,.55);border-radius:10px;pointer-events:none}
+.match:after{content:"";position:absolute;top:50%;left:50%;width:90px;height:90px;margin:-45px 0 0 -45px;
+  border:2px solid rgba(255,255,255,.55);border-radius:50%;pointer-events:none}
+.vs{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:8px;text-align:center}
+.team{flex:1}
+.shirt{width:60px;height:60px;margin:0 auto 6px;display:block;filter:drop-shadow(0 4px 6px rgba(0,0,0,.35))}
+.team b{font-size:17px;display:block}
+.vsb{font-weight:900;font-size:20px;background:var(--navy);color:var(--gold2);border-radius:12px;padding:8px 10px;border:2px solid var(--gold)}
+.kick{position:relative;z-index:1;text-align:center;margin-top:14px;font-weight:700;background:rgba(10,22,51,.85);
+  border-radius:12px;padding:8px;font-size:15px}
+.kick small{display:block;font-weight:400;color:var(--muted);font-size:12px}
+
+/* MISSIONS */
+.progress{height:12px;background:#0a1633;border-radius:999px;overflow:hidden;border:1px solid #2a3d70}
+.progress i{display:block;height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));width:0;transition:width .4s}
+.mis{display:flex;align-items:center;gap:12px;background:var(--navy2);border:1px solid rgba(255,255,255,.08);
+  border-radius:14px;padding:12px;margin-bottom:8px;cursor:pointer;user-select:none}
+.mis .st{width:38px;height:38px;flex:none;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  border:2px solid #3a4f86;color:#3a4f86}
+.mis.on .st{background:var(--gold);border-color:var(--gold);color:var(--navy);animation:pop .35s}
+@keyframes pop{50%{transform:scale(1.25)}}
+.mis .tx b{display:block;font-size:15px}
+.mis .tx small{color:var(--muted);font-size:13px}
+.trophy{text-align:center;padding:10px 0}
+.trophy svg{width:70px;height:70px;color:var(--gold)}
+
+/* PHRASES */
+.ph{display:flex;align-items:center;gap:10px;background:var(--card);color:var(--ink);border-radius:14px;padding:10px 12px;margin-bottom:8px}
+.ph .tx{flex:1}
+.ph .he{font-size:13px;color:var(--ink2)}
+.ph .es{font-size:17px;font-weight:700;direction:ltr;text-align:right}
+.ph .pr{font-size:13px;color:#7a5a00}
+.say{width:42px;height:42px;border-radius:50%;border:none;background:var(--navy);color:var(--gold2);display:flex;align-items:center;justify-content:center;cursor:pointer;flex:none}
+.say svg{width:20px;height:20px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tbtn{display:flex;flex-direction:column;gap:4px;align-items:flex-start;text-decoration:none;background:linear-gradient(160deg,var(--navy3),var(--navy2));
+  border:1.5px solid rgba(217,180,74,.5);border-radius:16px;padding:14px;color:#fff}
+.tbtn b{font-size:16px}
+.tbtn small{color:var(--muted);font-size:12px}
+.tbtn svg{color:var(--gold2)}
+
+/* CHECKLIST */
+.cl label{display:flex;gap:10px;align-items:center;padding:9px 0;border-bottom:1px solid #e6eaf3;font-size:15px}
+.cl label:last-child{border:none}
+.cl input{width:20px;height:20px;accent-color:var(--navy)}
+
+/* NAV */
+.bnav{position:fixed;bottom:0;left:0;right:0;z-index:20;background:rgba(7,14,34,.96);backdrop-filter:blur(10px);
+  border-top:1px solid rgba(217,180,74,.35);padding:6px 6px calc(6px + env(safe-area-inset-bottom))}
+.bnav .in{max-width:560px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr)}
+.bnav button{background:none;border:none;color:var(--muted);font:inherit;font-size:11px;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 0;cursor:pointer}
+.bnav button.on{color:var(--gold2)}
+.bnav button.on svg{filter:drop-shadow(0 0 6px rgba(243,210,122,.6))}
+.foot{text-align:center;color:var(--muted);font-size:12px;margin:24px 0 10px;line-height:1.6}
+.toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(20px);opacity:0;background:var(--gold);color:var(--navy);
+  font-weight:700;padding:10px 18px;border-radius:999px;transition:.3s;z-index:30;pointer-events:none;white-space:nowrap}
+.toast.on{opacity:1;transform:translateX(-50%)}
+.crown.pop{animation:cpop .28s ease-out;filter:drop-shadow(0 0 calc(var(--n,0)*5px) rgba(243,210,122,.95))}
+@keyframes cpop{0%{transform:scale(1)}40%{transform:scale(calc(1.12 + var(--n,0)*.07)) rotate(calc(var(--n,0)*-2deg))}100%{transform:scale(1)}}
+.hala.pop{animation:hpop .28s ease-out;text-shadow:0 0 calc(var(--n,0)*6px) rgba(243,210,122,.95)}
+@keyframes hpop{40%{transform:scale(calc(1.08 + var(--n,0)*.04))}}
+.hala{cursor:pointer;-webkit-tap-highlight-color:transparent}.crown{-webkit-tap-highlight-color:transparent}
+
+.ballegg{position:absolute;top:14px;left:14px;width:30px;height:30px;color:rgba(243,210,122,.55);background:none;border:0;padding:0;z-index:2}
+.ballegg svg{width:100%;height:100%}
+.ov{position:fixed;inset:0;z-index:60;display:flex;flex-direction:column;align-items:center;justify-content:safe center;overflow-y:auto;text-align:center;padding:24px;direction:rtl;background:rgba(6,12,30,.93);color:#fff}
+.ov h2{font-size:30px;margin:10px 0}
+.ov p{font-size:18px;line-height:1.7;max-width:340px;white-space:pre-line}
+.ov .btn{margin-top:20px;display:inline-flex}
+#cfv{position:fixed;inset:0;z-index:70;pointer-events:none;width:100%;height:100%}
+.gm{position:fixed;inset:0;z-index:65;background:linear-gradient(#0a1633,#1f7a46);touch-action:none;direction:ltr}
+.gm .sc{position:absolute;top:16px;left:0;right:0;text-align:center;font-size:44px;font-weight:900;color:#fff}
+.gm .bs{position:absolute;top:70px;left:0;right:0;text-align:center;font-size:15px;color:var(--gold2)}
+.gm .bl{position:absolute;width:56px;height:56px;color:#fff}
+.gm .cl{position:absolute;top:14px;right:14px;background:rgba(255,255,255,.15);color:#fff;border:0;border-radius:999px;padding:8px 14px;font:inherit;font-weight:700}
+.gm .hn{position:absolute;bottom:40px;left:0;right:0;text-align:center;color:rgba(255,255,255,.7);font-size:15px;direction:rtl}
+body.night{background:#030814!important}
+body.night .hero{box-shadow:inset 0 0 120px rgba(217,180,74,.35)}
+body.night .board{box-shadow:0 0 40px rgba(243,210,122,.6)}
+body.flash{animation:fl .6s 3}
+@keyframes fl{50%{filter:brightness(1.6) saturate(1.4)}}
+.mis.secret .tx b:before{content:"🔓 "}
+.surbtn{display:none;margin:10px auto 0;background:rgba(217,180,74,.15);border:1px solid var(--gold);color:var(--gold2);border-radius:999px;padding:8px 16px;font:inherit;font-weight:700}
+
+.btn.cal{background:transparent;border:1.5px solid #c6cfe4;color:var(--ink)}
+.altwrap{flex:1;min-width:0}
+.alts{display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x mandatory;direction:ltr;scrollbar-width:none;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch}
+.alts::-webkit-scrollbar{display:none}
+.slide{flex:0 0 calc(100% - 26px);scroll-snap-align:start;direction:rtl;min-width:0;position:relative}
+.it .card.alt{background:#fff6dc;border:1.5px solid var(--gold)}
+.it .card.alt:before{content:"‹";position:absolute;left:5px;top:50%;transform:translateY(-50%);font-size:26px;line-height:1;color:#a07d10;font-weight:700}
+.tag.alt{background:var(--gold);color:var(--navy);margin-inline:0 6px}
+.chips2{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.tr{font-size:12px;font-weight:700;padding:3px 8px;border-radius:999px;background:#e8edf7;color:var(--ink2)}
+.tr.warn{background:#ffe2b8;color:#8a4b00}
+.tr.good{background:#d8f5e3;color:#0f6a3a}
+.dots{display:flex;justify-content:center;gap:6px;margin-top:6px}
+.dots i{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.3)}
+.dots i.on{background:var(--gold2)}
+.hint{font-size:12px;color:#8a6b10;margin-top:8px;font-weight:700}
+.meal{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid #e6eaf3}
+.meal:last-child{border:none}
+.meal .mt{flex:none;width:60px;font-weight:700;font-size:13px;color:#8a6b10;direction:ltr;text-align:center;padding-top:2px}
+.meal .mx{flex:1;min-width:0}
+.meal .mx b{display:block;font-size:15px}
+.meal .mx span{display:block;font-size:14px;color:var(--ink2);line-height:1.55;margin-top:2px}
+.meal .mx a{display:inline-block;margin-top:6px;font-size:13px;font-weight:700;color:var(--navy);text-decoration:underline}
+.bnav .in{grid-template-columns:repeat(6,1fr)!important}
+
+.seg{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.seg button{flex:1 1 calc(50% - 6px);font:inherit;font-size:13px;font-weight:700;border:1.5px solid #2a3d70;background:var(--navy);color:#fff;border-radius:10px;padding:9px 6px;cursor:pointer}
+.seg button.on{background:linear-gradient(180deg,var(--gold2),var(--gold));color:var(--navy);border-color:var(--gold)}
+textarea.tr{width:100%;min-height:84px;border-radius:12px;border:1.5px solid #2a3d70;background:#fff;color:var(--ink);font:inherit;font-size:16px;padding:10px;resize:vertical;margin-bottom:4px}
+.note{font-size:13px;line-height:1.6;margin-top:10px}
+.panel .note{color:var(--ink2)}
+.panel.dark .note{color:var(--muted)}
+details.st{border-bottom:1px solid #e6eaf3}
+details.st:last-of-type{border:none}
+details.st summary{cursor:pointer;font-weight:700;padding:12px 0;font-size:15px}
+details.st ol{margin:0 0 12px;padding-inline-start:22px;line-height:1.75;font-size:14px;color:var(--ink2)}
+.panel.dark details.st{border-color:rgba(255,255,255,.1)}
+.panel.dark details.st ol{color:var(--muted)}
+
+</style>
+</head>
+<body>
+
+<!-- ICON SPRITE (original icons) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="gg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f6dc8e"/><stop offset="1" stop-color="#c99a2e"/></linearGradient>
+  </defs>
+  <symbol id="crown" viewBox="0 0 64 48"><path d="M6 38 2 10l16 12L32 2l14 20 16-12-4 28z" fill="url(#gg)" stroke="#8a6512" stroke-width="2" stroke-linejoin="round"/><rect x="6" y="38" width="52" height="8" rx="2" fill="url(#gg)" stroke="#8a6512" stroke-width="2"/><circle cx="32" cy="27" r="4" fill="#fff"/><circle cx="17" cy="30" r="2.6" fill="#fff"/><circle cx="47" cy="30" r="2.6" fill="#fff"/></symbol>
+  <symbol id="ball" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m12 7 4 3-1.5 4.6h-5L8 10z" fill="currentColor"/><path d="M12 7V2.6M16 10l4.2-1.6M14.5 14.6l2.6 3.8M9.5 14.6l-2.6 3.8M8 10 3.8 8.4" stroke="currentColor" stroke-width="1.6"/></symbol>
+  <symbol id="stadium" viewBox="0 0 24 24"><ellipse cx="12" cy="13" rx="10" ry="5.5" fill="none" stroke="currentColor" stroke-width="1.8"/><ellipse cx="12" cy="13" rx="5" ry="2.4" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M2 13v4c0 3 4.5 5.5 10 5.5S22 20 22 17v-4M5 4v5M19 4v5" stroke="currentColor" stroke-width="1.8" fill="none"/><path d="M3.5 3h3l-1.5 2zM17.5 3h3L19 5z" fill="currentColor"/></symbol>
+  <symbol id="plane" viewBox="0 0 24 24"><path d="M21 15.5v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V8.5l-8 5v2l8-2.5V18l-2 1.5V21l3.5-1 3.5 1v-1.5L13 18v-5z" fill="currentColor"/></symbol>
+  <symbol id="bed" viewBox="0 0 24 24"><path d="M3 19V6M3 14h18v5M21 14v-2a3 3 0 0 0-3-3h-7v5" stroke="currentColor" stroke-width="1.9" fill="none" stroke-linecap="round"/><circle cx="7" cy="11" r="2" fill="currentColor"/></symbol>
+  <symbol id="bus" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="15" rx="3" fill="none" stroke="currentColor" stroke-width="1.9"/><path d="M4 11h16M8 21v-3M16 21v-3" stroke="currentColor" stroke-width="1.9"/><circle cx="8" cy="14.5" r="1.2" fill="currentColor"/><circle cx="16" cy="14.5" r="1.2" fill="currentColor"/></symbol>
+  <symbol id="food" viewBox="0 0 24 24"><path d="M7 2v8a2 2 0 0 0 2 2v10M5 2v6M9 2v6M17 2c-2 2-3 5-3 8h3v12" stroke="currentColor" stroke-width="1.9" fill="none" stroke-linecap="round"/></symbol>
+  <symbol id="bag" viewBox="0 0 24 24"><path d="M5 8h14l-1 13H6zM9 8V6a3 3 0 0 1 6 0v2" stroke="currentColor" stroke-width="1.9" fill="none" stroke-linejoin="round"/></symbol>
+  <symbol id="walk" viewBox="0 0 24 24"><circle cx="13" cy="4" r="2" fill="currentColor"/><path d="m9 22 2-6 3 3v3M10 12l1-4 4 3 3 1M11 8l-4 2-1 4" stroke="currentColor" stroke-width="1.9" fill="none" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="taxi" viewBox="0 0 24 24"><path d="M5 11l2-5h10l2 5M3 11h18v6H3zM6 17v2M18 17v2M10 3h4v3h-4z" stroke="currentColor" stroke-width="1.9" fill="none" stroke-linejoin="round"/><circle cx="7" cy="14" r="1.2" fill="currentColor"/><circle cx="17" cy="14" r="1.2" fill="currentColor"/></symbol>
+  <symbol id="star" viewBox="0 0 24 24"><path d="m12 2.5 2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5L2.5 9.4l6.6-.9z" fill="currentColor"/></symbol>
+  <symbol id="trophy" viewBox="0 0 24 24"><path d="M7 3h10v5a5 5 0 0 1-10 0zM7 5H3v2a4 4 0 0 0 4 4M17 5h4v2a4 4 0 0 1-4 4M12 13v4M8 21h8M9 17h6v4H9z" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linejoin="round"/></symbol>
+  <symbol id="camera" viewBox="0 0 24 24"><path d="M3 8h4l2-3h6l2 3h4v12H3z" stroke="currentColor" stroke-width="1.9" fill="none" stroke-linejoin="round"/><circle cx="12" cy="13.5" r="3.6" fill="none" stroke="currentColor" stroke-width="1.9"/></symbol>
+  <symbol id="map" viewBox="0 0 24 24"><path d="M12 22s7-6.2 7-12a7 7 0 0 0-14 0c0 5.8 7 12 7 12z" stroke="currentColor" stroke-width="1.9" fill="none"/><circle cx="12" cy="10" r="2.6" fill="currentColor"/></symbol>
+  <symbol id="cal" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3" fill="none" stroke="currentColor" stroke-width="1.9"/><path d="M3 10h18M8 2v5M16 2v5" stroke="currentColor" stroke-width="1.9"/></symbol>
+  <symbol id="talk" viewBox="0 0 24 24"><path d="M4 5h11v8H9l-4 3v-3H4zM15 9h5v8h-1v3l-3-3h-4v-2" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linejoin="round"/></symbol>
+  <symbol id="info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" stroke-width="1.9"/><path d="M12 11v6M12 7.2v.1" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></symbol>
+  <symbol id="sound" viewBox="0 0 24 24"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/><path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"/></symbol>
+  <symbol id="check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7" stroke="currentColor" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="phone" viewBox="0 0 24 24"><path d="M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A17 17 0 0 1 3 5a2 2 0 0 1 2-2z" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linejoin="round"/></symbol>
+  <symbol id="ticket" viewBox="0 0 24 24"><path d="M3 7h18v3a2 2 0 0 0 0 4v3H3v-3a2 2 0 0 0 0-4z" stroke="currentColor" stroke-width="1.9" fill="none" stroke-linejoin="round"/><path d="M14 7v10" stroke="currentColor" stroke-width="1.6" stroke-dasharray="2 2"/></symbol>
+  <symbol id="rest" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z" stroke="currentColor" stroke-width="1.9" fill="none" stroke-linejoin="round"/></symbol>
+  <symbol id="shirtW" viewBox="0 0 64 64"><path d="M22 6 8 14 2 28l10 5 4-7v32h32V26l4 7 10-5-6-14L42 6c-2 4-6 6-10 6s-8-2-10-6z" fill="#fff" stroke="#c9a43c" stroke-width="2.5" stroke-linejoin="round"/><path d="M26 6c1.5 3 3.5 4.5 6 4.5s4.5-1.5 6-4.5" fill="none" stroke="#c9a43c" stroke-width="2.5"/><path d="m32 24 1.8 3.7 4 .6-2.9 2.8.7 4L32 33.2l-3.6 1.9.7-4-2.9-2.8 4-.6z" fill="#d9b44a"/></symbol>
+  <symbol id="shirtY" viewBox="0 0 64 64"><path d="M22 6 8 14 2 28l10 5 4-7v32h32V26l4 7 10-5-6-14L42 6c-2 4-6 6-10 6s-8-2-10-6z" fill="#f6d33c" stroke="#8a6a00" stroke-width="2.5" stroke-linejoin="round"/><path d="M26 6c1.5 3 3.5 4.5 6 4.5s4.5-1.5 6-4.5" fill="none" stroke="#8a6a00" stroke-width="2.5"/></symbol>
+</defs>
+</svg>
+
+<header class="hero wrap">
+  <div class="lights"><span></span><span></span></div>
+  <button class="ballegg" id="ballEgg" aria-label="כדור"><svg><use href="#ball"/></svg></button>
+  <svg class="crown" id="crownEgg"><use href="#crown"/></svg>
+  <div class="kicker">BAR MITZVAH · MADRID 2026</div>
+  <h1>המדריד <em>של נועם</em></h1>
+  <div class="sub">נועם · סבא ניסן · סבתא דליה · 8–13 באוקטובר</div>
+  <div class="hala">¡HALA MADRID!</div>
+
+  <div class="board" id="board">
+    <div class="lbl" id="cdLabel">ספירה לאחור</div>
+    <div class="digits">
+      <div class="dg"><b id="cdD">--</b><small>ימים</small></div>
+      <div class="dg"><b id="cdH">--</b><small>שעות</small></div>
+      <div class="dg"><b id="cdM">--</b><small>דקות</small></div>
+      <div class="dg"><b id="cdS">--</b><small>שניות</small></div>
+    </div>
+    <div class="note" id="cdNote"></div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ====== SCHEDULE ====== -->
+  <section class="view on" id="v-plan">
+    <h2><svg class="i"><use href="#cal"/></svg>הלוז היומי</h2>
+    <div class="chips" id="chips"></div>
+    <div id="day"></div>
+  </section>
+
+  <!-- ====== MATCH ====== -->
+  <section class="view" id="v-match">
+    <h2><svg class="i"><use href="#stadium"/></svg>יום המשחק</h2>
+    <div class="match">
+      <div class="vs">
+        <div class="team"><svg class="shirt"><use href="#shirtW"/></svg><b>ריאל מדריד</b></div>
+        <div class="vsb">VS</div>
+        <div class="team"><svg class="shirt"><use href="#shirtY"/></svg><b>ויאריאל</b></div>
+      </div>
+      <div class="kick">שבת 10.10 · 21:00 שעון מדריד<small>22:00 שעון ישראל · לה ליגה, מחזור 8 · סנטיאגו ברנבאו</small></div>
+    </div>
+
+    <div class="acts" style="margin-top:12px">
+      <a class="btn gold" target="_blank" rel="noopener" href="https://www.google.com/search?q=Real+Madrid+vs+Villarreal"><svg><use href="#ball"/></svg>תוצאה חיה</a>
+      <a class="btn ghost" target="_blank" rel="noopener" href="https://www.laliga.com/en-GB/match/temporada-2026-2027-laliga-ea-sports-real-madrid-villarreal-cf-8"><svg><use href="#info"/></svg>דף המשחק בלה ליגה</a>
+    </div>
+    <div class="board" style="margin-top:14px">
+      <div class="lbl">עד שריקת הפתיחה</div>
+      <div class="digits">
+        <div class="dg"><b id="mD">--</b><small>ימים</small></div>
+        <div class="dg"><b id="mH">--</b><small>שעות</small></div>
+        <div class="dg"><b id="mM">--</b><small>דקות</small></div>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-top:12px">
+      <h3>🎟️ המקומות שלנו</h3>
+      <div class="row"><span>קטגוריה</span><span>פרימיום (חום במפה)</span></div>
+      <div class="row"><span>איפה</span><span>היציע הארוך, מול מרכז המגרש</span></div>
+      <div class="row"><span>הסוכנות</span><span>Champions Tours</span></div>
+    </div>
+
+    <div class="panel dark">
+      <h3>⏱️ התוכנית של הערב</h3>
+      <div class="row"><span>מנוחה במלון</span><span class="ltr">עד 18:15</span></div>
+      <div class="row"><span>יוצאים מהמלון (מטרו)</span><span class="ltr">18:30</span></div>
+      <div class="row"><span>מגיעים לאצטדיון</span><span class="ltr">~19:00</span></div>
+      <div class="row"><span>שריקת פתיחה</span><span class="ltr">21:00</span></div>
+      <div class="row"><span>סיום משוער · חזרה במטרו</span><span class="ltr">~23:00</span></div>
+      <div class="acts">
+        <a class="btn gold" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&origin=Petit%20Palace%20Alcal%C3%A1%20Madrid&destination=Estadio%20Santiago%20Bernab%C3%A9u%20Madrid&travelmode=transit"><svg><use href="#map"/></svg>מסלול במטרו לברנבאו</a>
+        <a class="btn ghost" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&origin=Estadio%20Santiago%20Bernab%C3%A9u%20Madrid&destination=Petit%20Palace%20Alcal%C3%A1%20Madrid&travelmode=transit"><svg><use href="#bed"/></svg>חזרה למלון</a>
+      </div>
+    </div>
+
+    <div class="panel cl" id="matchList">
+      <h3>✅ לפני שיוצאים למשחק</h3>
+    </div>
+    <div class="tip">💡 תחנת המטרו Santiago Bernabéu סגורה לשיפוצים, אז הולכים ברגל ל-Nuevos Ministerios (12–15 דקות) או לוקחים את השאטל החינמי S10. אחרי המשחק יהיה צפוף, ולכן אפשר לחכות 15–20 דקות עד שהעומס יורד. ומומלץ לקבוע נקודת מפגש.</div>
+  </section>
+
+  <!-- ====== MISSIONS ====== -->
+  <section class="view" id="v-missions">
+    <h2><svg class="i"><use href="#trophy"/></svg>המשימות של נועם</h2>
+    <div class="panel dark">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <b id="misCount">0 / 0 כוכבים</b><span id="misRank" style="color:var(--gold2);font-weight:700"></span>
+      </div>
+      <div class="progress"><i id="misBar"></i></div>
+    </div>
+    <div id="missions"></div>
+    <div class="trophy" id="trophyBox" style="display:none">
+      <svg><use href="#trophy"/></svg>
+      <div style="font-weight:900;font-size:20px;color:var(--gold2)">אלוף מדריד! 🏆</div>
+      <div class="sub">כל המשימות הושלמו. מזל טוב לבר המצווה!</div>
+    </div>
+  </section>
+
+  <!-- ====== SPANISH ====== -->
+  <section class="view" id="v-spanish">
+    <h2><svg class="i"><use href="#talk"/></svg>מדברים ספרדית</h2>
+    <div class="panel dark" id="trPanel">
+      <h3>תרגום מהיר</h3>
+      <div class="seg" id="trDir">
+        <button type="button" data-sl="iw" data-tl="es" class="on">עברית ← ספרדית</button>
+        <button type="button" data-sl="es" data-tl="iw">ספרדית ← עברית</button>
+        <button type="button" data-sl="en" data-tl="es">אנגלית ← ספרדית</button>
+        <button type="button" data-sl="es" data-tl="en">ספרדית ← אנגלית</button>
+      </div>
+      <textarea class="tr" id="trText" dir="auto" placeholder="כתבו כאן משפט לתרגום"></textarea>
+      <div class="acts">
+        <a class="btn gold" id="trWeb" target="_blank" rel="noopener" href="https://translate.google.com/m?sl=iw&tl=es&hl=iw">תרגום באתר</a>
+        <a class="btn ghost" id="trApp" target="_blank" rel="noopener" href="https://translate.google.com/?sl=iw&tl=es&op=translate">תרגום באפליקציה</a>
+      </div>
+      <div class="note">"באתר" פותח את הגרסה לדפדפן עם השפות שבחרתם. "באפליקציה" פותח את Google Translate אם היא מותקנת, ומעתיק לשם את הטקסט. אם האפליקציה נפתחת עם שפות אחרות, מחליפים אותן בחצים שבראש המסך. בטלפונים מסוימים האפליקציה תופסת גם את הקישור של האתר.</div>
+    </div>
+    <div class="acts" style="margin:10px 0 4px">
+      <a class="btn ghost" target="_blank" rel="noopener" href="https://play.google.com/store/apps/details?id=com.google.android.apps.translate">הורדת האפליקציה לאנדרואיד</a>
+      <a class="btn ghost" target="_blank" rel="noopener" href="https://apps.apple.com/app/google-translate/id414706506">הורדה לאייפון</a>
+    </div>
+    <div class="tip">💡 תרגום באתר צריך אינטרנט. באפליקציה של Google Translate אפשר להוריד מראש את הספרדית ולתרגם גם בלי אינטרנט. את המשפטים שלמטה אפשר לקרוא ולהשמיע בלי אינטרנט בכלל. תרגום מצלמה (שלטים ותפריטים) קיים רק באפליקציה.</div>
+    <h2 style="font-size:18px">🗣️ משפטים שימושיים <small style="font-size:12px;color:var(--muted);font-weight:400">· לחיצה על הרמקול משמיעה</small></h2>
+    <div id="phrases"></div>
+  </section>
+
+  <!-- ====== INFO ====== -->
+  <section class="view" id="v-info">
+    <h2><svg class="i"><use href="#plane"/></svg>טיסות</h2>
+    <div class="panel">
+      <h3>✈️ הלוך · חמישי 8.10</h3>
+      <div class="row"><span>טיסה</span><span class="ltr">UX1302 · Air Europa</span></div>
+      <div class="row"><span>המראה מנתב"ג</span><span class="ltr">16:05</span></div>
+      <div class="row"><span>להיות בנתב"ג עד</span><span class="ltr">13:00</span></div>
+      <div class="row"><span>נחיתה במדריד (טרמינל 1)</span><span class="ltr">20:20</span></div>
+      <div class="acts">
+        <a class="btn gold" target="_blank" rel="noopener" href="https://www.flightradar24.com/data/flights/ux1302"><svg><use href="#plane"/></svg>מצב הטיסה עכשיו</a>
+        <a class="btn nav" target="_blank" rel="noopener" href="https://www.google.com/search?q=UX1302+flight+status"><svg><use href="#info"/></svg>בגוגל</a>
+      </div>
+    </div>
+    <div class="panel">
+      <h3>✈️ חזור · שלישי 13.10</h3>
+      <div class="row"><span>טיסה</span><span class="ltr">UX1301 · Air Europa</span></div>
+      <div class="row"><span>יציאה מהמלון במונית</span><span class="ltr">04:50</span></div>
+      <div class="row"><span>להיות בטרמינל 1 עד</span><span class="ltr">05:30</span></div>
+      <div class="row"><span>המראה ממדריד</span><span class="ltr">08:35</span></div>
+      <div class="row"><span>נחיתה בנתב"ג</span><span class="ltr">14:10</span></div>
+      <div class="acts">
+        <a class="btn gold" target="_blank" rel="noopener" href="https://www.flightradar24.com/data/flights/ux1301"><svg><use href="#plane"/></svg>מצב הטיסה עכשיו</a>
+        <a class="btn nav" target="_blank" rel="noopener" href="https://www.google.com/search?q=UX1301+flight+status"><svg><use href="#info"/></svg>בגוגל</a>
+      </div>
+    </div>
+    <div class="tip">💡 מצב הטיסה (בזמן, עיכוב, שער) מתעדכן ביממה שלפני הטיסה. שווה לבדוק בבוקר של יום הטיסה ושוב לפני היציאה לשדה.</div>
+    <div class="panel dark">
+      <h3>🧳 כבודה</h3>
+      <div class="row"><span>כלול לכל נוסע</span><span>טרולי 8 ק"ג + תיק גב</span></div>
+      <div class="row"><span>מזוודה 20 ק"ג</span><span>בתוספת תשלום</span></div>
+    </div>
+
+    <h2><svg class="i"><use href="#bed"/></svg>המלון</h2>
+    <div class="panel">
+      <h3>Petit Palace Alcalá</h3>
+      <div class="row"><span>כתובת</span><span class="ltr">Calle Virgen de los Peligros 2</span></div>
+      <div class="row"><span>צ'ק-אין</span><span>חמישי 8.10 · מ-14:00</span></div>
+      <div class="row"><span>צ'ק-אאוט</span><span>שלישי 13.10 · עד 12:00</span></div>
+      <div class="row"><span>חדר</span><span>משולש · ארוחת בוקר כלולה</span></div>
+      <div class="row"><span>מה בסביבה</span><span>גרן ויה וסול · מטרו Sevilla</span></div>
+      <div class="acts">
+        <a class="btn nav" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Petit%20Palace%20Alcal%C3%A1%20Calle%20Virgen%20de%20los%20Peligros%202%20Madrid"><svg><use href="#map"/></svg>המלון במפה</a>
+        <button class="btn chk" onclick="showAddr()"><svg><use href="#taxi"/></svg>כתובת לנהג מונית</button>
+      </div>
+    </div>
+
+    <h2><svg class="i"><use href="#bus"/></svg>תחבורה</h2>
+    <div class="panel">
+      <div class="row"><span>למלון → ברנבאו</span><span>מטרו ל-Nuevos Ministerios + הליכה</span></div>
+      <div class="row"><span>גיבוי</span><span>אוטובוס 150 מ-Sol/Sevilla</span></div>
+      <div class="row"><span>מטרו ליד המלון</span><span>Sevilla (קו 2) · Sol</span></div>
+      <div class="row"><span>תחנת Santiago Bernabéu</span><span>סגורה לשיפוצים</span></div>
+      <div class="row"><span>שאטל חינמי S10</span><span>Nuevos Ministerios ⇄ Plaza de Castilla</span></div>
+      <div class="row"><span>שדה תעופה ⇄ מלון</span><span>מונית (~30 דקות)</span></div>
+      <div class="row"><span>מנוי תיירים</span><span>Tourist Travel Pass · Zone A</span></div>
+      <div class="row"><span>חלופה</span><span>כרטיסיית 10 נסיעות לשיתוף</span></div>
+    </div>
+    <div class="tip">💡 את המנוי או הכרטיסייה קונים במכונות שבכל תחנת מטרו. המנוי אישי, אז צריך אחד לכל אחד מהשלושה. כרטיסיית 10 נסיעות אפשר לחלוק, ובכל נסיעה מעבירים אותה פעם אחת לכל אדם.</div>
+
+    <h2><svg class="i"><use href="#phone"/></svg>אינטרנט בנסיעה (eSIMo)</h2>
+    <div class="panel">
+      <div class="acts" style="margin:0 0 4px">
+        <a class="btn gold" target="_blank" rel="noopener" href="https://play.google.com/store/apps/details?id=io.esimo.androidapp">eSIMo לאנדרואיד</a>
+        <a class="btn gold" target="_blank" rel="noopener" href="https://apps.apple.com/us/app/esimo-travel-esim-calls/id1631894268">eSIMo לאייפון</a>
+        <a class="btn nav" target="_blank" rel="noopener" href="https://help.esimo.io/en/collections/3768386-install-and-activate">מרכז העזרה</a>
+      </div>
+      <details class="st" open><summary>שלב 1: מתקינים בבית, לפני הטיסה</summary>
+        <ol>
+          <li>מתחברים ל-Wi-Fi יציב. המכשיר צריך לתמוך ב-eSIM ולא להיות נעול לרשת.</li>
+          <li>פותחים את אפליקציית eSIMo ונכנסים ל-My eSIM.</li>
+          <li>לוחצים על כפתור Install הירוק. אם אין כפתור, יופיע קוד QR: אפשר לשלוח אותו למכשיר אחר ולסרוק אותו במצלמה.</li>
+          <li>באייפון מאשרים Allow. ההתקנה לוקחת כמה דקות, ובסיומה הסטטוס באפליקציה הוא Installed.</li>
+          <li>בודקים באפליקציה שהחבילה מכסה את ספרד ואת תאריכי הטיול.</li>
+        </ol></details>
+      <details class="st"><summary>שלב 2 באייפון: מפעילים אחרי הנחיתה</summary>
+        <ol>
+          <li>הגדרות &larr; סלולרי (Settings &gt; Cellular).</li>
+          <li>מוצאים את ה-eSIM (ה-SIM התחתון ברשימה) ומוודאים שהוא פועל.</li>
+          <li>למעלה, תחת "נתונים סלולריים" (Cellular Data), בוחרים את ה-eSIM.</li>
+          <li>נכנסים להגדרות ה-eSIM ומפעילים נדידת נתונים (Data Roaming).</li>
+          <li>מתנתקים מ-Wi-Fi ומתחילים להשתמש.</li>
+        </ol></details>
+      <details class="st"><summary>שלב 2 באנדרואיד: מפעילים אחרי הנחיתה</summary>
+        <ol>
+          <li>הגדרות &larr; חיבורים &larr; מנהל SIM (Settings &gt; Connections &gt; SIM Manager), ומפעילים את ה-eSIM האחרון ברשימה.</li>
+          <li>בתחתית המסך לוחצים על Mobile Data ובוחרים את ה-eSIM.</li>
+          <li>הגדרות &larr; חיבורים &larr; רשתות סלולריות, ומפעילים נדידת נתונים (Data Roaming).</li>
+          <li>מתנתקים מ-Wi-Fi ומתחילים להשתמש.</li>
+        </ol>
+        <div class="note" style="margin:0 0 12px">שמות התפריטים משתנים קצת בין יצרני טלפונים.</div></details>
+      <div class="note">אין מצב טיסה שמחליף SIM בלחיצה. אם אין חיבור, כדאי להפעיל מצב טיסה ל-10 שניות ולכבות אותו, כשה-Wi-Fi כבוי. כדי לא לשלם נדידה על הסים הישראלי, כדאי לכבות בו נדידת נתונים (עדיף לבדוק עם הספק שלכם). ההוראות לקוחות ממרכז העזרה של eSIMo.</div>
+    </div>
+
+    <h2><svg class="i"><use href="#star"/></svg>התקנה על מסך הבית</h2>
+    <div class="panel">
+      <details class="st" open><summary>באנדרואיד (Chrome)</summary>
+        <ol>
+          <li>פותחים את קישור האפליקציה ב-Chrome, עם אינטרנט, פעם אחת.</li>
+          <li>לוחצים על ⋮ (שלוש נקודות) בפינה העליונה.</li>
+          <li>בוחרים "התקנת אפליקציה" (או "הוספה למסך הבית"). אפשר גם ללחוץ על כפתור "התקנה" בראש האפליקציה.</li>
+          <li>מאשרים, ומופיע אייקון על מסך הבית.</li>
+        </ol></details>
+      <details class="st"><summary>באייפון (Safari)</summary>
+        <ol>
+          <li>פותחים את הקישור ב-Safari.</li>
+          <li>לוחצים על כפתור השיתוף (ריבוע עם חץ).</li>
+          <li>בוחרים "הוסף למסך הבית" ואז "הוסף".</li>
+        </ol></details>
+      <div class="note">אחרי הפתיחה הראשונה עם אינטרנט, האפליקציה נשמרת בטלפון ופועלת גם בלי חיבור. כשיש חיבור היא מתעדכנת לבד לגרסה האחרונה. הסימונים והכוכבים נשמרים בכל טלפון בנפרד.</div>
+    </div>
+
+    <h2><svg class="i"><use href="#phone"/></svg>חשוב לדעת</h2>
+    <div class="panel">
+      <div class="row"><span>חירום בספרד</span><span class="ltr"><a href="tel:112">112</a></span></div>
+      <div class="row"><span>Champions Tours</span><span class="ltr"><a href="tel:+97286368195">08-6368195</a></span></div>
+      <div class="row"><span>Champions Tours (נייד)</span><span class="ltr"><a href="tel:+972546667756">054-6667756</a></span></div>
+      <div class="row"><span>שגרירות ישראל</span><span class="ltr">Calle de Velázquez 150</span></div>
+      <div class="row"><span>הפרש שעות</span><span>מדריד שעה אחת אחרי ישראל</span></div>
+      <div class="row"><span>מטבע</span><span>יורו (€)</span></div>
+      <div class="row"><span>שקע חשמל</span><span>אירופאי (2 פינים עגולים)</span></div>
+    </div>
+
+    <div class="panel cl" id="packList">
+      <h3>🎒 רשימת אריזה</h3>
+    </div>
+  </section>
+
+  <!-- ====== FOOD ====== -->
+  <section class="view" id="v-food">
+    <h2><svg class="i"><use href="#food"/></svg>ארוחות</h2>
+    <div class="tip">שעות האוכל בספרד נוטות להיות מאוחרות: ארוחת צהריים בדרך כלל בין 14:00 ל-16:00, וארוחת ערב מ-21:00. באזורי תיירים הרבה מקומות מגישים גם מוקדם יותר.</div>
+    <div id="mealDays" style="margin-top:12px"></div>
+    <div class="panel dark">
+      <h3>צריך כשר?</h3>
+      <div class="note" style="margin:6px 0 10px">לא בדקתי כשרות באף אחד מהמקומות כאן. אפשר לחפש מסעדות כשרות במדריד במפה, או להוסיף לרשימה מקומות שבדקתם.</div>
+      <div class="acts"><a class="btn gold" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=kosher+restaurant+Madrid"><svg><use href="#map"/></svg>חיפוש כשר במפה</a></div>
+    </div>
+    <h2 style="font-size:18px">🍽️ מה מזמינים <small style="font-size:12px;color:var(--muted);font-weight:400">· לחיצה על הרמקול משמיעה</small></h2>
+    <div id="dishes"></div>
+    <h2 style="font-size:18px">🗣️ בשולחן</h2>
+    <div id="tablePhrases"></div>
+  </section>
+
+  <button class="surbtn" id="eggBtn">🥚 כל ה-Easter eggs</button>
+  <button class="surbtn" id="surBtn">💌 הברכה של אבא ואמא</button>
+  <div id="syncLine" style="text-align:center;font-size:12px;color:var(--muted);padding:6px 0;cursor:pointer"></div>
+  <div class="foot">נבנה באהבה לבר המצווה של נועם ⚽<br>כל השעות לפי שעון מדריד, אלא אם כתוב אחרת.<br>האפליקציה היא מעריץ של הקבוצה ולא אתר רשמי שלה.</div>
+</main>
+
+<nav class="bnav">
+  <div class="in">
+    <button data-v="plan" class="on"><svg class="i"><use href="#cal"/></svg>לוז</button>
+    <button data-v="match"><svg class="i"><use href="#stadium"/></svg>המשחק</button>
+    <button data-v="missions"><svg class="i"><use href="#trophy"/></svg>משימות</button>
+    <button data-v="food"><svg class="i"><use href="#food"/></svg>אוכל</button>
+    <button data-v="spanish"><svg class="i"><use href="#talk"/></svg>ספרדית</button>
+    <button data-v="info"><svg class="i"><use href="#info"/></svg>מידע</button>
+  </div>
+</nav>
+<div class="toast" id="toast"></div>
+
+<div id="installBar" style="display:none;position:fixed;top:0;left:0;right:0;z-index:40;background:#d9b44a;color:#0a1633;padding:calc(env(safe-area-inset-top,0px) + 8px) 12px 8px;text-align:center;font-weight:700;font-size:14px;gap:8px;justify-content:center;align-items:center;direction:rtl">
+  <button id="installBtn" style="display:none;background:#0a1633;color:#f3d27a;border:0;border-radius:999px;padding:8px 14px;font:inherit;font-weight:700">📲 התקנה כאפליקציה</button>
+  <button id="fsBtn" style="display:none;background:#0a1633;color:#f3d27a;border:0;border-radius:999px;padding:8px 14px;font:inherit;font-weight:700">⛶ מסך מלא</button>
+  <button id="barX" aria-label="סגירה" style="background:none;border:0;font-size:20px;line-height:1;color:#0a1633">×</button>
+</div>
+<script>
+(function(){
+  try{if('serviceWorker' in navigator&&/^https?:$/.test(location.protocol))navigator.serviceWorker.register('sw.js').catch(function(){})}catch(e){}
+  var standalone=false;try{standalone=matchMedia('(display-mode: fullscreen)').matches||matchMedia('(display-mode: standalone)').matches||navigator.standalone===true}catch(e){}
+  if(standalone)return;
+  var bar=document.getElementById('installBar'),ib=document.getElementById('installBtn'),fb=document.getElementById('fsBtn'),dp=null;
+  var hidden=false;try{hidden=sessionStorage.getItem('nm_barx')==='1'}catch(e){}
+  function show(){if(!hidden){bar.style.display='flex'}}
+  window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();dp=e;ib.style.display='inline-block';show()});
+  window.addEventListener('appinstalled',function(){bar.style.display='none'});
+  ib.onclick=function(){if(!dp)return;dp.prompt();dp.userChoice.finally(function(){dp=null;ib.style.display='none';if(fb.style.display==='none')bar.style.display='none'})};
+  if(document.documentElement.requestFullscreen){fb.style.display='inline-block';show();
+    fb.onclick=function(){document.documentElement.requestFullscreen().then(function(){bar.style.display='none'}).catch(function(){})}}
+  document.getElementById('barX').onclick=function(){bar.style.display='none';hidden=true;try{sessionStorage.setItem('nm_barx','1')}catch(e){}};
+})();
+</script>
+<script>
+/* ---------- storage (safe) ---------- */
+const store={
+  get(k,d){try{const v=localStorage.getItem('nm_'+k);return v?JSON.parse(v):d}catch(e){return d}},
+  set(k,v){try{localStorage.setItem('nm_'+k,JSON.stringify(v))}catch(e){}}
+};
+const toast=(m)=>{const t=document.getElementById('toast');t.textContent=m;t.classList.add('on');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('on'),1800)};
+
+const HOTEL='Petit Palace Alcalá, Calle Virgen de los Peligros 2, Madrid';
+const mapQ=q=>'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(q);
+const dir=(o,d,m)=>'https://www.google.com/maps/dir/?api=1&origin='+encodeURIComponent(o)+'&destination='+encodeURIComponent(d)+'&travelmode='+m;
+const STADIUM='Estadio Santiago Bernabéu, Madrid';
+const TRANSIT_TO=dir(HOTEL,STADIUM,'transit');
+const TRANSIT_BACK=dir(STADIUM,HOTEL,'transit');
+const WALK_RETIRO=dir(HOTEL,'Parque del Retiro, Madrid','walking');
+
+/* ---------- DATA ---------- */
+// status: final = מתוכנן | partial = חלקי | draft = הצעות בלבד
+const DAYS=[
+ {id:'d1',date:'2026-10-08',chip:'חמ׳ 8.10',num:'יום 1',title:'המראה למדריד! ✈️',status:'final',
+  items:[
+   {t:'13:00',ic:'plane',title:'מגיעים לנתב"ג, טרמינל 3',d:'שלוש שעות לפני הטיסה, כי הבידוק הביטחוני לוקח זמן.',tz:'שעון ישראל',map:'Ben Gurion Airport Terminal 3'},
+   {t:'16:05',ic:'plane',title:'המראה! UX1302 אייר אירופה',live:['https://www.flightradar24.com/data/flights/ux1302','מצב הטיסה'],d:'מעכשיו מזיזים את השעון שעה אחורה, לשעון מדריד.',tz:'שעון ישראל'},
+   {t:'20:20',ic:'plane',title:'נחיתה במדריד, טרמינל 1',live:['https://www.flightradar24.com/data/flights/ux1302','מצב הטיסה'],d:'אוספים את התיקים ויוצאים לתחנת המוניות.'},
+   {t:'20:50',ic:'taxi',title:'מונית למלון',d:'בערך 30 דקות. מראים לנהג את הכתובת בכפתור "כתובת לנהג מונית" במסך מידע.',map:HOTEL},
+   {t:'21:30',ic:'bed',title:"צ'ק-אין ב-Petit Palace Alcalá",d:'חדר משולש, ארוחת בוקר כלולה.',map:HOTEL},
+   {t:'22:00',ic:'walk',title:'סיבוב ערב קצר בגרן ויה',d:'5 דקות הליכה מהמלון. במדריד אוכלים ארוחת ערב מאוחר, אז זה בדיוק הזמן.',map:'Gran Vía Madrid',link:'https://maps.app.goo.gl/mVsvPmAs1TSWWctA6',sug:true}
+  ]},
+ {id:'d2',date:'2026-10-09',chip:'ו׳ 9.10',num:'יום 2',title:'יום האצטדיון 🏟️',status:'final',
+  alert:'🚇 תחנת המטרו Santiago Bernabéu סגורה לשיפוצים. יורדים ב-Nuevos Ministerios והולכים ברגל 12–15 דקות, או לוקחים את השאטל החינמי S10.',
+  items:[
+   {t:'08:30',ic:'food',title:'סיום ארוחת בוקר במלון',d:'ממלאים מצברים, היום נוסעים לאצטדיון!'},
+   {t:'08:40',ic:'bus',title:'מטרו לכיוון הברנבאו',d:'הולכים כמה דקות לתחנת Gran Vía, קו 1 ל-Tribunal, ואז קו 10 עד Nuevos Ministerios (3 תחנות). בערך 30–35 דקות. גיבוי: אוטובוס 150 מ-Sol / Sevilla.',link:TRANSIT_TO},
+   {t:'09:20',ic:'walk',title:'הליכה לאצטדיון לאורך הקסטיאנה',d:'12–15 דקות מ-Nuevos Ministerios, או בשאטל החינמי S10.',map:'Estadio Santiago Bernabéu'},
+   {t:'09:40',ic:'camera',title:'סיבוב באזור האצטדיון',d:'צילומים של האצטדיון מבחוץ והליכה בשדרת הקסטיאנה.',map:'Estadio Santiago Bernabéu',link:'https://maps.app.goo.gl/n5ouxT8Qy5wWg7i57'},
+   {t:'10:15',ic:'bag',title:'קניון El Corte Inglés Castellana',d:'נפתח ב-10:00, כמה דקות הליכה מ-Nuevos Ministerios. המון קומות של חנויות, ספורט ואלקטרוניקה, ובפנים אזור אוכל וקפה (Gourmet Experience).',map:'El Corte Inglés Castellana, Calle de Raimundo Fernández Villaverde 65, Madrid'},
+   {t:'11:30',ic:'walk',title:'יוצאים מהקניון והולכים לאצטדיון',d:'12–15 דקות הליכה. כדאי להגיע לסיור כרבע שעה לפני הזמן.',map:'Estadio Santiago Bernabéu'},
+   {t:'12:00',ic:'stadium',title:'⭐ סיור בסנטיאגו ברנבאו',d:'מוזיאון התארים וההיסטוריה של הקבוצה, ירידה לכר הדשא ותצפית פנורמית על כל האצטדיון. שימו לב: ביום שלפני משחק חדרי ההלבשה ודרגשי השחקנים לא פתוחים לביקור.',map:'Estadio Santiago Bernabéu',link:'https://maps.app.goo.gl/n5ouxT8Qy5wWg7i57'},
+   {t:'14:00',ic:'bus',title:'חוזרים למלון במטרו',d:'הליכה ל-Nuevos Ministerios, קו 10 ל-Tribunal וקו 1 ל-Gran Vía. כ-45 דקות עם ההליכה. גיבוי: אוטובוס 150.',link:TRANSIT_BACK},
+   {t:'14:50',ic:'rest',title:'מנוחה במלון, שעתיים',d:'מתקלחים, נחים ואוגרים כוח לערב.'},
+   {t:'16:50',ic:'walk',title:'הליכה לפלאסה מאיור',d:'10–15 דקות הליכה מהמלון.',map:'Plaza Mayor Madrid'},
+   {t:'17:10',ic:'food',title:'פלאסה מאיור ושוק סן מיגל',d:'הכיכר המפורסמת של מדריד, ולידה שוק אוכל מקורה וטעים. בערב מתמלא מאוד.',map:'Mercado de San Miguel Madrid'},
+   {t:'ערב',ic:'star',title:'חזרה דרך פוארטה דל סול',d:'מחפשים את "קילומטר 0" על המדרכה ואת פסל הדוב ועץ התות (משימה!). הלוחית מסמנת את נקודת האפס של הכבישים בספרד, ומסורת התיירים היא לעמוד עליה ולבקש משאלה.',map:'Puerta del Sol Madrid'}
+  ]},
+ {id:'d3',date:'2026-10-10',chip:'ש׳ 10.10',num:'יום 3',title:'יום המשחק ⚽',status:'final',
+  alert:'⚽ הערב: ריאל מדריד נגד ויאריאל, ב-21:00 בברנבאו. למשחק הולכים נועם וסבא ניסן.',
+  tipText:'הערב של סבתא דליה עוד פתוח: אפשר לתכנן לה ארוחה וסיבוב ליד המלון.',
+  items:[
+   {t:'09:00',ic:'food',title:'ארוחת בוקר במלון',d:'בוקר רגוע, יום חופשי עד אחר הצהריים.'},
+   {t:'10:00',ic:'walk',title:'הליכה לפארק רטירו',d:'כ-30 דקות ברגל לאורך רחוב Alcalá, דרך כיכר סיבלס ועד שער Puerta de Alcalá.',link:WALK_RETIRO},
+   {t:'10:30',ic:'star',title:'פארק רטירו, עד שנמאס',d:'אגם עם סירות חתירה, ארמון הקריסטל והגן הוורדים. עד 4 שעות לכל היותר.',map:'Parque del Retiro Madrid'},
+   {t:'14:30',ic:'food',title:'ארוחה גדולה וסיבוב חופשי',d:'אוכלים טוב כאן, כי לפני המשחק לא יהיה זמן לארוחה. מסתובבים בדרך חזרה למלון.'},
+   {t:'16:00',ic:'rest',title:'חזרה למלון ומנוחה',d:'חוזרים בסביבות 16:00–16:30 ונחים עד 18:15, כדי שיהיה כוח לערב ארוך. מכינים תיק קטן: כרטיסים, מטען נייד וצעיף.',map:HOTEL},
+   {t:'18:30',ic:'bus',title:'יוצאים למשחק במטרו',d:'נועם וסבא ניסן: Gran Vía, קו 1 ל-Tribunal, קו 10 ל-Nuevos Ministerios, ואז הליכה של 12–15 דקות. מגיעים בערך ב-19:00–19:10. במטרו כדי לא להיתקע בפקקים של יום המשחק. גיבוי: אוטובוס 150.',link:TRANSIT_TO},
+   {t:'19:00',ic:'ticket',title:'נכנסים לאצטדיון',d:'הבידוק בכניסה, מוצאים את המקומות בקטגוריית הפרימיום וקולטים את האווירה. כדאי לשאול את Champions Tours מתי נפתחים השערים.',map:'Estadio Santiago Bernabéu',link:'https://maps.app.goo.gl/n5ouxT8Qy5wWg7i57'},
+   {t:'21:00',ic:'ball',title:'⭐ שריקת פתיחה! ריאל מדריד – ויאריאל',live:['https://www.google.com/search?q=Real+Madrid+vs+Villarreal','תוצאה חיה'],d:'לה ליגה, מחזור 8. ¡HALA MADRID!'},
+   {t:'23:00',ic:'bus',title:'חוזרים למלון במטרו',d:'מחכים 15–20 דקות עד שהעומס יורד, הולכים ל-Nuevos Ministerios, קו 10 ל-Tribunal וקו 1 ל-Gran Vía. המטרו פועל בדרך כלל עד כ-01:30. כדאי לקבוע נקודת מפגש למקרה שמתפזרים.',link:TRANSIT_BACK}
+  ]},
+ {id:'d4',date:'2026-10-11',chip:'א׳ 11.10',num:'יום 4',title:'יום מדריד הקלאסית 👑',status:'draft',
+  tipText:'📝 היום הזה עוד לא תוכנן. מה שכתוב כאן הוא הצעות בלבד. ביום ראשון רוב החנויות במדריד סגורות או נפתחות מאוחר.',
+  items:[
+   {t:'בוקר',ic:'bag',title:'שוק הפשפשים אל ראסטרו',d:'שוק רחוב ענק שפתוח רק בבוקר של יום ראשון, בשכונת לה לטינה.',sug:true,map:'El Rastro Madrid'},
+   {t:'צהריים',ic:'stadium',title:'הארמון המלכותי',d:'אחד הארמונות הגדולים באירופה, ממש ליד מרכז העיר.',sug:true,map:'Palacio Real de Madrid'},
+   {t:'אחה״צ',ic:'walk',title:'פארק רטירו',d:'שיט בסירות חתירה באגם וטיול בין העצים.',sug:true,map:'Parque del Retiro Madrid'},
+   {t:'ערב',ic:'food',title:"צ'ורוס עם שוקולד",d:'הקינוח הכי מדרידי שיש.',sug:true,map:'Chocolatería San Ginés Madrid'}
+  ]},
+ {id:'d5',date:'2026-10-12',chip:'ב׳ 12.10',num:'יום 5',title:'יום אחרון במדריד 🇪🇸',status:'draft',
+  alert:'📌 12 באוקטובר הוא החג הלאומי של ספרד. בבוקר יש בדרך כלל מצעד צבאי במרכז העיר, ורחובות נסגרים. הרבה חנויות יהיו סגורות.',
+  tipText:'📝 היום הזה עוד לא תוכנן. מה שכתוב כאן הוא הצעות בלבד.',
+  items:[
+   {t:'בוקר',ic:'star',title:'לראות את מצעד החג הלאומי',d:'כדאי לבדוק מראש איפה עובר המסלול השנה.',sug:true},
+   {t:'צהריים',ic:'bag',title:'קניית מזכרות אחרונות',d:'אזור סול וגרן ויה, ליד המלון.',sug:true,map:'Puerta del Sol Madrid'},
+   {t:'19:30',ic:'food',title:'ארוחת ערב חגיגית, הערב האחרון',d:'חוגגים את בר המצווה!',sug:true},
+   {t:'21:30',ic:'bed',title:'אורזים, מזמינים מונית ל-04:50 והולכים לישון מוקדם',d:'לבקש מהקבלה ארוחת בוקר ארוזה, ואם אפשר לעשות כבר עכשיו צ\'ק-אאוט.',sug:true}
+  ]},
+ {id:'d6',date:'2026-10-13',chip:'ג׳ 13.10',num:'יום 6',title:'חוזרים הביתה 🏠',status:'final',
+  items:[
+   {t:'04:15',ic:'rest',title:'השכמה',d:'בודקים שלא נשכח כלום בחדר: מטענים, דרכונים ומזכרות.'},
+   {t:'04:50',ic:'taxi',title:'מונית לשדה התעופה, טרמינל 1',d:'הזמנו אותה מראש ערב לפני. הנסיעה 20–25 דקות.',map:'Madrid Barajas Airport Terminal 1'},
+   {t:'05:30',ic:'plane',title:"בטרמינל 1, צ'ק-אין ובידוק",live:['https://www.flightradar24.com/data/flights/ux1301','מצב הטיסה'],d:'שלוש שעות לפני. בטיסות לישראל יש בידוק ביטחוני נוסף.'},
+   {t:'08:35',ic:'plane',title:'המראה UX1301',live:['https://www.flightradar24.com/data/flights/ux1301','מצב הטיסה'],d:'אדיוס מדריד! 👋'},
+   {t:'14:10',ic:'star',title:'נחיתה בנתב"ג',d:'ברוכים השבים, אלופים!',tz:'שעון ישראל'}
+  ]}
+];
+
+
+/* ---------- ALTERNATIVES (swipe) + CALENDAR OVERRIDES ---------- */
+const W=s=>({s,k:'warn'}), G=s=>({s,k:'good'}), N=s=>({s});
+const ALTS={
+ d2_4:[
+  {ic:'star',title:'מוזיאון סורוליה',d:'בית ומוזיאון של הצייר חואקין סורוליה, עם גן פנימי קטן. שעה עד שעתיים.',map:'Museo Sorolla, Calle General Martínez Campos 37, Madrid',trade:[W('רחוק יותר: כ-1.2 ק״מ מהקניון (הערכה)'),G('פתוח בשישי 9:30–20:00'),W('כניסה 3€')]},
+  {ic:'bag',title:'חנות ריאל מדריד ליד האצטדיון',d:'חנות המועדון בשער 30 של האצטדיון. מצוין למזכרות לפני הסיור.',map:'Tienda Oficial Real Madrid Bernabéu, Madrid',trade:[G('כבר ליד האצטדיון, בלי הליכה נוספת'),N('פתוחה לפי המועדון 10:00–20:30, כדאי לוודא')]},
+  {ic:'walk',title:'טיול וקפה בקסטיאנה',d:'הליכה רגועה בשדרה והפסקת קפה בבית קפה מקומי. בלי כרטיסים.',map:'Paseo de la Castellana Madrid',trade:[G('חינם'),G('בלי הליכה נוספת'),W('פחות פעילות מסביב')]}
+ ],
+ d2_10:[
+  {ic:'food',title:'צ׳ורוס עם שוקולד ב-San Ginés',d:'בית הקפה ההיסטורי לצ׳ורוס ושוקולד סמיך, בסמטה ליד סול.',map:'Chocolatería San Ginés, Madrid',trade:[G('קרוב: כ-450 מ׳ מפלאסה מאיור (הערכה)'),N('לפי אתר תיירות פתוח 24 שעות'),W('תור בשעות שיא')]},
+  {ic:'stadium',title:'הארמון המלכותי וכיכר Plaza de Oriente',d:'בשעה הזו הארמון כבר נסגר, אז נהנים מבחוץ ומהכיכר שמולו.',map:'Palacio Real de Madrid',trade:[W('רחוק יותר: כ-700 מ׳ (הערכה)'),W('לא נכנסים פנימה: הארמון נסגר ב-18:00 בימי חול'),G('מבחוץ בחינם')]}
+ ],
+ d3_2:[
+  {ic:'star',title:'סירה באגם הגדול של רטירו',d:'חתירה על האגם מול האנדרטה. בתוך הפארק עצמו.',map:'Estanque Grande del Retiro, Madrid',trade:[G('בתוך הפארק, בלי הליכה נוספת'),W('בערך 8€ לסירה בסוף שבוע (לפי אתר תיירות)')]},
+  {ic:'camera',title:'מרפסת התצפית של ארמון סיבלס',d:'נוף על מדריד מלמעלה, על הדרך לרטירו. הכניסה בחצי שעה, והקופה נסגרת ב-13:40.',map:'Palacio de Cibeles, Plaza de Cibeles 1, Madrid',trade:[G('על הדרך, בלי הליכה נוספת'),W('כניסה 3€ (ועוד 0.50€ באינטרנט)'),W('סגור בימי שני')]},
+  {ic:'walk',title:'הגן הבוטני המלכותי',d:'יותר מ-5,000 מינים של צמחים בארבע טרסות, ליד מוזיאון הפראדו.',map:'Real Jardín Botánico, Madrid',trade:[W('רחוק יותר: כ-1 ק״מ מהפארק (הערכה)'),W('כניסה 4€'),G('פתוח עד 19:00 באוקטובר')]}
+ ],
+ d4_0:[
+  {ic:'star',title:'מוזיאון סורוליה, חינם בימי ראשון',d:'בית ומוזיאון של הצייר חואקין סורוליה, עם גן פנימי.',map:'Museo Sorolla, Calle General Martínez Campos 37, Madrid',trade:[G('כניסה חופשית בימי ראשון 10:00–15:00'),W('רחוק מהראסטרו: צריך מטרו או אוטובוס'),N('פתוח בימי ראשון עד 15:00')]},
+  {ic:'stadium',title:'הארמון המלכותי',d:'אחד הארמונות הגדולים באירופה, ליד מרכז העיר.',map:'Palacio Real de Madrid',trade:[G('קרוב לראסטרו: כ-1.3 ק״מ (הערכה)'),W('כניסה בתשלום, המחיר באתר patrimonionacional.es'),W('בימי ראשון סגור ב-16:00')]}
+ ]
+};
+const CALX={ d1_1:{end:'21:20'}, d6_3:{end:'13:10'} };
+
+/* ---------- MEALS ---------- */
+const MEALS=[
+ {day:'חמישי 8.10',rows:[
+  {k:'ארוחת ערב מאוחרת',t:'~22:00',d:'אחרי הצ׳ק-אין. בגרן ויה, 5 דקות מהמלון, יש הרבה בארים ומסעדות שפתוחים מאוחר. אם עייפים, אפשר צ׳ורוס ושוקולד ב-San Ginés.',map:'tapas bars Gran Vía Madrid'}]},
+ {day:'שישי 9.10',rows:[
+  {k:'ארוחת בוקר',t:'08:30',d:'במלון, כלולה בהזמנה.'},
+  {k:'הפסקת קפה',t:'~10:00',d:'בקניון El Corte Inglés, באזור Gourmet Experience בקומה הראשונה.',map:'El Corte Inglés Castellana, Calle de Raimundo Fernández Villaverde 65, Madrid'},
+  {k:'ארוחת צהריים',t:'~14:00',d:'עוד לא משובצת בלוז. הצעה: לאכול ליד האצטדיון אחרי הסיור, ואז לחזור למלון למנוחה.',map:'restaurants near Santiago Bernabéu Madrid'},
+  {k:'ארוחת ערב',t:'19:30',d:'בשוק סן מיגל: טאפאס ומנות קטנות, פתוח עד חצות לפי אתר תיירות. בשעות העומס צפוף, אז עדיף להקדים.',map:'Mercado de San Miguel Madrid'}]},
+ {day:'שבת 10.10 · יום המשחק',rows:[
+  {k:'ארוחת בוקר',t:'09:00',d:'במלון.'},
+  {k:'הארוחה הגדולה של היום',t:'14:30',d:'לפני המשחק אין זמן לארוחה, ולכן אוכלים טוב בצהריים, ליד רטירו או בדרך חזרה למלון.',map:'restaurants near Parque del Retiro Madrid'},
+  {k:'משהו קטן לפני היציאה',t:'~17:45',d:'חטיף במלון, ואחריו יוצאים. לא בדקתי מה מותר להכניס לאצטדיון, כדאי לשאול את Champions Tours.'},
+  {k:'סבתא דליה',t:'ערב',d:'ארוחה רגועה ליד המלון, בזמן שנועם וסבא ניסן במשחק.',map:'restaurants near Calle de Alcalá Madrid'}]},
+ {day:'ראשון 11.10 · הצעות',rows:[
+  {k:'צ׳ורוס ושוקולד',t:'בוקר',d:'ב-San Ginés, לפני הראסטרו.',map:'Chocolatería San Ginés, Madrid'},
+  {k:'טאפאס בלה לטינה',t:'צהריים',d:'ברחוב Cava Baja, ליד הראסטרו, יש הרבה בארים של טאפאס.',map:'Calle Cava Baja Madrid'}]},
+ {day:'שני 12.10 · הצעות',rows:[
+  {k:'ארוחת ערב חגיגית',t:'19:30',d:'הערב האחרון, ובר מצווה. כדאי להזמין שולחן מראש. 12.10 הוא חג לאומי בספרד, אז כדאי לוודא שהמסעדה פתוחה.'}]},
+ {day:'שלישי 13.10',rows:[
+  {k:'ארוחת בוקר ארוזה',t:'04:30',d:'ארוחת הבוקר הרגילה כנראה לא תהיה פתוחה. כדאי לבקש מהמלון מראש ארוחת בוקר ארוזה.'}]}
+];
+const DISHES=[
+ ['Tortilla española','חביתה עבה עם תפוחי אדמה, המנה הכי קלאסית','טוֹרְטִיָּה אֶסְפָּנְיוֹלָה'],
+ ['Patatas bravas','תפוחי אדמה מטוגנים ברוטב חריף','פָּטָטָס בְּרָבָס'],
+ ['Croquetas','קרוקטים מטוגנים. שואלים מה יש בהם','קְרוֹקֶטָס'],
+ ['Pan con tomate','לחם קלוי עם עגבנייה ושמן זית','פָּאן קוֹן טוֹמָטֶה'],
+ ['Bocadillo de calamares','כריך קלמרי מטוגן, מנה מדרידית','בּוֹקָדִיּוֹ דֶה קָלָמָרֶס'],
+ ['Pimientos de Padrón','פלפלונים מטוגנים, חלקם חריפים','פִּימְיֶנְטוֹס דֶה פָּדְרוֹן'],
+ ['Gambas al ajillo','שרימפס בשום ובשמן זית','גַּמְבָּס אַל אָחִיּוֹ'],
+ ['Jamón ibérico','נקניק חזיר מיובש, מומחיות ספרדית','חָמוֹן אִיבֶּרִיקוֹ'],
+ ['Cocido madrileño','תבשיל חורפי מדרידי עם חומוס ובשר','קוֹסִידוֹ מַדְרִילֶנְיוֹ'],
+ ['Churros con chocolate','צ׳ורוס עם שוקולד סמיך לטבילה','צ׳וּרוֹס קוֹן צ׳וֹקוֹלָטֶה'],
+ ['Zumo de naranja','מיץ תפוזים טבעי','סוּמוֹ דֶה נָרָנְחָה'],
+ ['Agua sin gas','מים בלי גז','אַגוּאָה סִין גָּאס']
+];
+const TABLE=[
+ ['שולחן לשלושה, בבקשה','Una mesa para tres, por favor','אוּנָה מֶסָה פָּרָה טְרֶס, פּוֹר פָבוֹר'],
+ ['התפריט, בבקשה','La carta, por favor','לָה קַרְטָה, פּוֹר פָבוֹר'],
+ ['מה יש בזה?','¿Qué lleva?','קֶה יֶיבָה?'],
+ ['בלי חזיר, בבקשה','Sin cerdo, por favor','סִין סֶרְדוֹ, פּוֹר פָבוֹר'],
+ ['לקחת','Para llevar','פָּרָה יֶיבָר'],
+ ['החשבון, בבקשה','La cuenta, por favor','לָה קוּאֶנְטָה, פּוֹר פָבוֹר']
+];
+
+const SECRET=['משימה סודית','למצוא אדם עם חולצת ריאל, להגיד לו ¡Hala Madrid! ולקבל ממנו חיוך'];
+const MISSIONS=[
+ ['צילום מול האצטדיון','תמונה של שלושתכם מול הברנבאו'],
+ ['על הדשא','לצלם את כר הדשא מקרוב בסיור'],
+ ['חדר הגביעים','לספור כמה גביעים אירופיים יש במוזיאון'],
+ ['קילומטר 0','למצוא את הלוח על המדרכה בפוארטה דל סול'],
+ ['הדוב ועץ התות','סלפי עם פסל הדוב, הסמל של מדריד'],
+ ['מזמין בספרדית','להזמין משהו בעצמך, בספרדית בלבד'],
+ ["צ'ורוס עם שוקולד",'לטעום את הקינוח הכי מדרידי'],
+ ['שיר באצטדיון',"לשיר עם הקהל ¡Hala Madrid!"],
+ ['גול!','לצעוק ¡GOOOL! עם 80 אלף איש'],
+ ['צעיף לבן','להניף צעיף במשחק'],
+ ['שלוש מילים חדשות','ללמד את סבא ואת סבתא שלוש מילים בספרדית'],
+ ['מזכרת לבית','לקנות מזכרת לכל אחד במשפחה'],
+ ['פלאסה מאיור','לספור כמה מרפסות יש בכיכר (כמעט 240!)'],
+ ['סבא וסבתא','תמונה מיוחדת שלך עם סבא ניסן וסבתא דליה']
+];
+
+const PHRASES=[
+ ['שלום','¡Hola!','אוֹלָה'],
+ ['בוקר טוב','Buenos días','בּוּאֵנוֹס דִיאַס'],
+ ['תודה רבה','Muchas gracias','מוּצָ\'אס גְרַסְיָאס'],
+ ['בבקשה','Por favor','פּוֹר פָבוֹר'],
+ ['סליחה','Perdón','פֶּרְדוֹן'],
+ ['כמה זה עולה?','¿Cuánto cuesta?','קוּאַנְטוֹ קוּאֶסְטָה?'],
+ ['החשבון, בבקשה','La cuenta, por favor','לָה קוּאֶנְטָה, פּוֹר פָבוֹר'],
+ ['איפה השירותים?','¿Dónde está el baño?','דוֹנְדֶה אֶסְטָה אֶל בָּנְיוֹ?'],
+ ['אני לא מדבר ספרדית','No hablo español','נוֹ אַבְּלוֹ אֶסְפָּנְיוֹל'],
+ ['אתה מדבר אנגלית?','¿Habla inglés?','אַבְּלָה אִינְגְלֵס?'],
+ ['מים, בבקשה','Agua, por favor','אַגוּאָה, פּוֹר פָבוֹר'],
+ ['אני רוצה...','Quiero...','קְיֶירוֹ...'],
+ ['לאצטדיון, בבקשה','Al estadio, por favor','אַל אֶסְטַדְיוֹ, פּוֹר פָבוֹר'],
+ ['לכתובת הזו, בבקשה','A esta dirección, por favor','אָה אֶסְטָה דִירֶקְסְיוֹן, פּוֹר פָבוֹר'],
+ ['גול!','¡Gol!','גוֹל!'],
+ ['יאללה מדריד!','¡Hala Madrid!','אָלָה מַדְרִיד!'],
+ ['אני חוגג בר מצווה','Celebro mi Bar Mitzvá','סֶלֶבְּרוֹ מִי בָּר מִצְוָה']
+];
+
+const MATCH_LIST=['כרטיסים בטלפון / מודפסים','טלפון טעון ומטען נייד','צעיף לבן 🤍','מעיל קל, כי בלילה מתקרר','תיק קטן בלבד','מזומן קטן לשתייה','נקודת מפגש למקרה שמתפזרים'];
+const PACK_LIST=['דרכונים','כרטיסי טיסה (בטלפון)','שובר המלון','כרטיסים למשחק ולסיור','מתאם חשמל אירופאי','מטען נייד','נעלי הליכה נוחות','מעיל קל לערב','חולצה לבנה למשחק','כרטיס אשראי + מעט יורו','ביטוח נסיעות','תרופות קבועות'];
+
+/* ---------- ICON helper ---------- */
+const ico=(id,cls='')=>`<svg class="i ${cls}"><use href="#${id}"/></svg>`;
+
+/* ---------- SCHEDULE ---------- */
+let done=store.get('done',{});
+function madridToday(){
+  try{return new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Madrid'}).format(new Date())}catch(e){return ''}
+}
+function renderChips(active){
+  document.getElementById('chips').innerHTML=DAYS.map(d=>
+    `<button class="chip ${d.id===active?'on':''}" data-d="${d.id}"><b>${d.num}</b>${d.chip}<span class="dot ${d.status==='final'?'':'draft'}"></span></button>`).join('');
+  document.querySelectorAll('.chip').forEach(c=>c.onclick=()=>{store.set('day',c.dataset.d);renderDay(c.dataset.d)});
+}
+const STATUS={final:['final','✔ מתוכנן'],partial:['partial','◐ מתוכנן חלקית'],draft:['draft','✎ הצעות, עוד לא סגור']};
+const altSel=store.get('alt',{});
+function hmOf(t){const m=/^(\d{1,2}):(\d{2})$/.exec(t);return m?[+m[1],+m[2]]:null}
+const p2=n=>String(n).padStart(2,'0');
+function calURL(d,i,title,loc){
+  const it=d.items[i],t0=hmOf(it.t);if(!t0)return '';
+  const key=d.id+'_'+i,x=CALX[key];
+  let mins=60;
+  if(x){const e=hmOf(x.end);mins=e[0]*60+e[1]-(t0[0]*60+t0[1])}
+  else{const nx=d.items[i+1],t1=nx&&hmOf(nx.t);if(t1){const g=t1[0]*60+t1[1]-(t0[0]*60+t0[1]);if(g>=15&&g<=180)mins=g}}
+  const tot=t0[0]*60+t0[1]+mins,date=d.date.replace(/-/g,'');
+  const s=date+'T'+p2(t0[0])+p2(t0[1])+'00',e=date+'T'+p2(Math.floor(tot/60)%24)+p2(tot%60)+'00';
+  const tz=it.tz?'Asia/Jerusalem':'Europe/Madrid';
+  const q=(k,v)=>'&'+k+'='+encodeURIComponent(v);
+  return 'https://calendar.google.com/calendar/render?action=TEMPLATE'+q('text','נועם במדריד: '+title.replace(/[⭐]/g,'').trim())+'&dates='+s+'/'+e+q('ctz',tz)+q('details',it.d||'')+q('location',loc||'');
+}
+function actsHTML(key,nav,cal,isDone){
+  return `<div class="acts">
+    ${nav?`<a class="btn nav" target="_blank" rel="noopener" href="${nav}">${ico('map')}ניווט</a>`:''}
+    ${cal?`<a class="btn cal" target="_blank" rel="noopener" href="${cal}">${ico('cal')}ליומן</a>`:''}
+    <button class="btn chk" data-k="${key}">${ico('check')}${isDone?'בוצע!':'סמן כבוצע'}</button></div>`;
+}
+function renderDay(id){
+  window.__day=id;renderChips(id);
+  const d=DAYS.find(x=>x.id===id)||DAYS[0];
+  const dt=new Date(d.date+'T12:00:00');
+  const dateStr=dt.toLocaleDateString('he-IL',{weekday:'long',day:'numeric',month:'long'});
+  const st=STATUS[d.status];
+  let h=`<div class="dayhead"><div class="num">${d.num} מתוך 6</div><div class="ttl">${d.title}</div><div class="dt">${dateStr}</div>
+    <span class="badge ${st[0]}">${st[1]}</span></div>`;
+  if(d.alert)h+=`<div class="alert">${d.alert}</div>`;
+  if(d.tipText)h+=`<div class="tip">${d.tipText}</div>`;
+  h+=`<div class="tl">`;
+  const altMap={};
+  d.items.forEach((it,i)=>{
+    const key=d.id+'_'+i, isDone=!!done[key], alts=(it.altkey&&ALTS[it.altkey])||null;if(alts)altMap[key]=alts;
+    const sel=alts?(altSel[key]||0):0, cur=sel>0?alts[sel-1]:null;
+    const nav=it.link||(it.map?mapQ(it.map):'');
+    const main=`<div class="t">${it.title}${it.sug?'<span class="tag">הצעה</span>':''}</div>
+      ${it.d?`<div class="d">${it.d}</div>`:''}
+      ${it.tz?`<div class="tz">🕐 ${it.tz}</div>`:''}
+      ${alts?`<div class="hint">יש חלופה בהחלקה הצידה: ${alts[0].title}</div>`:''}
+      ${actsHTML(key,nav,calURL(d,i,it.title,it.map),isDone)}`;
+    let body;
+    if(alts){
+      const slides=`<div class="slide card">${main}</div>`+alts.map(a=>`<div class="slide card alt">
+        <div class="t"><span class="tag alt">חלופה</span>${a.title}</div>
+        <div class="d">${a.d}</div>
+        <div class="chips2">${a.trade.map(c=>`<span class="tr ${c.k||''}">${c.s}</span>`).join('')}</div>
+        ${actsHTML(key,mapQ(a.map),calURL(d,i,a.title,a.map),isDone)}</div>`).join('');
+      body=`<div class="altwrap"><div class="alts" data-k="${key}">${slides}</div>
+        <div class="dots" data-k="${key}">${[0,...alts.map((_,j)=>j+1)].map(j=>`<i class="${j===sel?'on':''}"></i>`).join('')}</div></div>`;
+    }else body=`<div class="card">${main}</div>`;
+    h+=`<div class="it ${it.sug?'sug':''} ${isDone?'done':''}" data-k="${key}">
+      <div class="ic"><div class="bub">${ico(isDone?'check':(cur?cur.ic:it.ic))}</div><div class="tm">${it.t}</div></div>${body}</div>`;
+  });
+  h+=`</div>`;
+  const el=document.getElementById('day');el.innerHTML=h;
+  el.querySelectorAll('.btn.chk').forEach(b=>b.onclick=()=>{
+    const k=b.dataset.k;done[k]=!done[k];if(!done[k])delete done[k];store.set('done',done);
+    if(done[k])toast('⭐ מעולה!');renderDay(id);
+  });
+  el.querySelectorAll('.alts').forEach(sc=>{
+    const key=sc.dataset.k,n=altMap[key].length+1,idx0=+key.split('_')[1];
+    const maxS=()=>sc.scrollWidth-sc.clientWidth;
+    requestAnimationFrame(()=>{sc.scrollLeft=maxS()*(altSel[key]||0)/(n-1)});
+    let tm;
+    sc.addEventListener('scroll',()=>{
+      clearTimeout(tm);
+      tm=setTimeout(()=>{
+        const m=maxS(),idx=m>0?Math.round(sc.scrollLeft/m*(n-1)):0;
+        if((altSel[key]||0)===idx)return;
+        if(idx)altSel[key]=idx;else delete altSel[key];
+        store.set('alt',altSel);
+        const dots=el.querySelectorAll('.dots[data-k="'+key+'"] i');dots.forEach((x,j)=>x.classList.toggle('on',j===idx));
+        const bub=el.querySelector('.it[data-k="'+key+'"] .bub');
+        if(bub&&!done[key])bub.innerHTML=ico(idx?altMap[key][idx-1].ic:d.items[idx0].ic);
+        toast(idx?'נבחרה חלופה: '+altMap[key][idx-1].title:'חזרתם לתוכנית המקורית');
+      },140);
+    },{passive:true});
+  });
+}
+
+/* ---------- COUNTDOWN ---------- */
+const DEPART=new Date('2026-10-08T16:05:00+03:00');
+const KICK=new Date('2026-10-10T21:00:00+02:00');
+const LAND_HOME=new Date('2026-10-13T14:10:00+03:00');
+const pad=n=>String(Math.max(0,n)).padStart(2,'0');
+function split(ms){ms=Math.max(0,ms);const s=Math.floor(ms/1000);return[Math.floor(s/86400),Math.floor(s%86400/3600),Math.floor(s%3600/60),s%60]}
+function tick(){
+  const now=new Date();let target,label,note;
+  if(now<DEPART){target=DEPART;label='עד ההמראה למדריד ✈️';note='חמישי 8.10 · 16:05 שעון ישראל';}
+  else if(now<KICK){target=KICK;label='עד שריקת הפתיחה בברנבאו ⚽';note='שבת 10.10 · 21:00 שעון מדריד';}
+  else if(now<LAND_HOME){target=LAND_HOME;label='עד הנחיתה בבית 🏠';note='שלישי 13.10 · 14:10 שעון ישראל';}
+  else{target=now;label='הטיול הסתיים, איזה טיול! 🏆';note='מזל טוב לבר המצווה, נועם!';}
+  const [d,h,m,s]=split(target-now);
+  cdLabel.textContent=label;cdNote.textContent=note;cdD.textContent=pad(d);cdH.textContent=pad(h);cdM.textContent=pad(m);cdS.textContent=pad(s);
+  const [md,mh,mm]=split(KICK-now);mD.textContent=pad(md);mH.textContent=pad(mh);mM.textContent=pad(mm);
+}
+
+/* ---------- MISSIONS ---------- */
+let mis=store.get('mis',{});
+function renderMissions(){
+  const base=Object.keys(mis).filter(k=>+k<MISSIONS.length).length;
+  let unlocked=store.get('secret',false);
+  if(!unlocked&&base>=5){unlocked=true;store.set('secret',true);found('secret');setTimeout(()=>{toast('🔓 נפתחה משימה סודית!');confetti(60)},200)}
+  const ALL=unlocked?[...MISSIONS,SECRET]:MISSIONS;
+  const total=ALL.length,cnt=Object.keys(mis).filter(k=>+k<total).length;
+  document.getElementById('missions').innerHTML=ALL.map((m,i)=>
+    `<div class="mis ${mis[i]?'on':''} ${i>=MISSIONS.length?'secret':''}" data-i="${i}"><div class="st">${ico('star')}</div><div class="tx"><b>${m[0]}</b><small>${m[1]}</small></div></div>`).join('');
+  misCount.textContent=`${cnt} / ${total} כוכבים`;
+  misBar.style.width=(cnt/total*100)+'%';
+  misRank.textContent=cnt>=total?'👑 אגדה':cnt>=10?'⭐ קפטן':cnt>=6?'⚽ שחקן הרכב':cnt>=3?'👟 שחקן ספסל':'🌱 טירון';
+  trophyBox.style.display=cnt>=total?'block':'none';
+  document.querySelectorAll('.mis').forEach(el=>el.onclick=()=>{
+    const i=el.dataset.i;if(mis[i])delete mis[i];else{mis[i]=1;if(+i===3)found('km0');toast('⭐ כוכב חדש!')}store.set('mis',mis);renderMissions();
+  });
+}
+
+/* ---------- PHRASES ---------- */
+function speak(t){
+  try{const u=new SpeechSynthesisUtterance(t);u.lang='es-ES';u.rate=.85;speechSynthesis.cancel();speechSynthesis.speak(u)}
+  catch(e){toast('השמעה לא נתמכת במכשיר הזה')}
+}
+function renderPhrases(){
+  const el=document.getElementById('phrases');
+  el.innerHTML=PHRASES.map((p,i)=>`<div class="ph"><div class="tx"><div class="he">${p[0]}</div><div class="es">${p[1]}</div><div class="pr">${p[2]}</div></div>
+    <button class="say" data-i="${i}" aria-label="השמע">${ico('sound')}</button></div>`).join('');
+  el.querySelectorAll('.say').forEach(b=>b.onclick=()=>{const t=PHRASES[b.dataset.i][1];if(t==='¡Gol!')goal();else speak(t)});
+}
+
+/* ---------- MEALS ---------- */
+function renderMeals(){
+  document.getElementById('mealDays').innerHTML=MEALS.map(m=>`<div class="panel"><h3>${m.day}</h3>${m.rows.map(r=>`<div class="meal"><div class="mt">${r.t}</div><div class="mx"><b>${r.k}</b><span>${r.d}</span>${r.map?`<a target="_blank" rel="noopener" href="${mapQ(r.map)}">להצגה במפה</a>`:''}</div></div>`).join('')}</div>`).join('');
+  const card=(es,he,pr,i,kind)=>`<div class="ph"><div class="tx"><div class="he">${he}</div><div class="es">${es}</div><div class="pr">${pr}</div></div><button class="say" data-k="${kind}" data-i="${i}" aria-label="השמע">${ico('sound')}</button></div>`;
+  document.getElementById('dishes').innerHTML=DISHES.map((x,i)=>card(x[0],x[1],x[2],i,'d')).join('');
+  document.getElementById('tablePhrases').innerHTML=TABLE.map((x,i)=>card(x[1],x[0],x[2],i,'t')).join('');
+  document.querySelectorAll('#v-food .say').forEach(b=>b.onclick=()=>speak(b.dataset.k==='d'?DISHES[b.dataset.i][0]:TABLE[b.dataset.i][1]));
+}
+
+/* ---------- CHECKLISTS ---------- */
+function renderList(elId,key,items){
+  const st=store.get(key,{});const el=document.getElementById(elId);
+  el.insertAdjacentHTML('beforeend',items.map((t,i)=>`<label><input type="checkbox" data-i="${i}" ${st[i]?'checked':''}>${t}</label>`).join(''));
+  el.querySelectorAll('input').forEach(c=>c.onchange=()=>{if(c.checked)st[c.dataset.i]=1;else delete st[c.dataset.i];store.set(key,st)});
+}
+
+/* ---------- TRANSLATOR ---------- */
+(function(){
+  const st={sl:'iw',tl:'es'};
+  const box=document.getElementById('trText');
+  function upd(){
+    const t=box.value.trim(), q=encodeURIComponent(t);
+    document.getElementById('trWeb').href='https://translate.google.com/m?sl='+st.sl+'&tl='+st.tl+'&hl=iw'+(t?'&q='+q:'');
+    document.getElementById('trApp').href='https://translate.google.com/?sl='+st.sl+'&tl='+st.tl+(t?'&text='+q:'')+'&op=translate';
+  }
+  document.querySelectorAll('#trDir button').forEach(b=>b.onclick=()=>{
+    document.querySelectorAll('#trDir button').forEach(x=>x.classList.toggle('on',x===b));
+    st.sl=b.dataset.sl;st.tl=b.dataset.tl;upd();
+  });
+  box.addEventListener('input',upd);
+  document.getElementById('trApp').addEventListener('click',()=>{
+    const t=box.value.trim();if(!t)return;
+    try{navigator.clipboard.writeText(t).then(()=>toast('הטקסט הועתק')).catch(()=>{})}catch(e){}
+  });
+  upd();
+})();
+
+/* ---------- TAXI ADDRESS ---------- */
+function showAddr(){
+  const w=document.createElement('div');
+  w.style.cssText='position:fixed;inset:0;z-index:50;background:#fff;color:#0a1633;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;direction:ltr';
+  w.innerHTML='<div style="font-size:18px;color:#4a5878;margin-bottom:10px">Por favor, a esta dirección:</div><div style="font-size:32px;font-weight:900;line-height:1.25">Hotel Petit Palace Alcalá<br>Calle Virgen de los Peligros, 2<br>Madrid</div><div style="margin-top:28px;font-size:15px;color:#4a5878;direction:rtl">לחיצה בכל מקום תסגור</div>';
+  w.onclick=()=>w.remove();document.body.appendChild(w);
+}
+
+/* ---------- NAV ---------- */
+document.querySelectorAll('.bnav button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('.bnav button').forEach(x=>x.classList.toggle('on',x===b));
+  document.querySelectorAll('.view').forEach(v=>v.classList.toggle('on',v.id==='v-'+b.dataset.v));
+  window.scrollTo({top:document.querySelector('main').offsetTop-10,behavior:'smooth'});
+});
+
+
+/* ---------- EASTER EGGS ---------- */
+const EGGS=[
+ ['crown','הכתר','לחיצות מהירות על הכתר או על ¡HALA MADRID! בראש המסך'],
+ ['keepy','משחק הכדור','לחיצה על הכדור הקטן בפינה של הכותרת, ואז להקפיץ אותו'],
+ ['gol','צעקת הגול','בלשונית הספרדית, לחיצה על הרמקול ליד ¡Gol!'],
+ ['night','מצב סטדיון','החזקה ארוכה על לוח הספירה לאחור'],
+ ['kick','שריקת הפתיחה','לפתוח את האפליקציה בזמן שריקת הפתיחה של המשחק, בשבת 10.10 בערב'],
+ ['secret','המשימה הסודית','לסמן 5 משימות בלשונית המשימות'],
+ ['km0','קילומטר 0','לסמן את המשימה "קילומטר 0" אחרי שמוצאים את הלוחית בפוארטה דל סול']
+];
+const eggsFound=store.get('eggs',{});
+function found(id){if(!eggsFound[id]){eggsFound[id]=1;store.set('eggs',eggsFound)}}
+function confetti(n){
+  n=n||120;
+  let c=document.getElementById('cfv');
+  if(!c){c=document.createElement('canvas');c.id='cfv';document.body.appendChild(c)}
+  const W=c.width=innerWidth,H=c.height=innerHeight,x=c.getContext('2d');
+  const col=['#d9b44a','#f3d27a','#ffffff','#1b2f5e','#3ccf7a'];
+  const ps=Array.from({length:n},()=>({x:Math.random()*W,y:-20-Math.random()*H*.5,vx:(Math.random()-.5)*3,vy:2+Math.random()*4,s:5+Math.random()*7,r:Math.random()*6,vr:(Math.random()-.5)*.3,c:col[Math.random()*col.length|0]}));
+  let f=0;
+  (function step(){
+    x.clearRect(0,0,W,H);
+    ps.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.r+=p.vr;x.save();x.translate(p.x,p.y);x.rotate(p.r);x.fillStyle=p.c;x.fillRect(-p.s/2,-p.s/3,p.s,p.s*.6);x.restore()});
+    if(++f<220)requestAnimationFrame(step);else c.remove();
+  })();
+}
+function beep(freq,dur,type){
+  try{const A=window.AudioContext||window.webkitAudioContext,a=new A(),o=a.createOscillator(),g=a.createGain();
+    o.type=type||'sine';o.frequency.value=freq;g.gain.value=.15;o.connect(g);g.connect(a.destination);o.start();o.stop(a.currentTime+dur)}catch(e){}
+}
+function whistle(){beep(2600,.25,'square');setTimeout(()=>beep(2600,.25,'square'),320);setTimeout(()=>beep(2600,.6,'square'),640)}
+function goal(){
+  try{const u=new SpeechSynthesisUtterance('¡Gooooooooool!');u.lang='es-ES';u.rate=.55;u.pitch=1.2;speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){}
+  document.body.classList.add('flash');setTimeout(()=>document.body.classList.remove('flash'),1900);
+  found('gol');confetti(80);toast('⚽ ¡GOOOOL!');
+}
+function overlay(html,onClose){
+  const o=document.createElement('div');o.className='ov';o.setAttribute('dir','rtl');o.innerHTML=html;
+  o.addEventListener('click',e=>{if(e.target.closest('[data-close]')||e.target===o){o.remove();if(onClose)onClose()}});
+  document.body.appendChild(o);return o;
+}
+/* 1: crown / Hala Madrid x5, with a growing pulse */
+(function(){let n=0,t;
+  const cr=document.getElementById('crownEgg'),hl=document.querySelector('.hala');
+  const hit=()=>{
+    n++;clearTimeout(t);t=setTimeout(()=>{n=0;cr.style.setProperty('--n',0);hl.style.setProperty('--n',0)},1500);
+    [cr,hl].forEach(el=>{el.style.setProperty('--n',n);el.classList.remove('pop');void el.getBoundingClientRect();el.classList.add('pop')});
+    if(n<5)beep(400+n*120,.07);
+    if(n>=5){n=0;found('crown');confetti(140);toast('¡Hala Madrid! 👑');whistle()}
+  };
+  cr.addEventListener('click',hit);hl.addEventListener('click',hit);
+})();
+/* 2: keepy-uppy */
+(function(){
+  document.getElementById('ballEgg').addEventListener('click',()=>{
+    const g=document.createElement('div');g.className='gm';
+    g.innerHTML='<div class="sc">0</div><div class="bs"></div><button class="cl">סגירה</button><svg class="bl"><use href="#ball"/></svg><div class="hn">לוחצים על הכדור כדי שלא יפול</div>';
+    document.body.appendChild(g);
+    const sc=g.querySelector('.sc'),bs=g.querySelector('.bs'),bl=g.querySelector('.bl');
+    let best=store.get('keepy',0),score=0,alive=true,W=innerWidth,H=innerHeight;
+    let x=W/2-28,y=H*.3,vx=0,vy=0;
+    bs.textContent='שיא: '+best;
+    const stop=()=>{alive=false;g.remove()};
+    g.querySelector('.cl').onclick=e=>{e.stopPropagation();stop()};
+    const end=()=>{if(score>best){best=score;store.set('keepy',best);toast('🏆 שיא חדש: '+best);confetti(70)}else toast('נפל! ניקוד: '+score);score=0;sc.textContent=0;bs.textContent='שיא: '+best;x=W/2-28;y=H*.3;vx=0;vy=0};
+    g.addEventListener('pointerdown',e=>{
+      if(e.target.closest('.cl'))return;
+      const r=bl.getBoundingClientRect(),cx=r.left+28,cy=r.top+28;
+      if(Math.hypot(e.clientX-cx,e.clientY-cy)<46){found('keepy');score++;vy=-(7+Math.min(score,40)*.12);vx=(cx-e.clientX)*(.08+Math.min(score,40)*.004);sc.textContent=score;beep(500+score*8,.06);if(score%10===0)toast('⚡ רמה '+(score/10+1))}
+    });
+    (function loop(){
+      if(!alive)return;
+      vy+=.18+Math.min(score,40)*.0075;x+=vx;y+=vy;
+      if(x<0){x=0;vx=Math.abs(vx)}if(x>W-56){x=W-56;vx=-Math.abs(vx)}
+      if(y>H-40){end()}
+      bl.style.left=x+'px';bl.style.top=y+'px';requestAnimationFrame(loop);
+    })();
+  });
+})();
+/* 3: stadium night mode, long press on board */
+(function(){const b=document.getElementById('board');let t;
+  const on=()=>{t=setTimeout(()=>{document.body.classList.toggle('night');found('night');toast(document.body.classList.contains('night')?'🌙 מצב ערב באצטדיון':'☀️ חזרה ליום')},800)},off=()=>clearTimeout(t);
+  b.addEventListener('pointerdown',on);['pointerup','pointerleave','pointercancel'].forEach(ev=>b.addEventListener(ev,off));
+})();
+/* 4: kickoff overlay (once, only while app is open) */
+function kickCheck(){
+  const now=new Date();
+  if(now>=KICK&&now<new Date(+KICK+3*3600e3)&&!store.get('kickSeen',false)){
+    store.set('kickSeen',true);found('kick');whistle();confetti(100);
+    overlay('<div style="font-size:64px">⚽</div><h2>המשחק התחיל!</h2><p>ריאל מדריד נגד ויאריאל, בברנבאו.\nנועם וסבא ניסן שם, עכשיו.</p><a class="btn gold" target="_blank" rel="noopener" href="https://www.google.com/search?q=Real+Madrid+vs+Villarreal">תוצאה חיה</a><button class="btn" data-close style="background:rgba(255,255,255,.15);color:#fff">סגירה</button>');
+  }
+}
+/* 5: parents' surprise, unlocked after landing */
+const SUR_ENC='15HXqNeb15Qg157XkNeR15Ag15XXkNee15A6INee15bXnCDXmNeV15Eg16DXldei150hINeQ16DXl9eg15Ug15LXkNeZ150g15HXmiDXnteQ15XXky4g8J+SmQ==';
+const SUR_AT=LAND_HOME;
+function surText(){try{return decodeURIComponent(escape(atob(SUR_ENC)))}catch(e){return ''}}
+function surShow(first){
+  if(first){confetti(160);whistle()}
+  overlay('<div style="font-size:56px">💌</div><h2>מזל טוב, נועם!</h2><p>'+surText().replace(/</g,'&lt;')+'</p><button class="btn gold" data-close>סגירה</button>');
+}
+const QUIZ_AT=new Date('2026-10-13T05:30:00+02:00');
+function eggMenu(){
+  const n=EGGS.filter(e=>eggsFound[e[0]]).length;
+  overlay('<h2>🥚 כל ה-Easter eggs</h2><p style="margin-bottom:6px">מצאת '+n+' מתוך '+EGGS.length+'</p><div style="width:100%;max-width:340px;text-align:right">'+EGGS.map(e=>`<div style="display:flex;gap:10px;align-items:flex-start;background:rgba(255,255,255,.08);border-radius:12px;padding:10px 12px;margin:8px 0"><div style="font-size:22px">${eggsFound[e[0]]?'✅':'🔒'}</div><div><b>${e[1]}</b><div style="font-size:14px;opacity:.8;line-height:1.5">${e[2]}</div></div></div>`).join('')+'</div><button class="btn gold" data-close>סגירה</button>',()=>{surCheck()});
+}
+function eggQuiz(){
+  const n=EGGS.filter(e=>eggsFound[e[0]]).length,N=EGGS.length;
+  const o=overlay('<div style="font-size:56px">🥚</div><h2>כמה Easter eggs מצאת?</h2><p>במהלך הטיול הסתתרו באפליקציה הפתעות. נחש כמה מצאת.</p><div id="qg" style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;max-width:320px;margin-top:10px">'+Array.from({length:N+1},(_,i)=>`<button class="btn gold" data-g="${i}" style="margin:0;min-width:52px;justify-content:center">${i}</button>`).join('')+'</div>',()=>{store.set('quizSeen',true);surCheck()});
+  o.addEventListener('click',e=>{
+    const b=e.target.closest('[data-g]');if(!b)return;
+    const g=+b.dataset.g;o.remove();
+    const msg=g===n?'ניחשת בדיוק!':g<n?'מצאת יותר ממה שחשבת!':'חשבת שמצאת יותר...';
+    if(n===N||g===n)confetti(120);
+    overlay('<div style="font-size:56px">'+(n===N?'🏆':'🥚')+'</div><h2>מצאת '+n+' מתוך '+N+'</h2><p>ניחשת '+g+'. '+msg+'</p><button class="btn gold" data-close>רשימת כל ה-Easter eggs</button>',()=>{store.set('quizSeen',true);document.getElementById('eggBtn').style.display='block';eggMenu()});
+  });
+}
+function quizDue(){return new Date()>=QUIZ_AT&&!store.get('quizSeen',false)}
+function surCheck(){
+  if(new Date()<SUR_AT)return;
+  if(quizDue()||document.querySelector('.ov'))return;
+  const btn=document.getElementById('surBtn');btn.style.display='block';
+  if(!store.get('surSeen',false)){store.set('surSeen',true);surShow(true)}
+}
+let quizOpen=false;
+function quizCheck(){
+  if(store.get('quizSeen',false))document.getElementById('eggBtn').style.display='block';
+  if(quizDue()&&!quizOpen&&!document.querySelector('.ov')){quizOpen=true;eggQuiz()}
+}
+document.getElementById('eggBtn').onclick=eggMenu;
+document.getElementById('surBtn').onclick=()=>surShow(false);
+setInterval(()=>{kickCheck();quizCheck();surCheck()},1000);kickCheck();quizCheck();surCheck();
+
+/* ---------- SYNC (Google Sheet, optional) ---------- */
+const SHEET_URL='';
+(function(){DAYS.forEach(d=>d.items.forEach((it,i)=>{const k=d.id+'_'+i;if(ALTS[k])it.altkey=k}))})();
+function parseCSV(t){
+  const rows=[];let r=[],f='',q=false;
+  for(let i=0;i<t.length;i++){const c=t[i];
+    if(q){if(c==='"'){if(t[i+1]==='"'){f+='"';i++}else q=false}else f+=c}
+    else if(c==='"')q=true;
+    else if(c===','){r.push(f);f=''}
+    else if(c==='\n'){r.push(f);rows.push(r);r=[];f=''}
+    else if(c!=='\r')f+=c;
+  }
+  if(f!==''||r.length){r.push(f);rows.push(r)}
+  return rows;
+}
+function normTime(s){const m=/^(\d{1,2}):(\d{2})(:\d{2})?$/.exec(s);return m?String(m[1]).padStart(2,'0')+':'+m[2]:s}
+function normDate(s){
+  let m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(s);if(m)return s;
+  m=/^(\d{1,2})[\/.](\d{1,2})[\/.](\d{4})$/.exec(s);
+  if(m){const a=+m[1],b=+m[2],mo=a===10?a:(b===10?b:a),dd=mo===a?b:a;return m[3]+'-'+String(mo).padStart(2,'0')+'-'+String(dd).padStart(2,'0')}
+  return s;
+}
+function applySheet(text){
+  const rows=parseCSV(text.replace(/^﻿/,'')).filter(r=>r.length>1||r[0]);
+  const head=rows.shift()||[];if(head[0]!=='type'||head.indexOf('title')<0)throw new Error('bad header');
+  const ix={};head.forEach((c,i)=>ix[c]=i);const g=(r,c)=>(r[ix[c]]||'').trim();
+  const days=[],byId={},mealsBy={},mealOrder=[];
+  rows.forEach(r=>{
+    const t=g(r,'type'),dk=g(r,'day');
+    if(t==='day'){const d={id:dk,date:normDate(g(r,'date')),chip:g(r,'chip'),num:g(r,'num')||('יום '+(days.length+1)),title:g(r,'title'),status:g(r,'status')||'draft',items:[]};
+      const al=g(r,'alert'),tp=g(r,'tip');if(al)d.alert=al;if(tp)d.tipText=tp;days.push(d);byId[dk]=d}
+    else if(t==='item'&&byId[dk]){const it={t:normTime(g(r,'time')),ic:g(r,'icon')||'star',title:g(r,'title'),d:g(r,'desc')};
+      ['tz','map','link'].forEach(k=>{if(g(r,k))it[k]=g(r,k)});if(g(r,'sug'))it.sug=true;
+      if(g(r,'live_url'))it.live=[g(r,'live_url'),g(r,'live_label')||'עדכון חי'];if(g(r,'altkey'))it.altkey=g(r,'altkey');byId[dk].items.push(it)}
+    else if(t==='meal'){if(!mealsBy[dk]){mealsBy[dk]={day:dk,rows:[]};mealOrder.push(dk)}
+      const m={k:g(r,'title'),t:normTime(g(r,'time')),d:g(r,'desc')};if(g(r,'map'))m.map=g(r,'map');mealsBy[dk].rows.push(m)}
+  });
+  if(!days.length||!days.every(d=>d.items.length))throw new Error('empty');
+  DAYS.length=0;days.forEach(d=>DAYS.push(d));
+  MEALS.length=0;mealOrder.forEach(k=>MEALS.push(mealsBy[k]));
+}
+function syncLine(msg){const el=document.getElementById('syncLine');if(el)el.textContent=msg}
+function syncStamp(ts){return 'מעודכן לאחרונה: '+new Date(ts).toLocaleString('he-IL',{day:'numeric',month:'numeric',hour:'2-digit',minute:'2-digit'})}
+function rerender(){
+  const ids=DAYS.map(d=>d.id);const cur=ids.includes(window.__day)?window.__day:ids[0];
+  renderDay(cur);renderMeals();
+}
+async function syncNow(manual){
+  if(!SHEET_URL)return;
+  try{
+    const ac=new AbortController();const to=setTimeout(()=>ac.abort(),8000);
+    const res=await fetch(SHEET_URL+(SHEET_URL.includes('?')?'&':'?')+'_='+Date.now(),{cache:'no-store',signal:ac.signal});clearTimeout(to);
+    if(!res.ok)throw new Error('http '+res.status);
+    const text=await res.text();
+    const cache=store.get('sheet',null);
+    if(!cache||cache.text!==text){applySheet(text);store.set('sheet',{ts:Date.now(),text});rerender();if(cache)toast('הלוז עודכן ✔')}
+    else store.set('sheet',{ts:Date.now(),text});
+    syncLine(syncStamp(Date.now()));
+  }catch(e){
+    const c=store.get('sheet',null);
+    syncLine(manual?'אין חיבור, ממשיכים עם הגרסה השמורה':(c?syncStamp(c.ts)+' (ללא חיבור)':''));
+  }
+}
+function syncInit(){
+  if(!SHEET_URL)return;
+  const c=store.get('sheet',null);
+  if(c){try{applySheet(c.text);syncLine(syncStamp(c.ts))}catch(e){}}
+  document.getElementById('syncLine').onclick=()=>{syncLine('בודק...');syncNow(true)};
+  syncNow(false);setInterval(()=>{if(document.visibilityState==='visible')syncNow(false)},600000);
+  document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')syncNow(false)});
+}
+
+/* ---------- INIT ---------- */
+(function(){
+  syncInit();
+  const today=madridToday();
+  const todayDay=DAYS.find(d=>d.date===today);
+  renderDay(todayDay?todayDay.id:store.get('day','d1'));
+  renderMissions();renderPhrases();renderMeals();
+  renderList('matchList','ml',MATCH_LIST);renderList('packList','pl',PACK_LIST);
+  tick();setInterval(tick,1000);
+})();
+</script>
+</body>
+</html>
