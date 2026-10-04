@@ -212,7 +212,7 @@ h3{margin:0 0 6px;font-size:17px}
 .ballegg svg{width:100%;height:100%}
 .ov{position:fixed;inset:0;z-index:60;display:flex;flex-direction:column;align-items:center;justify-content:safe center;overflow-y:auto;text-align:center;padding:24px;direction:rtl;background:rgba(6,12,30,.98);color:#fff}
 .ov h2{font-size:30px;margin:10px 0}
-.gframe{position:relative;margin:6px auto 14px;width:230px;padding:7px;border-radius:18px;background:linear-gradient(145deg,#f3d27a,#b98a2c 45%,#f3d27a);box-shadow:0 0 0 1px rgba(255,236,170,.35),0 10px 34px rgba(217,180,74,.28),0 4px 14px rgba(0,0,0,.6);display:none;animation:gfade .9s ease both}
+.gframe{position:relative;margin:16px auto 22px;width:230px;padding:7px;border-radius:18px;background:linear-gradient(145deg,#f3d27a,#b98a2c 45%,#f3d27a);box-shadow:0 0 0 1px rgba(255,236,170,.35),0 10px 34px rgba(217,180,74,.28),0 4px 14px rgba(0,0,0,.6);display:none;animation:gfade .9s ease both}
 .gframe:before{content:"";position:absolute;inset:3px;border-radius:15px;border:1px solid rgba(10,22,51,.55);pointer-events:none;z-index:2}
 .gframe .mat{border-radius:12px;padding:4px;background:#0a1633}
 .gframe img{display:block;width:100%;height:auto;border-radius:9px}
@@ -651,20 +651,20 @@ const DAYS=[
   alert:'🚇 תחנת המטרו Santiago Bernabéu סגורה לשיפוצים. יורדים ב-Nuevos Ministerios והולכים ברגל 12–15 דקות, או לוקחים את השאטל החינמי S10.',
   items:[
    {t:'08:30',ic:'food',title:'סיום ארוחת בוקר במלון',d:'ממלאים מצברים, היום נוסעים לאצטדיון!'},
-   {t:'08:40',ic:'bus',title:'מטרו לכיוון הברנבאו',d:'הולכים כמה דקות לתחנת Gran Vía, קו 1 ל-Tribunal, ואז קו 10 עד Nuevos Ministerios (3 תחנות). בערך 30–35 דקות. גיבוי: אוטובוס 150 מ-Sol / Sevilla.',link:TRANSIT_TO},
+   {t:'08:40',ic:'bus',title:'מטרו לכיוון הברנבאו',d:'הולכים כמה דקות לתחנת Gran Vía, קו 1 ל-Tribunal, ואז קו 10 עד Nuevos Ministerios (3 תחנות). בערך 30–35 דקות. אפשר גם באוטובוס 147, בהחלקה הצידה.',link:TRANSIT_TO},
    {t:'09:20',ic:'walk',title:'הליכה לאצטדיון לאורך הקסטיאנה',d:'12–15 דקות מ-Nuevos Ministerios, או בשאטל החינמי S10.',map:'Estadio Santiago Bernabéu'},
    {t:'09:40',ic:'camera',title:'סיבוב באזור האצטדיון',d:'צילומים של האצטדיון מבחוץ והליכה בשדרת הקסטיאנה.',map:'Estadio Santiago Bernabéu',link:'https://maps.app.goo.gl/n5ouxT8Qy5wWg7i57'},
    {t:'10:15',ic:'bag',title:'קניון El Corte Inglés Castellana',d:'נפתח ב-10:00, כמה דקות הליכה מ-Nuevos Ministerios. המון קומות של חנויות, ספורט ואלקטרוניקה, ובפנים אזור אוכל וקפה (Gourmet Experience).',map:'El Corte Inglés Castellana, Calle de Raimundo Fernández Villaverde 65, Madrid'},
    {t:'11:30',ic:'walk',title:'יוצאים מהקניון והולכים לאצטדיון',d:'12–15 דקות הליכה. כדאי להגיע לסיור כרבע שעה לפני הזמן.',map:'Estadio Santiago Bernabéu'},
    {t:'12:00',ic:'stadium',title:'⭐ סיור בסנטיאגו ברנבאו',d:'מוזיאון התארים וההיסטוריה של הקבוצה, ירידה לכר הדשא ותצפית פנורמית על כל האצטדיון. שימו לב: ביום שלפני משחק חדרי ההלבשה ודרגשי השחקנים לא פתוחים לביקור.',map:'Estadio Santiago Bernabéu',link:'https://maps.app.goo.gl/n5ouxT8Qy5wWg7i57'},
-   {t:'14:00',ic:'bus',title:'חוזרים למלון במטרו',d:'הליכה ל-Nuevos Ministerios, קו 10 ל-Tribunal וקו 1 ל-Gran Vía. כ-45 דקות עם ההליכה. גיבוי: אוטובוס 150.',link:TRANSIT_BACK},
+   {t:'14:00',ic:'bus',title:'חוזרים למלון במטרו',d:'הליכה ל-Nuevos Ministerios, קו 10 ל-Tribunal וקו 1 ל-Gran Vía. כ-45 דקות עם ההליכה. אפשר גם באוטובוס 147, בהחלקה הצידה.',link:TRANSIT_BACK},
    {t:'14:50',ic:'rest',title:'מנוחה במלון, שעתיים',d:'מתקלחים, נחים ואוגרים כוח לערב.'},
    {t:'16:50',ic:'walk',title:'הליכה לפלאסה מאיור',d:'10–15 דקות הליכה מהמלון.',map:'Plaza Mayor Madrid'},
    {t:'17:10',ic:'food',title:'פלאסה מאיור ושוק סן מיגל',d:'הכיכר המפורסמת של מדריד, ולידה שוק אוכל מקורה וטעים. בערב מתמלא מאוד.',map:'Mercado de San Miguel Madrid'},
    {t:'ערב',ic:'star',title:'חזרה דרך פוארטה דל סול',d:'מחפשים את "קילומטר 0" על המדרכה ואת פסל הדוב ועץ התות (משימה!). הלוחית מסמנת את נקודת האפס של הכבישים בספרד, ומסורת התיירים היא לעמוד עליה ולבקש משאלה.',map:'Puerta del Sol Madrid'}
   ]},
  {id:'d3',date:'2026-10-10',chip:'ש׳ 10.10',num:'יום 3',title:'יום המשחק ⚽',status:'final',
-  alert:'⚽ הערב: ריאל מדריד נגד ויאריאל, ב-21:00 בברנבאו. למשחק הולכים נועם וסבא ניסן.',
+  alert:'⚽ הערב: ריאל מדריד נגד ויאריאל, ב-21:00 בברנבאו. למשחק הולכים נועם וסבא ניסן. 🚫 לא לקחת אוטובוסים או מוניות לאזור האצטדיון החל מ-3 שעות לפני המשחק. הרחובות חסומים, יש להסתמך על המטרו בלבד עד תחנת Nuevos Ministerios.',
   tipText:'הערב של סבתא דליה עוד פתוח: אפשר לתכנן לה ארוחה וסיבוב ליד המלון.',
   items:[
    {t:'09:00',ic:'food',title:'ארוחת בוקר במלון',d:'בוקר רגוע, יום חופשי עד אחר הצהריים.'},
@@ -672,10 +672,10 @@ const DAYS=[
    {t:'10:30',ic:'star',title:'פארק רטירו, עד שנמאס',d:'אגם עם סירות חתירה, ארמון הקריסטל והגן הוורדים. עד 4 שעות לכל היותר.',map:'Parque del Retiro Madrid'},
    {t:'14:30',ic:'food',title:'ארוחה גדולה וסיבוב חופשי',d:'אוכלים טוב כאן, כי לפני המשחק לא יהיה זמן לארוחה. מסתובבים בדרך חזרה למלון.'},
    {t:'16:00',ic:'rest',title:'חזרה למלון ומנוחה',d:'חוזרים בסביבות 16:00–16:30 ונחים עד 18:15, כדי שיהיה כוח לערב ארוך. מכינים תיק קטן: כרטיסים, מטען נייד וצעיף.',map:HOTEL},
-   {t:'18:30',ic:'bus',title:'יוצאים למשחק במטרו',d:'נועם וסבא ניסן: Gran Vía, קו 1 ל-Tribunal, קו 10 ל-Nuevos Ministerios, ואז הליכה של 12–15 דקות. מגיעים בערך ב-19:00–19:10. במטרו כדי לא להיתקע בפקקים של יום המשחק. גיבוי: אוטובוס 150.',link:TRANSIT_TO},
+   {t:'18:30',ic:'bus',title:'יוצאים למשחק במטרו',d:'נועם וסבא ניסן: Gran Vía, קו 1 ל-Tribunal, קו 10 ל-Nuevos Ministerios, ואז הליכה של 12–15 דקות. מגיעים בערך ב-19:00–19:10. רק במטרו, בלי אוטובוסים ובלי מוניות: הרחובות סביב האצטדיון חסומים.',link:TRANSIT_TO},
    {t:'19:00',ic:'ticket',title:'נכנסים לאצטדיון',d:'הבידוק בכניסה, מוצאים את המקומות בקטגוריית הפרימיום וקולטים את האווירה. כדאי לשאול את Champions Tours מתי נפתחים השערים.',map:'Estadio Santiago Bernabéu',link:'https://maps.app.goo.gl/n5ouxT8Qy5wWg7i57'},
    {t:'21:00',ic:'ball',title:'⭐ שריקת פתיחה! ריאל מדריד – ויאריאל',live:['https://www.google.com/search?q=Real+Madrid+vs+Villarreal','תוצאה חיה'],d:'לה ליגה, מחזור 8. ¡HALA MADRID!'},
-   {t:'23:00',ic:'bus',title:'חוזרים למלון במטרו',d:'מחכים 15–20 דקות עד שהעומס יורד, הולכים ל-Nuevos Ministerios, קו 10 ל-Tribunal וקו 1 ל-Gran Vía. המטרו פועל בדרך כלל עד כ-01:30. כדאי לקבוע נקודת מפגש למקרה שמתפזרים.',link:TRANSIT_BACK}
+   {t:'23:00',ic:'bus',title:'חוזרים למלון במטרו',d:'מחכים 15–20 דקות עד שהעומס יורד, יש שתי דרכים: הליכה דרומה ל-Nuevos Ministerios, קו 10 ל-Tribunal וקו 1 ל-Gran Vía. או, כדי לעקוף את ההמון, הליכה צפונה לתחנת Cuzco (קו 10), תחנה אחת צפונה ל-Plaza de Castilla, ושם קו 1 ל-Gran Vía. כדאי לאמת את המסלול בגוגל מפות בערב. המטרו פועל בדרך כלל עד כ-01:30. כדאי לקבוע נקודת מפגש למקרה שמתפזרים.',link:TRANSIT_BACK}
   ]},
  {id:'d4',date:'2026-10-11',chip:'א׳ 11.10',num:'יום 4',title:'יום מדריד הקלאסית 👑',status:'draft',
   tipText:'📝 היום הזה עוד לא תוכנן. מה שכתוב כאן הוא הצעות בלבד. ביום ראשון רוב החנויות במדריד סגורות או נפתחות מאוחר.',
@@ -708,6 +708,12 @@ const DAYS=[
 /* ---------- ALTERNATIVES (swipe) + CALENDAR OVERRIDES ---------- */
 const W=s=>({s,k:'warn'}), G=s=>({s,k:'good'}), N=s=>({s});
 const ALTS={
+ d2_1:[
+  {ic:'bus',title:'אוטובוס 147 מ-Plaza del Callao',d:'הליכה קצרה ל-Plaza del Callao (כ-10 דקות), עולים על אוטובוס 147 ונוסעים ישר לתחנת Lima-Santiago Bernabéu, ממש מול האצטדיון. מגיעים בערך ב-09:20.',map:'Estadio Santiago Bernabéu, Madrid',trade:[G('0 מטר הליכה בסוף, ממש מול האצטדיון'),G('בלי החלפות תת-קרקעיות'),W('רגיש לעומסי תנועה במרכז. כדאי מרווח ביטחון של 15 דקות'),N('נסיעה: כ-25 דקות')]}
+ ],
+ d2_7:[
+  {ic:'bus',title:'אוטובוס 147 חזרה ל-Callao',d:'עולים בתחנת Lima-Santiago Bernabéu ליד האצטדיון, יורדים ב-Plaza del Callao, ומשם הליכה קצרה למלון. אין צורך ללכת ל-Nuevos Ministerios.',map:'Plaza del Callao, Madrid',trade:[G('בלי הליכה לתחנת מטרו'),G('בלי החלפות תת-קרקעיות'),W('רגיש לעומסי תנועה. כדאי מרווח ביטחון'),N('נסיעה: כ-25 דקות')]}
+ ],
  d2_4:[
   {ic:'star',title:'מוזיאון סורוליה',d:'בית ומוזיאון של הצייר חואקין סורוליה, עם גן פנימי קטן. שעה עד שעתיים.',map:'Museo Sorolla, Calle General Martínez Campos 37, Madrid',trade:[W('רחוק יותר: כ-1.2 ק״מ מהקניון (הערכה)'),G('פתוח בשישי 9:30–20:00'),W('כניסה 3€')]},
   {ic:'bag',title:'חנות ריאל מדריד ליד האצטדיון',d:'חנות המועדון בשער 30 של האצטדיון. מצוין למזכרות לפני הסיור.',map:'Tienda Oficial Real Madrid Bernabéu, Madrid',trade:[G('כבר ליד האצטדיון, בלי הליכה נוספת'),N('פתוחה לפי המועדון 10:00–20:30, כדאי לוודא')]},
@@ -1141,7 +1147,7 @@ const SUR_AT=LAND_HOME;
 function surText(){try{return decodeURIComponent(escape(atob(SUR_ENC)))}catch(e){return ''}}
 function surShow(first){
   if(first){confetti(160);whistle()}
-  overlay('<div style="font-size:56px">💌</div><h2>מזל טוב, נועם!</h2>'+(GR_IMG?'<div class="gframe" id="grFrame"><i></i><i></i><i></i><i></i><div class="mat"><img id="grImg" alt=""></div></div>':'')+'<p>'+surText().replace(/</g,'&lt;')+'</p><button class="btn gold" data-close>סגירה</button>');
+  overlay('<div style="font-size:56px">💌</div><h2>מזל טוב, נועם!</h2><p>'+surText().replace(/</g,'&lt;')+'</p>'+(GR_IMG?'<div class="gframe" id="grFrame"><i></i><i></i><i></i><i></i><div class="mat"><img id="grImg" alt=""></div></div>':'')+'<button class="btn gold" data-close>סגירה</button>');
   greetImg();
 }
 const GR_IMG='./greeting.dat';
@@ -1264,7 +1270,7 @@ function syncInit(){
 /* ---------- INIT ---------- */
 (function(){
   syncInit();wxInit();
-  try{if(new URLSearchParams(location.search).get('preview')==='dad2026')setTimeout(()=>surShow(false),700)}catch(e){}
+  try{if(new URLSearchParams(location.search).get('preview')==='dad2026'){document.getElementById('surBtn').style.display='block';setTimeout(()=>surShow(false),700)}}catch(e){}
   const today=madridToday();
   const todayDay=DAYS.find(d=>d.date===today);
   renderDay(todayDay?todayDay.id:store.get('day','d1'));
