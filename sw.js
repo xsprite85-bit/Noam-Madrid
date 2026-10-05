@@ -7,7 +7,7 @@ function timeout(ms){return new Promise((_,r)=>setTimeout(()=>r(new Error('t')),
 self.addEventListener('fetch',e=>{
   const req=e.request;if(req.method!=='GET')return;
   const url=new URL(req.url);
-  if(url.pathname.endsWith('/content.dat'))return; // always straight to the network; the app keeps its own saved copy
+  if(url.pathname.endsWith('/content.dat')||url.pathname.endsWith('/version.json'))return; // always straight to the network; the app keeps its own saved copy
   if(url.origin===location.origin){
     // pages: network first (so updates arrive), fall back to the saved copy when offline or slow
     if(req.mode==='navigate'||url.pathname.endsWith('/index.html')||url.pathname.endsWith('/')){

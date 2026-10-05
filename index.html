@@ -251,6 +251,23 @@ h3{margin:0 0 6px;font-size:17px}
 .qzl{display:flex;align-items:center;justify-content:space-between;width:100%;max-width:340px;margin:0 auto 10px;padding:14px;border-radius:14px;border:2px solid rgba(243,210,122,.5);background:rgba(255,255,255,.08);color:#fff;font:inherit;font-size:18px;font-weight:800}
 .qzl.lock{opacity:.45;border-color:rgba(255,255,255,.2)}
 .qzl small{font-size:13px;font-weight:600;color:var(--gold2)}
+.hy{margin-bottom:14px}
+.hyrow{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px 2px 8px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.hyrow::-webkit-scrollbar{display:none}
+.hyc{flex:0 0 82%;scroll-snap-align:center;background:var(--card);color:var(--ink);border-radius:20px;overflow:hidden;box-shadow:0 6px 18px rgba(0,0,0,.28)}
+.hyart{position:relative;height:150px;display:flex;align-items:center;justify-content:center}
+.hyart .plate{width:112px;height:112px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff,#e9edf5);box-shadow:0 8px 18px rgba(0,0,0,.3),inset 0 0 0 7px rgba(0,0,0,.05);display:flex;align-items:center;justify-content:center;font-size:58px}
+.hyart i{position:absolute;font-style:normal;font-size:34px;filter:drop-shadow(0 3px 4px rgba(0,0,0,.3))}
+.hyart .s1{right:22px;bottom:14px}.hyart .s2{left:24px;top:16px;font-size:22px}
+.hyb{padding:14px 16px 16px}
+.hyb b{font-size:19px;margin-inline-end:6px}
+.hyb p{margin:8px 0 12px;font-size:14px;line-height:1.6;color:#33415f}
+.hyb .btn{display:inline-flex}
+.hydots{display:flex;gap:6px;justify-content:center;margin-top:2px}
+.hydots i{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.3);transition:all .2s}
+.hydots i.on{background:var(--gold);width:18px;border-radius:4px}
+#updBar{position:fixed;top:0;left:0;right:0;z-index:70;display:none;align-items:center;justify-content:center;gap:10px;background:#3ccf7a;color:#06240f;padding:calc(env(safe-area-inset-top,0px) + 10px) 12px 10px;font-weight:800;font-size:14px;box-shadow:0 4px 14px rgba(0,0,0,.35)}
+#updBar button{background:#06240f;color:#fff;border:0;border-radius:999px;padding:7px 14px;font:inherit;font-weight:800}
 .qzh{font-size:13px;color:var(--gold2);margin-bottom:6px}
 .qzq{font-size:21px;font-weight:800;line-height:1.5;max-width:340px;margin-bottom:14px}
 .qzb{display:block;width:100%;max-width:340px;margin:0 auto 9px;padding:12px 14px;border-radius:14px;border:2px solid rgba(255,255,255,.25);background:rgba(255,255,255,.08);color:#fff;font:inherit;font-size:17px;font-weight:700;text-align:center}
@@ -342,6 +359,7 @@ details.st ol{margin:0 0 12px;padding-inline-start:22px;line-height:1.75;font-si
 </defs>
 </svg>
 
+<div id="updBar"><span>🆕 יש גרסה חדשה של האפליקציה</span><button id="updBtn">עדכון</button></div>
 <header class="hero wrap">
   <div class="lights"><span></span><span></span></div>
   <button class="ballegg" id="ballEgg" aria-label="כדור"><svg><use href="#ball"/></svg></button>
@@ -596,6 +614,7 @@ details.st ol{margin:0 0 12px;padding-inline-start:22px;line-height:1.75;font-si
       <h3>🎒 רשימת אריזה</h3>
     </div>
   <button class="surbtn" id="surBtn">💌 הברכה של אבא ואמא</button>
+  <div class="panel dark" style="text-align:center;margin-top:14px"><div class="note" id="verInfo" style="margin-bottom:10px"></div><button class="btn gold" id="refBtn" style="display:inline-flex">🔄 רענון האפליקציה</button><div class="note" style="margin-top:8px;font-size:12px">מוחק את העותק השמור ומוריד את הגרסה העדכנית. ההתקדמות והשיאים נשמרים.</div></div>
   </section>
 
   <!-- ====== FOOD ====== -->
@@ -609,10 +628,10 @@ details.st ol{margin:0 0 12px;padding-inline-start:22px;line-height:1.75;font-si
       <div class="meal"><div class="mx"><b>De Pita Madre / Barganzo<em class="tag" style="font-style:normal">כשר-סטייל · ליד המלון</em></b><span>בקלמננרס 13, כמה דקות מהמלון. פיתות וסגנון ישראלי, מומלץ בקרב ישראלים.</span><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=De+Pita+Madre+Calle+Colmenares+13+Madrid">📍 במפה</a></div></div><div class="meal"><div class="mx"><b>Fuego<em class="tag" style="font-style:normal">בשרי · סטייק</em></b><span>מסעדת סטייקים כשרה שמוזכרת הרבה במדריכי כשרות לישראלים. מתאים לארוחה חגיגית.</span><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Fuego+kosher+steakhouse+Madrid">📍 במפה</a></div></div><div class="meal"><div class="mx"><b>La Hummuseria<em class="tag" style="font-style:normal">חומוס</em></b><span>חומוס ומנות ישראליות, מקום קליל לצהריים.</span><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=La+Hummuseria+Madrid">📍 במפה</a></div></div><div class="meal"><div class="mx"><b>Re Salomone<em class="tag" style="font-style:normal">איטלקי · חלבי</em></b><span>איטלקי-יהודי בסגנון רומאי, אחד המקומות הידועים בקהילה.</span><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Re+Salomone+Madrid">📍 במפה</a></div></div><div class="meal"><div class="mx"><b>La Escudilla<em class="tag" style="font-style:normal">כשר-סטייל</em></b><span>מקום ספרדי עם מנות מקומיות, מוזכר במדריכי כשרות.</span><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=La+Escudilla+Madrid">📍 במפה</a></div></div><div class="meal"><div class="mx"><b>Eli Pastrami<em class="tag" style="font-style:normal">פסטרמה</em></b><span>סנדוויץ׳ פסטרמה בסגנון ניו-יורקי.</span><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Eli+Pastrami+Madrid">📍 במפה</a></div></div><div class="meal"><div class="mx"><b>בית חב״ד מדריד<em class="tag" style="font-style:normal">קהילה</em></b><span>אפשר לשאול שם איפה אוכלים כשר השבוע ומה פתוח.</span><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Chabad+Madrid">📍 במפה</a></div></div>
       <div class="acts"><a class="btn gold" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=kosher+restaurant+Madrid"><svg><use href="#map"/></svg>עוד כשר במפה</a></div>
     </div>
-    <div class="panel">
-      <h3>✨ מצולם ומדובר (לא כשר)</h3>
-      <div class="note" style="margin:6px 0 10px">אם בא על משהו עם ווייב ולא מפריע, אלה מקומות שמופיעים הרבה ברשתות. כשרות אפשר לפתור עם מנות צמחוניות, אבל זה בלי השגחה.</div>
-      <div class="meal"><div class="mx"><b>StreetXO<em class="tag" style="font-style:normal">מצולם מאוד · לא כשר</em></b><span>המסעדה של דייוויד מוניוז, אחת הכי מדוברות באינסטגרם. עדיף להזמין מראש.</span><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=StreetXO+Madrid">📍 במפה</a></div></div><div class="meal"><div class="mx"><b>Platea<em class="tag" style="font-style:normal">מקום ענק ווייב · לא כשר</em></b><span>קומפלקס אוכל ובילוי, תפאורה מרשימה לתמונות.</span><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Platea+Madrid">📍 במפה</a></div></div><div class="meal"><div class="mx"><b>Comparte<em class="tag" style="font-style:normal">מצולם · לא כשר</em></b><span>מקום מעוצב בקצה גרן ויה.</span><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Comparte+Madrid">📍 במפה</a></div></div><div class="meal"><div class="mx"><b>Botín<em class="tag" style="font-style:normal">היסטורי · לא כשר</em></b><span>המסעדה העתיקה בעולם לפי גינס, מפורסמת בגדי חזיר, אז לא מתאימה כשרות.</span><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Botín+Madrid">📍 במפה</a></div></div>
+    <div class="hy">
+      <h3 style="margin:2px 4px 6px;color:#fff">✨ מצולם ומדובר <small style="font-size:12px;color:var(--muted);font-weight:400">· מחליקים הצידה, לא כשר</small></h3>
+      <div class="hyrow" id="hyRow"><div class="hyc"><div class="hyart" style="background:linear-gradient(135deg,#ff5f6d,#ffc371)"><div class="plate"><span>🍜</span></div><i class="s1">🥟</i><i class="s2">✨</i></div><div class="hyb"><b>StreetXO</b><em class="tag" style="font-style:normal">אסייתי-ספרדי · לא כשר</em><p>של השף דייוויד מוניוז, מהשמות הכי חמים בסצנה של מדריד. אוכל רחוב בסגנון אסייתי-ספרדי, צבעוני ומצולם, ותמיד עם תור. עדיף להזמין מראש.</p><a class="btn gold" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=StreetXO+Madrid"><svg><use href="#map"/></svg>ניווט</a></div></div><div class="hyc"><div class="hyart" style="background:linear-gradient(135deg,#7b2ff7,#f107a3)"><div class="plate"><span>🎭</span></div><i class="s1">🍸</i><i class="s2">✨</i></div><div class="hyb"><b>Platea</b><em class="tag" style="font-style:normal">מתחם אוכל · לא כשר</em><p>מתחם אוכל ובילוי ענק במה שהיה פעם בית קולנוע. כמה דוכנים ובארים תחת קורת גג אחת, תפאורה מרשימה, ואפשר לבחור מה שרוצים.</p><a class="btn gold" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Platea+Madrid"><svg><use href="#map"/></svg>ניווט</a></div></div><div class="hyc"><div class="hyart" style="background:linear-gradient(135deg,#11998e,#38ef7d)"><div class="plate"><span>🥗</span></div><i class="s1">🍷</i><i class="s2">✨</i></div><div class="hyb"><b>Comparte</b><em class="tag" style="font-style:normal">מצולם · לא כשר</em><p>מקום מעוצב וצבעוני שמוזכר הרבה ברשתות, עם מנות לחלוקה. מתאים לארוחה עם תמונות יפות.</p><a class="btn gold" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Comparte+Madrid"><svg><use href="#map"/></svg>ניווט</a></div></div><div class="hyc"><div class="hyart" style="background:linear-gradient(135deg,#8e2c0f,#d9904a)"><div class="plate"><span>🐖</span></div><i class="s1">🔥</i><i class="s2">✨</i></div><div class="hyb"><b>Botín</b><em class="tag" style="font-style:normal">היסטורי · לא כשר</em><p>לפי ספר השיאים של גינס, המסעדה העתיקה בעולם, מ-1725. מפורסמת בגדי חזיר צלוי בתנור עצים, ולכן לא מתאימה לשומרי כשרות.</p><a class="btn gold" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Sobrino+de+Botín+Madrid"><svg><use href="#map"/></svg>ניווט</a></div></div></div>
+      <div class="hydots" id="hyDots"></div>
     </div>
     <h2 style="font-size:18px">🍽️ מה מזמינים <small style="font-size:12px;color:var(--muted);font-weight:400">· לחיצה על הרמקול משמיעה</small></h2>
     <div id="dishes"></div>
@@ -622,7 +641,7 @@ details.st ol{margin:0 0 12px;padding-inline-start:22px;line-height:1.75;font-si
 
   <button class="surbtn" id="eggBtn">🥚 כל ה-Easter eggs</button>
   <div id="syncLine" style="text-align:center;font-size:12px;color:var(--muted);padding:6px 0;cursor:pointer"></div>
-  <div class="foot">נבנה באהבה לבר המצווה של נועם ⚽<br>כל השעות לפי שעון מדריד, אלא אם כתוב אחרת.<br>האפליקציה היא מעריץ של הקבוצה ולא אתר רשמי שלה.</div>
+  <div class="foot">נבנה באהבה לבר המצווה של נועם ⚽<br>כל השעות לפי שעון מדריד, אלא אם כתוב אחרת.<br>האפליקציה היא מעריץ של הקבוצה ולא אתר רשמי שלה.<br><span id="verLine" style="opacity:.6"></span></div>
 </main>
 
 <nav class="bnav">
@@ -1030,6 +1049,36 @@ function renderMissions(){
   });
 }
 
+/* food carousel dots */
+(function(){
+  const r=document.getElementById('hyRow'),d=document.getElementById('hyDots');if(!r||!d)return;
+  const n=r.children.length;d.innerHTML='<i></i>'.repeat(n);
+  const upd=()=>{const w=r.children[0].offsetWidth+12;let k=Math.round(Math.abs(r.scrollLeft)/w);k=Math.max(0,Math.min(n-1,k));[...d.children].forEach((x,i)=>x.classList.toggle('on',i===k))};
+  r.addEventListener('scroll',upd,{passive:true});upd();
+})();
+const APP_VER='20261005-2309';
+function verLabel(){if(!APP_VER)return 'פיתוח';const m=APP_VER.match(/^(\d{4})(\d\d)(\d\d)-(\d\d)(\d\d)$/);return m?(+m[3])+'.'+(+m[2])+' בשעה '+m[4]+':'+m[5]:APP_VER}
+async function hardRefresh(){
+  const bt=document.getElementById('refBtn');if(bt)bt.textContent='מתעדכן…';toast('🔄 מתעדכן…');
+  try{if('serviceWorker' in navigator){const rs=await navigator.serviceWorker.getRegistrations();for(const r of rs)await r.unregister()}}catch(e){}
+  try{if(window.caches){const ks=await caches.keys();for(const k of ks)await caches.delete(k)}}catch(e){}
+  location.replace(location.pathname+'?r='+Date.now());
+}
+function checkVer(){
+  if(!APP_VER||!/^https?:$/.test(location.protocol))return;
+  fetch('./version.json?t='+Date.now(),{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>{
+    if(j&&j.v&&j.v!==APP_VER)document.getElementById('updBar').style.display='flex';
+  }).catch(()=>{});
+}
+(function(){
+  const t='גרסה '+verLabel();
+  const a=document.getElementById('verLine'),b=document.getElementById('verInfo');
+  if(a)a.textContent=t;if(b)b.textContent=t;
+  document.getElementById('refBtn').onclick=hardRefresh;
+  document.getElementById('updBtn').onclick=hardRefresh;
+  setTimeout(checkVer,2500);
+  document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')checkVer()});
+})();
 /* ---------- ACHIEVEMENTS ---------- */
 function achData(){
   const kb=store.get('keepy',0),pb=store.get('pkBest',0),pt=store.get('pkTot',0),tb=store.get('triB',[0,0,0]);
