@@ -1,4 +1,4 @@
-const V='nm-v3';
+const V='nm-v4';
 const CORE=['./','./index.html','./manifest.webmanifest','./icon-192.png','./icon-512.png','./apple-touch-icon.png','./greeting.dat'];
 const FONT_HOSTS=['fonts.googleapis.com','fonts.gstatic.com'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(V).then(c=>c.addAll(CORE)).then(()=>self.skipWaiting()))});
