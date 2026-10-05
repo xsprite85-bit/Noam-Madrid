@@ -227,7 +227,37 @@ h3{margin:0 0 6px;font-size:17px}
 .gm .bs{position:absolute;top:70px;left:0;right:0;text-align:center;font-size:15px;color:var(--gold2)}
 .gm .bl{position:absolute;width:56px;height:56px;color:#fff}
 .gm .cl{position:absolute;top:14px;right:14px;background:rgba(255,255,255,.15);color:#fff;border:0;border-radius:999px;padding:8px 14px;font:inherit;font-weight:700}
-.gm .hn{position:absolute;bottom:40px;left:0;right:0;text-align:center;color:rgba(255,255,255,.7);font-size:15px;direction:rtl}
+.goalegg{position:absolute;top:14px;right:14px;width:34px;height:34px;color:rgba(243,210,122,.6);background:none;border:0;padding:0;z-index:2;transition:transform .15s}
+.goalegg svg{width:100%;height:100%}
+.goalegg:active,.goalegg.tap{transform:scale(1.25);color:#f3d27a}
+.shirt.egg{cursor:pointer;transition:transform .15s,filter .15s;-webkit-tap-highlight-color:transparent}
+.shirt.egg:active{transform:scale(.9)}
+.shirt.egg.tap{animation:shpop .45s ease-out}
+@keyframes shpop{0%{transform:scale(1)}35%{transform:scale(1.35) rotate(-6deg);filter:drop-shadow(0 0 14px #f3d27a)}70%{transform:scale(.95) rotate(3deg)}100%{transform:scale(1)}}
+.pk .goal{position:absolute;top:19%;left:50%;width:min(320px,86vw);height:130px;margin-left:calc(min(320px,86vw)/-2);border:5px solid #fff;border-bottom:0;border-radius:6px 6px 0 0;background:repeating-linear-gradient(45deg,rgba(255,255,255,.12) 0 2px,transparent 2px 14px),repeating-linear-gradient(-45deg,rgba(255,255,255,.12) 0 2px,transparent 2px 14px)}
+.pk .zn{position:absolute;inset:0;display:flex}
+.pk .zn i{flex:1;border-inline:1px dashed rgba(255,255,255,.28)}
+.pk .kp{position:absolute;bottom:0;left:50%;width:50px;height:50px;margin-left:-25px;font-size:42px;line-height:50px;text-align:center;transition:transform .35s ease-out}
+.pk .bl{transition:left .45s ease-out,top .45s ease-out,transform .45s ease-out}
+.pk .res{position:absolute;left:0;right:0;top:60%;text-align:center;color:#fff;font-size:26px;font-weight:900;direction:rtl;pointer-events:none}
+.pk .dots{position:absolute;top:100px;left:0;right:0;text-align:center;font-size:22px;letter-spacing:6px}
+.ach .r{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.1);font-size:14px}
+.ach .r b{font-size:15px}
+.ach .r span{color:var(--gold2);font-weight:700;text-align:left}
+.ach h3{margin:2px 0 4px}
+.ach .ch{padding:8px 0}
+.ach .ch .t{display:flex;justify-content:space-between;font-size:14px;margin-bottom:5px}
+.ach .ch.done .t b:before{content:"✅ "}
+.qzl{display:flex;align-items:center;justify-content:space-between;width:100%;max-width:340px;margin:0 auto 10px;padding:14px;border-radius:14px;border:2px solid rgba(243,210,122,.5);background:rgba(255,255,255,.08);color:#fff;font:inherit;font-size:18px;font-weight:800}
+.qzl.lock{opacity:.45;border-color:rgba(255,255,255,.2)}
+.qzl small{font-size:13px;font-weight:600;color:var(--gold2)}
+.qzh{font-size:13px;color:var(--gold2);margin-bottom:6px}
+.qzq{font-size:21px;font-weight:800;line-height:1.5;max-width:340px;margin-bottom:14px}
+.qzb{display:block;width:100%;max-width:340px;margin:0 auto 9px;padding:12px 14px;border-radius:14px;border:2px solid rgba(255,255,255,.25);background:rgba(255,255,255,.08);color:#fff;font:inherit;font-size:17px;font-weight:700;text-align:center}
+.qzb.ok{background:#1f9d57;border-color:#3ccf7a}
+.qzb.no{background:#a53a3a;border-color:#e2554f}
+.qze{max-width:340px;margin:6px auto 0;font-size:15px;line-height:1.6;color:#dfe8ff}
+.gm .hn{position:absolute;bottom:40px;left:0;right:0;padding:0 16px;text-align:center;color:rgba(255,255,255,.7);font-size:15px;direction:rtl}
 body.night{background:#030814!important}
 body.night .hero{box-shadow:inset 0 0 120px rgba(217,180,74,.35)}
 body.night .board{box-shadow:0 0 40px rgba(243,210,122,.6)}
@@ -307,6 +337,7 @@ details.st ol{margin:0 0 12px;padding-inline-start:22px;line-height:1.75;font-si
   <symbol id="ticket" viewBox="0 0 24 24"><path d="M3 7h18v3a2 2 0 0 0 0 4v3H3v-3a2 2 0 0 0 0-4z" stroke="currentColor" stroke-width="1.9" fill="none" stroke-linejoin="round"/><path d="M14 7v10" stroke="currentColor" stroke-width="1.6" stroke-dasharray="2 2"/></symbol>
   <symbol id="rest" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z" stroke="currentColor" stroke-width="1.9" fill="none" stroke-linejoin="round"/></symbol>
   <symbol id="shirtW" viewBox="0 0 64 64"><path d="M22 6 8 14 2 28l10 5 4-7v32h32V26l4 7 10-5-6-14L42 6c-2 4-6 6-10 6s-8-2-10-6z" fill="#fff" stroke="#c9a43c" stroke-width="2.5" stroke-linejoin="round"/><path d="M26 6c1.5 3 3.5 4.5 6 4.5s4.5-1.5 6-4.5" fill="none" stroke="#c9a43c" stroke-width="2.5"/><path d="m32 24 1.8 3.7 4 .6-2.9 2.8.7 4L32 33.2l-3.6 1.9.7-4-2.9-2.8 4-.6z" fill="#d9b44a"/></symbol>
+  <symbol id="goalI" viewBox="0 0 24 24"><path d="M3 19V6h18v13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 10.5h18M3 15h18M8 6v13M12 6v13M16 6v13" stroke="currentColor" stroke-width="1" opacity=".55" fill="none"/><circle cx="12" cy="19" r="1.6" fill="currentColor"/></symbol>
   <symbol id="shirtY" viewBox="0 0 64 64"><path d="M22 6 8 14 2 28l10 5 4-7v32h32V26l4 7 10-5-6-14L42 6c-2 4-6 6-10 6s-8-2-10-6z" fill="#f6d33c" stroke="#8a6a00" stroke-width="2.5" stroke-linejoin="round"/><path d="M26 6c1.5 3 3.5 4.5 6 4.5s4.5-1.5 6-4.5" fill="none" stroke="#8a6a00" stroke-width="2.5"/></symbol>
 </defs>
 </svg>
@@ -314,6 +345,7 @@ details.st ol{margin:0 0 12px;padding-inline-start:22px;line-height:1.75;font-si
 <header class="hero wrap">
   <div class="lights"><span></span><span></span></div>
   <button class="ballegg" id="ballEgg" aria-label="כדור"><svg><use href="#ball"/></svg></button>
+  <button class="goalegg" id="goalEgg" aria-label="פנדלים"><svg><use href="#goalI"/></svg></button>
   <svg class="crown" id="crownEgg"><use href="#crown"/></svg>
   <div class="kicker">BAR MITZVAH · MADRID 2026</div>
   <h1>המדריד <em>של נועם</em></h1>
@@ -346,7 +378,7 @@ details.st ol{margin:0 0 12px;padding-inline-start:22px;line-height:1.75;font-si
     <h2><svg class="i"><use href="#stadium"/></svg>יום המשחק</h2>
     <div class="match">
       <div class="vs">
-        <div class="team"><svg class="shirt"><use href="#shirtW"/></svg><b>ריאל מדריד</b></div>
+        <div class="team"><svg class="shirt egg" id="shirtEgg" role="button" aria-label="טריוויה"><use href="#shirtW"/></svg><b>ריאל מדריד</b></div>
         <div class="vsb">VS</div>
         <div class="team"><svg class="shirt"><use href="#shirtY"/></svg><b>ויאריאל</b></div>
       </div>
@@ -401,6 +433,7 @@ details.st ol{margin:0 0 12px;padding-inline-start:22px;line-height:1.75;font-si
       </div>
       <div class="progress"><i id="misBar"></i></div>
     </div>
+    <div id="ach" class="ach"></div>
     <div id="missions"></div>
     <div class="trophy" id="trophyBox" style="display:none">
       <svg><use href="#trophy"/></svg>
@@ -983,16 +1016,38 @@ function renderMissions(){
   let unlocked=store.get('secret',false);
   if(!unlocked&&base>=5){unlocked=true;store.set('secret',true);found('secret');setTimeout(()=>{toast('🔓 נפתחה משימה סודית!');confetti(60)},200)}
   const ALL=unlocked?[...MISSIONS,SECRET]:MISSIONS;
-  const total=ALL.length,cnt=Object.keys(mis).filter(k=>+k<total).length;
+  const AD=achData().chs;
+  const total=ALL.length+AD.length,cnt=Object.keys(mis).filter(k=>+k<ALL.length).length+AD.filter(c=>c[2]>=c[3]).length;
   document.getElementById('missions').innerHTML=ALL.map((m,i)=>
-    `<div class="mis ${mis[i]?'on':''} ${i>=MISSIONS.length?'secret':''}" data-i="${i}"><div class="st">${ico('star')}</div><div class="tx"><b>${m[0]}</b><small>${m[1]}</small></div></div>`).join('');
+    `<div class="mis ${mis[i]?'on':''} ${i>=MISSIONS.length?'secret':''}" data-i="${i}"><div class="st">${ico('star')}</div><div class="tx"><b>${m[0]}</b><small>${m[1]}</small></div></div>`).join('')+AD.map(c=>{const d=c[2]>=c[3];return `<div class="mis ${d?'on':''} achm"><div class="st">${ico('star')}</div><div class="tx"><b>🎯 ${c[1]}</b><small>${d?'הושג!':'בינתיים: '+c[2]+' מתוך '+c[3]}</small></div></div>`}).join('');
   misCount.textContent=`${cnt} / ${total} כוכבים`;
   misBar.style.width=(cnt/total*100)+'%';
   misRank.textContent=cnt>=total?'👑 אגדה':cnt>=10?'⭐ קפטן':cnt>=6?'⚽ שחקן הרכב':cnt>=3?'👟 שחקן ספסל':'🌱 טירון';
   trophyBox.style.display=cnt>=total?'block':'none';
-  document.querySelectorAll('.mis').forEach(el=>el.onclick=()=>{
+  renderAch();
+  document.querySelectorAll('.mis:not(.achm)').forEach(el=>el.onclick=()=>{
     const i=el.dataset.i;if(mis[i])delete mis[i];else{mis[i]=1;if(+i===3)found('km0');toast('⭐ כוכב חדש!')}store.set('mis',mis);renderMissions();
   });
+}
+
+/* ---------- ACHIEVEMENTS ---------- */
+function achData(){
+  const kb=store.get('keepy',0),pb=store.get('pkBest',0),pt=store.get('pkTot',0),tb=store.get('triB',[0,0,0]);
+  const rows=[],chs=[];
+  if(eggsFound.keepy){rows.push(['⚽','הקפצות','שיא '+kb]);chs.push(['k','80 הקפצות ברצף',kb,80])}
+  if(eggsFound.pen){rows.push(['🥅','פנדלים','שיא '+pb+' מתוך 5 · '+pt+' גולים']);chs.push(['p','40 גולים בפנדלים (מצטבר)',pt,40])}
+  if(eggsFound.trivia){rows.push(['🧠','טריוויה','קל '+tb[0]+'/5 · בינוני '+tb[1]+'/5 · קשה '+tb[2]+'/5']);chs.push(['t','לעבור את 3 רמות הטריוויה',[0,1,2].filter(i=>tb[i]>=3).length,3])}
+  return {rows,chs};
+}
+let _achBusy=false;
+function renderAch(){
+  const el=document.getElementById('ach');if(!el||_achBusy)return;
+  const {rows,chs}=achData();
+  el.innerHTML=rows.length?'<div class="panel dark"><h3>📊 לוח תוצאות</h3>'+rows.map(r=>'<div class="r"><b>'+r[0]+' '+r[1]+'</b><span>'+r[2]+'</span></div>').join('')+'</div>':'';
+  const done=store.get('achDone',{});let nd=null;
+  chs.forEach(c=>{if(c[2]>=c[3]&&!done[c[0]]){done[c[0]]=1;nd=c[1]}});
+  if(nd){store.set('achDone',done);setTimeout(()=>{toast('⭐ כוכב חדש! '+nd);confetti(80)},300)}
+  if(typeof renderMissions==='function'){_achBusy=true;try{renderMissions()}finally{_achBusy=false}}
 }
 
 /* ---------- PHRASES ---------- */
@@ -1068,10 +1123,12 @@ const EGGS=[
  ['night','מצב סטדיון','החזקה ארוכה על לוח הספירה לאחור'],
  ['kick','שריקת הפתיחה','לפתוח את האפליקציה בזמן שריקת הפתיחה של המשחק, בשבת 10.10 בערב'],
  ['secret','המשימה הסודית','לסמן 5 משימות בלשונית המשימות'],
+ ['pen','בעיטות פנדל','לחיצה על אייקון השער בצד ימין של הכותרת'],
+ ['trivia','טריוויה ריאל מדריד','בלשונית המשחק, לחיצה על החולצה הלבנה של ריאל מדריד'],
  ['km0','קילומטר 0','לסמן את המשימה "קילומטר 0" אחרי שמוצאים את הלוחית בפוארטה דל סול']
 ];
 const eggsFound=store.get('eggs',{});
-function found(id){if(!eggsFound[id]){eggsFound[id]=1;store.set('eggs',eggsFound)}}
+function found(id){if(!eggsFound[id]){eggsFound[id]=1;store.set('eggs',eggsFound);try{renderAch()}catch(e){}}}
 function confetti(n){
   n=n||120;
   let c=document.getElementById('cfv');
@@ -1124,11 +1181,11 @@ function overlay(html,onClose){
     bs.textContent='שיא: '+best;
     const stop=()=>{alive=false;g.remove()};
     g.querySelector('.cl').onclick=e=>{e.stopPropagation();stop()};
-    const end=()=>{if(score>best){best=score;store.set('keepy',best);toast('🏆 שיא חדש: '+best);confetti(70)}else toast('נפל! ניקוד: '+score);score=0;sc.textContent=0;bs.textContent='שיא: '+best;x=W/2-28;y=H*.3;vx=0;vy=0};
+    const end=()=>{if(score>best){best=score;store.set('keepy',best);renderAch();toast('🏆 שיא חדש: '+best);confetti(70)}else toast('נפל! ניקוד: '+score);score=0;sc.textContent=0;bs.textContent='שיא: '+best;x=W/2-28;y=H*.3;vx=0;vy=0};
     g.addEventListener('pointerdown',e=>{
       if(e.target.closest('.cl'))return;
       const r=bl.getBoundingClientRect(),cx=r.left+28,cy=r.top+28;
-      if(Math.hypot(e.clientX-cx,e.clientY-cy)<46){found('keepy');score++;vy=-(7+Math.min(score,40)*.12);vx=(cx-e.clientX)*(.08+Math.min(score,40)*.004);sc.textContent=score;beep(500+score*8,.06);if(score%10===0)toast('⚡ רמה '+(score/10+1))}
+      if(Math.hypot(e.clientX-cx,e.clientY-cy)<46){found('keepy');score++;if(score>store.get('keepy',0)){store.set('keepy',score);renderAch()}vy=-(7+Math.min(score,40)*.12);vx=(cx-e.clientX)*(.08+Math.min(score,40)*.004);sc.textContent=score;beep(500+score*8,.06);if(score%10===0)toast('⚡ רמה '+(score/10+1))}
     });
     (function loop(){
       if(!alive)return;
@@ -1173,6 +1230,122 @@ async function greetImg(){
   }catch(e){/* no image: the greeting still shows */}
 }
 const QUIZ_AT=new Date('2026-10-13T05:30:00+02:00');
+/* penalty shootout */
+(function(){
+  const b=document.getElementById('goalEgg');
+  b.addEventListener('click',()=>{
+    b.classList.add('tap');setTimeout(()=>b.classList.remove('tap'),250);beep(520,.08);
+    const g=document.createElement('div');g.className='gm pk';
+    g.innerHTML='<div class="sc">0</div><div class="bs"></div><button class="cl">סגירה</button><div class="goal"><div class="zn"><i></i><i></i><i></i></div><div class="kp">🧤</div></div><div class="dots"></div><svg class="bl"><use href="#ball"/></svg><div class="res"></div><div class="hn">לוחצים על שמאל, אמצע או ימין כדי לבעוט</div>';
+    document.body.appendChild(g);
+    const sc=g.querySelector('.sc'),bs=g.querySelector('.bs'),bl=g.querySelector('.bl'),kp=g.querySelector('.kp'),goal=g.querySelector('.goal'),res=g.querySelector('.res'),dots=g.querySelector('.dots'),hn=g.querySelector('.hn');
+    let best=store.get('pkBest',0),score=0,kicks=0,busy=false,alive=true,W=innerWidth,H=innerHeight,marks=[];
+    const home=()=>{bl.style.transition='none';bl.style.left=(W/2-28)+'px';bl.style.top=(H*.74)+'px';bl.style.transform='scale(1)';void bl.offsetWidth;bl.style.transition=''};
+    const draw=()=>{sc.textContent=score;bs.textContent='שיא: '+best+' מתוך 5';dots.innerHTML=marks.join('')+'⚪'.repeat(5-marks.length)};
+    home();draw();
+    g.querySelector('.cl').onclick=e=>{e.stopPropagation();alive=false;g.remove()};
+    const again=()=>{score=0;kicks=0;marks=[];busy=false;res.textContent='';hn.textContent='לוחצים על שמאל, אמצע או ימין כדי לבעוט';hn.onclick=null;kp.style.transform='';home();draw()};
+    g.addEventListener('pointerdown',e=>{
+      if(busy||!alive||e.target.closest('.cl')||kicks>=5)return;
+      busy=true;found('pen');
+      const r=goal.getBoundingClientRect(),zw=r.width/3;
+      const z=Math.max(0,Math.min(2,Math.floor((e.clientX-r.left)/zw)));
+      const kz=Math.floor(Math.random()*3);
+      const zx=i=>r.left+zw*(i+.5);
+      bl.style.left=(zx(z)-28)+'px';bl.style.top=(r.top+r.height*.45-28)+'px';bl.style.transform='scale(.55)';
+      kp.style.transform='translateX('+((kz-1)*zw)+'px) rotate('+((kz-1)*25)+'deg)';
+      beep(300,.12,'triangle');
+      setTimeout(()=>{
+        kicks++;
+        if(kz===z){marks.push('🧤');res.textContent='הוצל!';res.style.color='#ffb4ae';beep(180,.3,'sawtooth')}
+        else{score++;store.set('pkTot',store.get('pkTot',0)+1);renderAch();marks.push('⚽');res.textContent='גוווול!';res.style.color='#9dffc2';beep(760,.12);setTimeout(()=>beep(990,.2),130);confetti(35)}
+        draw();
+        setTimeout(()=>{
+          res.textContent='';
+          if(kicks>=5){
+            if(score>best){best=score;store.set('pkBest',best);confetti(90)}renderAch();
+            const msg=score===5?'מושלם! 🏆':score>=3?'כל הכבוד!':'עוד ניסיון אחד?';
+            res.style.color='#fff';res.innerHTML=score+' מתוך 5<br><small style="font-size:17px">'+msg+'</small>';
+            hn.textContent='לחיצה כאן לסיבוב נוסף';hn.style.pointerEvents='auto';hn.style.textDecoration='underline';
+            hn.onclick=e2=>{e2.stopPropagation();hn.style.textDecoration='';again()};
+            busy=false;kicks=5;
+          }else{kp.style.transform='';home();busy=false}
+        },900);
+      },600);
+    });
+  });
+})();
+/* Real Madrid trivia */
+const QL=[
+ {n:'קל',qs:[
+  {q:'מה צבע החולצה הביתית של ריאל מדריד?',o:['לבן','כחול','אדום','שחור'],a:0,e:'לבן, ובגלל זה קוראים להם ״הלבנים״.'},
+  {q:'נגד איזו קבוצה משחקים את ״אל קלאסיקו״?',o:['אתלטיקו מדריד','סביליה','ברצלונה','ולנסיה'],a:2,e:'אל קלאסיקו הוא המשחק מול ברצלונה, הדרבי הגדול בספרד.'},
+  {q:'איך קוראים לאצטדיון של ריאל מדריד?',o:['קאמפ נואו','סנטיאגו ברנבאו','מטרופוליטנו','מסטאיה'],a:1,e:'סנטיאגו ברנבאו, באמצע העיר מדריד.'},
+  {q:'מי מלך השערים של כל הזמנים של ריאל מדריד?',o:['קרים בנזמה','רול גונסאלס','אלפרדו די סטפנו','כריסטיאנו רונאלדו'],a:3,e:'כריסטיאנו רונאלדו כבש במדי המועדון 450 שערים.'},
+  {q:'מה הכינוי המוכר של ריאל מדריד?',o:['לוס בלאנקוס (הלבנים)','לוס קולצ׳ונרוס','לוס קולֶה','לוס אמארילוס'],a:0,e:'בגלל החולצות הלבנות. מדריד נקראת גם ״לוס מרנגס״.'}]},
+ {n:'בינוני',qs:[
+  {q:'באיזו שנה נוסד המועדון?',o:['1889','1902','1920','1947'],a:1,e:'המועדון נוסד ב-1902. התואר ״ריאל״ (מלכותי) ניתן לו על ידי המלך אלפונסו ה-13 ב-1920.'},
+  {q:'על שם מי נקרא האצטדיון?',o:['סנטיאגו ברנבאו, שחקן ולימים נשיא המועדון','המלך אלפונסו ה-13','אלפרדו די סטפנו','קרלוס סנטיאגו, ראש העיר'],a:0,e:'סנטיאגו ברנבאו שיחק במועדון, ואחר כך כיהן שנים רבות כנשיאו.'},
+  {q:'איך ממשיך ההמנון ״הלה מדריד...״?',o:['…ואנחנו בראש','…וִיבָה אספניה','…ואין עוד כמונו','…וְנָאדָה מָאס'],a:3,e:'״Hala Madrid y nada más״, כלומר ״קדימה מדריד, ושום דבר אחר״.'},
+  {q:'מה הסמל של העיר מדריד?',o:['דוב ועץ תות','אריה וכתר','שור וגביע','נשר וחרב'],a:0,e:'הדוב והעץ (מדרוניו) מופיעים על סמל העיר, ויש להם פסל מפורסם בפוארטה דל סול.'},
+  {q:'על איזה שדרה גדולה נמצא האצטדיון?',o:['גרן ויה','פאסאו דה לה קסטלנה','קאלה דה אלקלה','פאסאו דל פראדו'],a:1,e:'פאסאו דה לה קסטלנה, אחד הצירים הראשיים של מדריד.'}]},
+ {n:'קשה',qs:[
+  {q:'כמה גביעי אירופה רצופים זכה בהם ריאל מדריד בשנות ה-50 המאוחרות?',o:['2','3','5','7'],a:2,e:'חמישה גביעי אלופות אירופה ברציפות, בין 1956 ל-1960.'},
+  {q:'באיזו מדינה נולד אלפרדו די סטפנו?',o:['ספרד','ארגנטינה','אורוגוואי','קולומביה'],a:1,e:'הוא נולד בארגנטינה, ואחר כך שיחק גם בנבחרת ספרד.'},
+  {q:'כמה שנים כיהן סנטיאגו ברנבאו כנשיא המועדון?',o:['10','20','35','50'],a:2,e:'בערך 35 שנה, בין 1943 ל-1978.'},
+  {q:'איך נקראת קבוצת הרזרבה של ריאל מדריד?',o:['ריאל מדריד ב׳','קסטיליה','אלקלה','צ׳מרטין'],a:1,e:'ריאל מדריד קסטיליה, המקום שבו גדלים הכוכבים הצעירים.'},
+  {q:'מי כבש בראשו בדקה 93 בגמר ״הדסימה״ ב-2014?',o:['גארת׳ בייל','כריסטיאנו רונאלדו','סרחיו ראמוס','קרים בנזמה'],a:2,e:'סרחיו ראמוס כבש בדקה 93 והעביר את המשחק להארכה. מדריד ניצחה 4:1 וזכתה בגביע ה-10.'}]}
+];
+(function(){
+  const sh=document.getElementById('shirtEgg');
+  sh.addEventListener('click',()=>{
+    sh.classList.remove('tap');void sh.getBoundingClientRect();sh.classList.add('tap');
+    beep(660,.08);setTimeout(()=>beep(880,.1),90);
+    if(navigator.vibrate)try{navigator.vibrate(30)}catch(e){}
+    setTimeout(trivia,420);
+  });
+})();
+function trivia(){
+  const o=overlay('');
+  const menu=()=>{
+    const tb=store.get('triB',[0,0,0]);
+    o.innerHTML='<div style="font-size:52px">🧠</div><h2>טריוויה ריאל מדריד</h2><p style="margin-bottom:10px">5 שאלות בכל רמה. 3 תשובות נכונות פותחות את הרמה הבאה.</p>'
+     +QL.map((l,k)=>{const open=k===0||tb[k-1]>=3;return '<button class="qzl '+(open?'':'lock')+'" data-l="'+k+'"><span>'+(open?'':'🔒 ')+'רמה '+(k+1)+': '+l.n+'</span><small>'+(tb[k]>=3?'✅ ':'')+'שיא '+tb[k]+'/5</small></button>'}).join('')
+     +'<button class="btn" data-close style="margin-top:6px">סגירה</button>';
+    o.querySelectorAll('.qzl').forEach(b=>b.onclick=e=>{e.stopPropagation();const k=+b.dataset.l;if(b.classList.contains('lock')){toast('צריך 3 תשובות נכונות ברמה הקודמת');return}play(k)});
+  };
+  const play=(lv)=>{
+    let i=0,sc=0;const L=QL[lv];
+    const render=()=>{
+      if(i>=L.qs.length){
+        const tb=store.get('triB',[0,0,0]);if(sc>tb[lv]){tb[lv]=sc;store.set('triB',tb)}renderAch();
+        const pass=sc>=3,last=lv===QL.length-1;
+        const msg=sc===5?'מושלם! 🏆':pass?'כל הכבוד!':'כמעט! צריך לפחות 3 כדי להתקדם.';
+        o.innerHTML='<div style="font-size:56px">'+(pass?'🏆':'⚽')+'</div><h2>'+sc+' מתוך 5</h2><p>'+msg+(pass&&!last?'\nנפתחה רמה '+(lv+2)+': '+QL[lv+1].n:'')+'</p>'
+         +(pass&&!last?'<button class="btn gold" id="qzNx">לרמה הבאה</button>':'')
+         +'<button class="btn '+(pass&&!last?'':'gold')+'" id="qzAg" style="margin-top:10px">עוד פעם</button><button class="btn" id="qzMn" style="margin-top:10px">בחירת רמה</button><button class="btn" data-close style="margin-top:10px">סגירה</button>';
+        if(pass)confetti(sc===5?100:50);
+        const nx=o.querySelector('#qzNx');if(nx)nx.onclick=e=>{e.stopPropagation();play(lv+1)};
+        o.querySelector('#qzAg').onclick=e=>{e.stopPropagation();play(lv)};
+        o.querySelector('#qzMn').onclick=e=>{e.stopPropagation();menu()};
+        return;
+      }
+      const q=L.qs[i],idx=q.o.map((t,k)=>k).sort(()=>Math.random()-.5);
+      o.innerHTML='<div class="qzh">רמה '+(lv+1)+': '+L.n+' · שאלה '+(i+1)+' מתוך 5 · ניקוד '+sc+'</div><div class="qzq">'+q.q+'</div>'+idx.map(k=>'<button class="qzb" data-k="'+k+'">'+q.o[k]+'</button>').join('')+'<div class="qze" id="qze"></div><div id="qzn"></div>';
+      o.querySelectorAll('.qzb').forEach(b=>b.onclick=e=>{
+        e.stopPropagation();found('trivia');
+        const k=+b.dataset.k,okk=k===q.a;
+        o.querySelectorAll('.qzb').forEach(x=>{x.style.pointerEvents='none';if(+x.dataset.k===q.a)x.classList.add('ok')});
+        if(okk){sc++;beep(780,.1);setTimeout(()=>beep(1040,.15),110)}else{b.classList.add('no');beep(200,.3,'sawtooth')}
+        o.querySelector('#qze').textContent=(okk?'נכון! ':'לא בדיוק. ')+q.e;
+        o.querySelector('#qzn').innerHTML='<button class="btn gold" id="qzNext">'+(i===L.qs.length-1?'לתוצאה':'שאלה הבאה')+'</button>';
+        o.querySelector('#qzNext').onclick=ev=>{ev.stopPropagation();i++;render()};
+      });
+    };
+    render();
+  };
+  menu();
+}
 function eggMenu(){
   const n=EGGS.filter(e=>eggsFound[e[0]]).length;
   overlay('<h2>🥚 כל ה-Easter eggs</h2><p style="margin-bottom:6px">מצאת '+n+' מתוך '+EGGS.length+'</p><div style="width:100%;max-width:340px;text-align:right">'+EGGS.map(e=>`<div style="display:flex;gap:10px;align-items:flex-start;background:rgba(255,255,255,.08);border-radius:12px;padding:10px 12px;margin:8px 0"><div style="font-size:22px">${eggsFound[e[0]]?'✅':'🔒'}</div><div><b>${e[1]}</b><div style="font-size:14px;opacity:.8;line-height:1.5">${e[2]}</div></div></div>`).join('')+'</div><button class="btn gold" data-close>סגירה</button>',()=>{surCheck()});
