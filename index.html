@@ -1036,9 +1036,9 @@ function renderMissions(){
   if(!unlocked&&base>=5){unlocked=true;store.set('secret',true);found('secret');setTimeout(()=>{toast('🔓 נפתחה משימה סודית!');confetti(60)},200)}
   const ALL=unlocked?[...MISSIONS,SECRET]:MISSIONS;
   const AD=achData().chs;
-  const total=ALL.length+AD.length,cnt=Object.keys(mis).filter(k=>+k<ALL.length).length+AD.filter(c=>c[2]>=c[3]).length;
+  const total=ALL.length+AD.length,cnt=Object.keys(mis).filter(k=>+k<ALL.length).length+AD.filter(c=>c.done).length;
   document.getElementById('missions').innerHTML=ALL.map((m,i)=>
-    `<div class="mis ${mis[i]?'on':''} ${i>=MISSIONS.length?'secret':''}" data-i="${i}"><div class="st">${ico('star')}</div><div class="tx"><b>${m[0]}</b><small>${m[1]}</small></div></div>`).join('')+AD.map(c=>{const d=c[2]>=c[3];return `<div class="mis ${d?'on':''} achm"><div class="st">${ico('star')}</div><div class="tx"><b>🎯 ${c[1]}</b><small>${d?'הושג!':'בינתיים: '+c[2]+' מתוך '+c[3]}</small></div></div>`}).join('');
+    `<div class="mis ${mis[i]?'on':''} ${i>=MISSIONS.length?'secret':''}" data-i="${i}"><div class="st">${ico('star')}</div><div class="tx"><b>${m[0]}</b><small>${m[1]}</small></div></div>`).join('')+AD.map(c=>{const d=c.done;return `<div class="mis ${d?'on':''} achm"><div class="st">${ico('star')}</div><div class="tx"><b>🎯 ${c.goal} ${c[1]}</b><small>${d?'הושג!':'שלב '+(c.k+1)+' מתוך '+c[3].length+': יעד '+c.tgt+' · בינתיים '+c[2]}</small></div></div>`}).join('');
   misCount.textContent=`${cnt} / ${total} כוכבים`;
   misBar.style.width=(cnt/total*100)+'%';
   misRank.textContent=cnt>=total?'👑 אגדה':cnt>=10?'⭐ קפטן':cnt>=6?'⚽ שחקן הרכב':cnt>=3?'👟 שחקן ספסל':'🌱 טירון';
@@ -1056,7 +1056,7 @@ function renderMissions(){
   const upd=()=>{const w=r.children[0].offsetWidth+12;let k=Math.round(Math.abs(r.scrollLeft)/w);k=Math.max(0,Math.min(n-1,k));[...d.children].forEach((x,i)=>x.classList.toggle('on',i===k))};
   r.addEventListener('scroll',upd,{passive:true});upd();
 })();
-const APP_VER='20261005-2309';
+const APP_VER='20261006-1954';
 function verLabel(){if(!APP_VER)return 'פיתוח';const m=APP_VER.match(/^(\d{4})(\d\d)(\d\d)-(\d\d)(\d\d)$/);return m?(+m[3])+'.'+(+m[2])+' בשעה '+m[4]+':'+m[5]:APP_VER}
 async function hardRefresh(){
   const bt=document.getElementById('refBtn');if(bt)bt.textContent='מתעדכן…';toast('🔄 מתעדכן…');
@@ -1079,13 +1079,190 @@ function checkVer(){
   setTimeout(checkVer,2500);
   document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')checkVer()});
 })();
+/* ---------- MINI GAMES: runner + sky shooter ---------- */
+function gameShell(){
+  const g=document.createElement('div');g.className='gm';
+  g.innerHTML='<canvas style="position:absolute;inset:0;width:100%;height:100%"></canvas><div class="sc" style="pointer-events:none">0</div><div class="bs" style="pointer-events:none"></div><button class="cl">סגירה</button><div class="msg" style="position:absolute;left:0;right:0;top:38%;text-align:center;color:#fff;direction:rtl;pointer-events:none;font-weight:800;font-size:22px;line-height:1.6;padding:0 20px"></div>';
+  document.body.appendChild(g);
+  const cv=g.querySelector('canvas'),ctx=cv.getContext('2d'),dpr=Math.min(window.devicePixelRatio||1,2),W=innerWidth,H=innerHeight;
+  cv.width=W*dpr;cv.height=H*dpr;ctx.scale(dpr,dpr);
+  return {g,cv,ctx,W,H,sc:g.querySelector('.sc'),bs:g.querySelector('.bs'),msg:g.querySelector('.msg'),cl:g.querySelector('.cl')};
+}
+/* ---- runner ---- */
+function runGame(){
+  const {g,ctx,W,H,sc,bs,msg,cl}=gameShell();
+  const u=H/620,gy=H*.72,px=W*.22;
+  let alive=true,state='ready',dist=0,py=gy,vy=0,obs=[],phase=0,nextGap=0,best=store.get('runBest',0),stage=0,deadAt=0,last=performance.now(),peak=0;
+  const meters=()=>Math.floor(dist/(u*12));
+  const speedNow=()=>Math.min(12,6.5+meters()/150)*u;
+  const commit=()=>{const m=meters();if(m>peak)peak=m;if(peak>store.get('runBest',0)){store.set('runBest',peak);best=peak;renderAch()}};
+  const stop=()=>{commit();alive=false;g.remove()};
+  cl.onclick=e=>{e.stopPropagation();stop()};
+  bs.textContent='שיא: '+best+' מ׳';
+  msg.innerHTML='לוחצים כדי לקפוץ<br><small style="font-size:16px;font-weight:600;opacity:.8">קפצו מעל הכדורים, הקונוסים והשחקנים</small>';
+  const TY=[
+    {k:'ball',w:20,h:20,s:0},{k:'cone',w:22,h:30,s:0},
+    {k:'def',w:24,h:62,s:1},{k:'ref',w:24,h:62,s:1},
+    {k:'tree',w:36,h:78,s:2},{k:'gate',w:64,h:74,s:2}];
+  function spawn(){
+    const pool=TY.filter(t=>t.s<=stage),t=pool[Math.floor(Math.random()*pool.length)];
+    obs.push({k:t.k,x:W+40,w:t.w*u,h:t.h*u});
+  }
+  function figure(x,y,shirt,shorts,num,sw,card){
+    ctx.save();
+    ctx.fillStyle='#e8b48a';ctx.beginPath();ctx.arc(x,y-56*u,7*u,0,7);ctx.fill();
+    ctx.fillStyle='#1b1b1f';ctx.beginPath();ctx.arc(x,y-58*u,7.4*u,Math.PI,0);ctx.fill();
+    ctx.strokeStyle='#e8b48a';ctx.lineWidth=4*u;ctx.lineCap='round';
+    ctx.beginPath();ctx.moveTo(x,y-44*u);ctx.lineTo(x+7*u+sw*5*u,y-34*u);ctx.stroke();
+    ctx.fillStyle=shirt;ctx.fillRect(x-9*u,y-49*u,18*u,23*u);
+    if(num){ctx.fillStyle='#14224d';ctx.font='bold '+(13*u)+'px sans-serif';ctx.textAlign='center';ctx.fillText(num,x,y-31*u)}
+    ctx.fillStyle=shorts;ctx.fillRect(x-9*u,y-27*u,18*u,12*u);
+    ctx.strokeStyle='#f1f1f1';ctx.lineWidth=5*u;
+    ctx.beginPath();ctx.moveTo(x-4*u,y-15*u);ctx.lineTo(x-4*u+sw*9*u,y-3*u);ctx.moveTo(x+4*u,y-15*u);ctx.lineTo(x+4*u-sw*9*u,y-3*u);ctx.stroke();
+    ctx.fillStyle='#14161c';ctx.fillRect(x-4*u+sw*9*u-3*u,y-4*u,9*u,4*u);ctx.fillRect(x+4*u-sw*9*u-3*u,y-4*u,9*u,4*u);
+    if(card){ctx.fillStyle='#ffd400';ctx.fillRect(x+9*u,y-42*u,6*u,9*u)}
+    ctx.restore();
+  }
+  function drawObs(o){
+    const x=o.x,y=gy;
+    if(o.k==='ball'){ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(x+10*u,y-10*u,10*u,0,7);ctx.fill();ctx.fillStyle='#222';ctx.beginPath();ctx.arc(x+10*u,y-10*u,4*u,0,7);ctx.fill()}
+    else if(o.k==='cone'){ctx.fillStyle='#ff7a1a';ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x+22*u,y);ctx.lineTo(x+11*u,y-30*u);ctx.fill();ctx.fillStyle='#fff';ctx.fillRect(x+6*u,y-14*u,10*u,4*u)}
+    else if(o.k==='def')figure(x+12*u,y,'#2b6cff','#12307a','',Math.sin(phase*.6)*.5,false);
+    else if(o.k==='ref')figure(x+12*u,y,'#17171a','#17171a','',Math.sin(phase*.6)*.5,true);
+    else if(o.k==='tree'){ctx.fillStyle='#6b3f1d';ctx.fillRect(x+15*u,y-34*u,8*u,34*u);ctx.fillStyle='#1f8f3b';ctx.beginPath();ctx.arc(x+19*u,y-52*u,20*u,0,7);ctx.fill();ctx.fillStyle='#e0262f';[[-8,-58],[6,-62],[0,-48],[10,-50],[-10,-46]].forEach(p=>{ctx.beginPath();ctx.arc(x+(19+p[0])*u,y+p[1]*u,3.2*u,0,7);ctx.fill()})}
+    else if(o.k==='gate'){ctx.fillStyle='#d8cfb8';ctx.fillRect(x,y-60*u,64*u,60*u);ctx.fillRect(x-3*u,y-74*u,70*u,14*u);ctx.fillStyle='#4a4a52';[8,26,44].forEach(a=>{ctx.beginPath();ctx.moveTo(x+a*u,y);ctx.lineTo(x+a*u,y-30*u);ctx.arc(x+(a+6)*u,y-30*u,6*u,Math.PI,0);ctx.lineTo(x+(a+12)*u,y);ctx.fill()})}
+  }
+  function reset(){dist=0;py=gy;vy=0;obs=[];stage=0;nextGap=W*.9;state='run';msg.textContent='';peak=0}
+  g.addEventListener('pointerdown',e=>{
+    if(e.target.closest('.cl'))return;
+    found('run');
+    if(state==='ready'||(state==='dead'&&performance.now()-deadAt>500)){reset();vy=-13.5*u;beep(520,.05);return}
+    if(state==='run'&&py>=gy-1){vy=-13.5*u;beep(440,.05,'triangle')}
+  });
+  (function loop(now){
+    if(!alive)return;requestAnimationFrame(loop);
+    const f=Math.min(2,(now-last)/16.67);last=now;
+    if(state==='run'){
+      const sp=speedNow();dist+=sp*f;phase+=sp*f*.045;
+      vy+=.8*u*f;py+=vy*f;if(py>gy){py=gy;vy=0}
+      nextGap-=sp*f;if(nextGap<=0){spawn();nextGap=sp*(38+Math.random()*34)}
+      obs.forEach(o=>o.x-=sp*f);obs=obs.filter(o=>o.x>-90*u);
+      const m=meters();if(m>peak)peak=m;
+      const ns=m>=600?2:m>=250?1:0;if(ns>stage){stage=ns;toast(ns===1?'⚽ שלב 2: שחקנים ושופטים!':'🏛️ שלב 3: סמלי מדריד!');beep(880,.12);setTimeout(()=>beep(1180,.14),130)}
+      sc.textContent=m+' מ׳';
+      const bx=px-10*u,bw=20*u,top=py-58*u;
+      for(const o of obs){if(bx+bw>o.x+5*u&&bx<o.x+o.w-5*u&&py>gy-o.h+6*u){state='dead';deadAt=performance.now();commit();beep(160,.35,'sawtooth');
+        msg.innerHTML=(m>best?'🏆 שיא חדש! ':'')+m+' מטר<br><small style="font-size:16px;font-weight:600;opacity:.85">לחצו כדי לנסות שוב</small>';if(m>=best){}bs.textContent='שיא: '+store.get('runBest',0)+' מ׳';break}}
+    }
+    // draw
+    const sky=ctx.createLinearGradient(0,0,0,gy);sky.addColorStop(0,'#0a1633');sky.addColorStop(1,'#1d4d8a');ctx.fillStyle=sky;ctx.fillRect(0,0,W,H);
+    ctx.fillStyle='#16213f';ctx.fillRect(0,gy-150*u,W,115*u);
+    for(let i=0;i<60;i++){const x=((i*53.7-dist*.15)%W+W)%W,y=gy-145*u+(i*37%105)*u;ctx.fillStyle=['#f3d27a','#fff','#e2554f','#7fb0ff'][i%4];ctx.globalAlpha=.55;ctx.fillRect(x,y,3*u,3*u)}
+    ctx.globalAlpha=1;
+    ctx.fillStyle='#1f7a46';ctx.fillRect(0,gy-35*u,W,H);
+    for(let i=-1;i<12;i++){const x=((i*90*u-dist*.9)%(W+180*u));ctx.fillStyle=(i%2)?'rgba(255,255,255,.05)':'rgba(0,0,0,.05)';ctx.fillRect(x,gy-35*u,90*u,H)}
+    ctx.fillStyle='rgba(255,255,255,.75)';ctx.fillRect(0,gy+4*u,W,3*u);
+    obs.forEach(drawObs);
+    const air=py<gy-1;figure(px,py,'#ffffff','#ffffff','7',air?.8:Math.sin(phase),false);
+  })(performance.now());
+}
+/* ---- sky shooter ---- */
+function shootGame(){
+  const {g,ctx,W,H,sc,bs,msg,cl}=gameShell();
+  const u=Math.min(H/800,1.2);
+  const NAMES=['תותח רגיל','ירי כפול','ירי משולש','מטח חמישה'],NEXT=[8,22,45,1e9];
+  let alive=true,state='ready',x=W/2,y=H*.78,tx=x,ty=y,lives=3,score=0,kills=0,lvl=0,bul=[],en=[],eb=[],pt=[],fireT=0,spT=0,inv=0,last=performance.now(),deadAt=0,peak=0,best=store.get('shBest',0);
+  const stars=Array.from({length:50},(_,i)=>({x:Math.random()*W,y:Math.random()*H,s:.5+Math.random()*2}));
+  const commit=()=>{if(score>store.get('shBest',0)){store.set('shBest',score);best=score;renderAch()}};
+  const stop=()=>{commit();alive=false;g.remove()};
+  cl.onclick=e=>{e.stopPropagation();stop()};
+  bs.textContent='שיא: '+best;
+  msg.innerHTML='גוררים את האצבע כדי לטוס<br><small style="font-size:16px;font-weight:600;opacity:.8">המטוס יורה לבד. מפילים אויבים ומשדרגים נשק</small>';
+  const hud=document.createElement('div');hud.style.cssText='position:absolute;left:0;right:0;top:100px;text-align:center;color:#fff;font-weight:700;font-size:14px;direction:rtl;pointer-events:none';g.appendChild(hud);
+  const paintHud=()=>{const need=NEXT[lvl];hud.innerHTML='❤️'.repeat(lives)+'<br>נשק: '+NAMES[lvl]+(lvl<3?' · עוד '+(need-kills)+' להשמדה לשדרוג':' · מקסימום!')};
+  paintHud();
+  function fire(){
+    const v=-12*u,px=x,py=y-26*u;
+    const add=(dx,vx)=>bul.push({x:px+dx*u,y:py,vx:vx*u,vy:v});
+    if(lvl===0)add(0,0);else if(lvl===1){add(-9,0);add(9,0)}else if(lvl===2){add(0,0);add(-8,-2.2);add(8,2.2)}else{add(0,0);add(-8,-1.8);add(8,1.8);add(-14,-4);add(14,4)}
+    beep(900-lvl*60,.03,'square');
+  }
+  function spawn(){
+    const r=Math.random(),big=score>350&&r<.18,mid=score>100&&r<.5;
+    const t=big?{k:'bomber',hp:6,r:24,sp:1.0,pts:60}:mid?{k:'fighter',hp:2,r:16,sp:1.9,pts:25}:{k:'drone',hp:1,r:13,sp:2.4,pts:10};
+    en.push({...t,r:t.r*u,sp:t.sp*u*(1+Math.min(score,2500)/2500),x:20*u+Math.random()*(W-40*u),y:-30*u,x0:0,ph:Math.random()*6,sh:1200});
+    en[en.length-1].x0=en[en.length-1].x;
+  }
+  function boom(ex,ey,c){for(let i=0;i<10;i++)pt.push({x:ex,y:ey,vx:(Math.random()-.5)*6*u,vy:(Math.random()-.5)*6*u,l:1,c})}
+  function reset(){lives=3;score=0;kills=0;lvl=0;bul=[];en=[];eb=[];pt=[];inv=0;x=tx=W/2;y=ty=H*.78;state='play';msg.textContent='';paintHud()}
+  const move=e=>{const r=g.getBoundingClientRect();tx=Math.max(20*u,Math.min(W-20*u,e.clientX-r.left));ty=Math.max(H*.3,Math.min(H-50*u,e.clientY-r.top-70*u))};
+  g.addEventListener('pointerdown',e=>{if(e.target.closest('.cl'))return;found('shoot');move(e);if(state==='ready'||(state==='dead'&&performance.now()-deadAt>500))reset()});
+  g.addEventListener('pointermove',e=>{if(e.buttons||e.pointerType==='touch')move(e)});
+  function plane(){
+    ctx.save();ctx.translate(x,y);ctx.globalAlpha=(inv>0&&Math.floor(inv/80)%2)?.35:1;
+    ctx.fillStyle='#f3d27a';ctx.beginPath();ctx.moveTo(-22*u,14*u);ctx.lineTo(0,2*u);ctx.lineTo(22*u,14*u);ctx.lineTo(0,10*u);ctx.fill();
+    ctx.fillStyle='#fff';ctx.beginPath();ctx.moveTo(0,-28*u);ctx.lineTo(7*u,-4*u);ctx.lineTo(10*u,16*u);ctx.lineTo(0,10*u);ctx.lineTo(-10*u,16*u);ctx.lineTo(-7*u,-4*u);ctx.fill();
+    ctx.fillStyle='#3a8dff';ctx.beginPath();ctx.ellipse(0,-8*u,3.4*u,7*u,0,0,7);ctx.fill();
+    ctx.fillStyle='#ff9a2a';ctx.beginPath();ctx.moveTo(-4*u,16*u);ctx.lineTo(0,16*u+(8+Math.random()*7)*u);ctx.lineTo(4*u,16*u);ctx.fill();
+    ctx.restore();
+  }
+  (function loop(now){
+    if(!alive)return;requestAnimationFrame(loop);
+    const dt=Math.min(40,now-last),f=dt/16.67;last=now;
+    stars.forEach(s=>{s.y+=s.s*f*(state==='play'?1.5:.6);if(s.y>H){s.y=-4;s.x=Math.random()*W}});
+    if(state==='play'){
+      x+=(tx-x)*.35*Math.min(1,f);y+=(ty-y)*.35*Math.min(1,f);inv=Math.max(0,inv-dt);
+      fireT-=dt;if(fireT<=0){fire();fireT=[340,300,280,210][lvl]}
+      spT-=dt;if(spT<=0){spawn();spT=Math.max(330,950-score*.4)}
+      bul.forEach(b=>{b.x+=b.vx*f;b.y+=b.vy*f});bul=bul.filter(b=>b.y>-20&&b.x>-20&&b.x<W+20);
+      en.forEach(e=>{e.y+=e.sp*f;if(e.k==='fighter')e.x=e.x0+Math.sin(e.ph+e.y/60)*40*u;if(e.k==='bomber'){e.sh-=dt;if(e.sh<=0&&e.y>0){e.sh=1500;eb.push({x:e.x,y:e.y+e.r,vx:0,vy:3.4*u})}}});
+      eb.forEach(b=>{b.y+=b.vy*f});eb=eb.filter(b=>b.y<H+20);
+      for(const b of bul){for(const e of en){if(e.hp>0&&Math.hypot(b.x-e.x,b.y-e.y)<e.r+4*u){e.hp--;b.y=-99;if(e.hp<=0){score+=e.pts;kills++;boom(e.x,e.y,e.k==='bomber'?'#ff9a2a':'#ff5a5a');beep(220,.08,'sawtooth');
+        if(lvl<3&&kills>=NEXT[lvl]){lvl++;toast('🔫 שדרוג נשק: '+NAMES[lvl]);beep(880,.1);setTimeout(()=>beep(1320,.15),110)}paintHud()}break}}}
+      en=en.filter(e=>e.hp>0&&e.y<H+40);
+      const hit=()=>{if(inv>0)return;lives--;inv=1500;boom(x,y,'#fff');beep(130,.3,'sawtooth');paintHud();
+        if(lives<=0){state='dead';deadAt=performance.now();commit();bs.textContent='שיא: '+store.get('shBest',0);msg.innerHTML=(score>=best&&score>0?'🏆 שיא חדש! ':'')+score+' נקודות<br><small style="font-size:16px;font-weight:600;opacity:.85">לחצו כדי לנסות שוב</small>'}};
+      for(const e of en)if(Math.hypot(x-e.x,y-e.y)<e.r+12*u){e.hp=0;boom(e.x,e.y,'#ff5a5a');hit()}
+      for(const b of eb)if(Math.hypot(x-b.x,y-b.y)<10*u){b.y=H+99;hit()}
+      sc.textContent=score;if(score>peak)peak=score;
+    }
+    pt.forEach(p=>{p.x+=p.vx*f;p.y+=p.vy*f;p.l-=.03*f});pt=pt.filter(p=>p.l>0);
+    const bg=ctx.createLinearGradient(0,0,0,H);bg.addColorStop(0,'#050b1f');bg.addColorStop(1,'#13386b');ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+    ctx.fillStyle='#fff';stars.forEach(s=>{ctx.globalAlpha=.4+s.s/4;ctx.fillRect(s.x,s.y,s.s,s.s)});ctx.globalAlpha=1;
+    bul.forEach(b=>{ctx.fillStyle='#ffe27a';ctx.fillRect(b.x-2*u,b.y-8*u,4*u,12*u)});
+    eb.forEach(b=>{ctx.fillStyle='#ff4d4d';ctx.beginPath();ctx.arc(b.x,b.y,5*u,0,7);ctx.fill()});
+    en.forEach(e=>{ctx.save();ctx.translate(e.x,e.y);
+      if(e.k==='drone'){ctx.fillStyle='#e2554f';ctx.beginPath();ctx.moveTo(0,e.r);ctx.lineTo(-e.r,-e.r);ctx.lineTo(e.r,-e.r);ctx.fill()}
+      else if(e.k==='fighter'){ctx.fillStyle='#ff9a2a';ctx.beginPath();ctx.moveTo(0,e.r);ctx.lineTo(-e.r,0);ctx.lineTo(0,-e.r);ctx.lineTo(e.r,0);ctx.fill();ctx.fillStyle='#2a1500';ctx.fillRect(-3*u,-3*u,6*u,6*u)}
+      else{ctx.fillStyle='#5a6477';ctx.beginPath();ctx.ellipse(0,0,e.r,e.r*.65,0,0,7);ctx.fill();ctx.fillStyle='#ff3b3b';[-14,0,14].forEach(d=>{ctx.beginPath();ctx.arc(d*u,2*u,3*u,0,7);ctx.fill()})}
+      ctx.restore()});
+    pt.forEach(p=>{ctx.globalAlpha=Math.max(0,p.l);ctx.fillStyle=p.c;ctx.fillRect(p.x,p.y,4*u,4*u)});ctx.globalAlpha=1;
+    if(state!=='dead')plane();
+  })(performance.now());
+}
+(function(){
+  /* runner: 3 quick taps on the VS badge */
+  const vs=document.querySelector('.vsb');let n=0,t0=0;
+  if(vs)vs.addEventListener('click',()=>{const now=Date.now();if(now-t0>1200)n=0;t0=now;n++;
+    vs.style.transform='scale(1.25)';setTimeout(()=>vs.style.transform='',140);beep(500+n*120,.06);
+    if(n>=3){n=0;beep(900,.1);setTimeout(runGame,260)}});
+  /* shooter: 3 quick taps on the countdown title */
+  const cl=document.getElementById('cdLabel');let m=0,u0=0;
+  if(cl)cl.addEventListener('click',()=>{const now=Date.now();if(now-u0>1200)m=0;u0=now;m++;
+    cl.style.transform='scale(1.12)';setTimeout(()=>cl.style.transform='',140);beep(500+m*120,.06);
+    if(m>=3){m=0;beep(900,.1);setTimeout(shootGame,260)}});
+})();
+
 /* ---------- ACHIEVEMENTS ---------- */
 function achData(){
-  const kb=store.get('keepy',0),pb=store.get('pkBest',0),pt=store.get('pkTot',0),tb=store.get('triB',[0,0,0]);
+  const kb=store.get('keepy',0),pb=store.get('pkBest',0),pt=store.get('pkTot',0),tb=store.get('triB',[0,0,0]),rb=store.get('runBest',0),sb=store.get('shBest',0);
   const rows=[],chs=[];
-  if(eggsFound.keepy){rows.push(['⚽','הקפצות','שיא '+kb]);chs.push(['k','80 הקפצות ברצף',kb,80])}
-  if(eggsFound.pen){rows.push(['🥅','פנדלים','שיא '+pb+' מתוך 5 · '+pt+' גולים']);chs.push(['p','40 גולים בפנדלים (מצטבר)',pt,40])}
-  if(eggsFound.trivia){rows.push(['🧠','טריוויה','קל '+tb[0]+'/5 · בינוני '+tb[1]+'/5 · קשה '+tb[2]+'/5']);chs.push(['t','לעבור את 3 רמות הטריוויה',[0,1,2].filter(i=>tb[i]>=3).length,3])}
+  if(eggsFound.keepy){rows.push(['⚽','הקפצות','שיא '+kb]);chs.push(['k','הקפצות ברצף',kb,[10,25,50]])}
+  if(eggsFound.pen){rows.push(['🥅','פנדלים','שיא '+pb+' מתוך 5 · '+pt+' גולים']);chs.push(['p','גולים בפנדלים (מצטבר)',pt,[10,25,40]])}
+  if(eggsFound.trivia){rows.push(['🧠','טריוויה','קל '+tb[0]+'/5 · בינוני '+tb[1]+'/5 · קשה '+tb[2]+'/5']);chs.push(['t','רמות טריוויה שעברת',[0,1,2].filter(i=>tb[i]>=3).length,[1,2,3]])}
+  if(eggsFound.run){rows.push(['🏃','ריצה וקפיצה','שיא '+rb+' מ׳']);chs.push(['r','מטרים בריצה',rb,[300,600,1000]])}
+  if(eggsFound.shoot){rows.push(['✈️','מטוס קרב','שיא '+sb+' נקודות']);chs.push(['s','נקודות במטוס',sb,[500,1200,2000]])}
+  chs.forEach(c=>{const T=c[3];c.goal=T[T.length-1];c.k=T.findIndex(x=>c[2]<x);if(c.k<0)c.k=T.length-1;c.done=c[2]>=c.goal;c.tgt=T[c.k]});
   return {rows,chs};
 }
 let _achBusy=false;
@@ -1094,7 +1271,7 @@ function renderAch(){
   const {rows,chs}=achData();
   el.innerHTML=rows.length?'<div class="panel dark"><h3>📊 לוח תוצאות</h3>'+rows.map(r=>'<div class="r"><b>'+r[0]+' '+r[1]+'</b><span>'+r[2]+'</span></div>').join('')+'</div>':'';
   const done=store.get('achDone',{});let nd=null;
-  chs.forEach(c=>{if(c[2]>=c[3]&&!done[c[0]]){done[c[0]]=1;nd=c[1]}});
+  chs.forEach(c=>{if(c.done&&!done[c[0]]){done[c[0]]=1;nd=c.goal+' '+c[1]}});
   if(nd){store.set('achDone',done);setTimeout(()=>{toast('⭐ כוכב חדש! '+nd);confetti(80)},300)}
   if(typeof renderMissions==='function'){_achBusy=true;try{renderMissions()}finally{_achBusy=false}}
 }
@@ -1174,6 +1351,8 @@ const EGGS=[
  ['secret','המשימה הסודית','לסמן 5 משימות בלשונית המשימות'],
  ['pen','בעיטות פנדל','לחיצה על אייקון השער בצד ימין של הכותרת'],
  ['trivia','טריוויה ריאל מדריד','בלשונית המשחק, לחיצה על החולצה הלבנה של ריאל מדריד'],
+ ['run','ריצה וקפיצה','3 לחיצות מהירות על ה-VS שבלשונית המשחק'],
+ ['shoot','מטוס קרב','3 לחיצות מהירות על הכותרת של הספירה לאחור'],
  ['km0','קילומטר 0','לסמן את המשימה "קילומטר 0" אחרי שמוצאים את הלוחית בפוארטה דל סול']
 ];
 const eggsFound=store.get('eggs',{});
@@ -1325,26 +1504,15 @@ const QUIZ_AT=new Date('2026-10-13T05:30:00+02:00');
   });
 })();
 /* Real Madrid trivia */
-const QL=[
- {n:'קל',qs:[
-  {q:'מה צבע החולצה הביתית של ריאל מדריד?',o:['לבן','כחול','אדום','שחור'],a:0,e:'לבן, ובגלל זה קוראים להם ״הלבנים״.'},
-  {q:'נגד איזו קבוצה משחקים את ״אל קלאסיקו״?',o:['אתלטיקו מדריד','סביליה','ברצלונה','ולנסיה'],a:2,e:'אל קלאסיקו הוא המשחק מול ברצלונה, הדרבי הגדול בספרד.'},
-  {q:'איך קוראים לאצטדיון של ריאל מדריד?',o:['קאמפ נואו','סנטיאגו ברנבאו','מטרופוליטנו','מסטאיה'],a:1,e:'סנטיאגו ברנבאו, באמצע העיר מדריד.'},
-  {q:'מי מלך השערים של כל הזמנים של ריאל מדריד?',o:['קרים בנזמה','רול גונסאלס','אלפרדו די סטפנו','כריסטיאנו רונאלדו'],a:3,e:'כריסטיאנו רונאלדו כבש במדי המועדון 450 שערים.'},
-  {q:'מה הכינוי המוכר של ריאל מדריד?',o:['לוס בלאנקוס (הלבנים)','לוס קולצ׳ונרוס','לוס קולֶה','לוס אמארילוס'],a:0,e:'בגלל החולצות הלבנות. מדריד נקראת גם ״לוס מרנגס״.'}]},
- {n:'בינוני',qs:[
-  {q:'באיזו שנה נוסד המועדון?',o:['1889','1902','1920','1947'],a:1,e:'המועדון נוסד ב-1902. התואר ״ריאל״ (מלכותי) ניתן לו על ידי המלך אלפונסו ה-13 ב-1920.'},
-  {q:'על שם מי נקרא האצטדיון?',o:['סנטיאגו ברנבאו, שחקן ולימים נשיא המועדון','המלך אלפונסו ה-13','אלפרדו די סטפנו','קרלוס סנטיאגו, ראש העיר'],a:0,e:'סנטיאגו ברנבאו שיחק במועדון, ואחר כך כיהן שנים רבות כנשיאו.'},
-  {q:'איך ממשיך ההמנון ״הלה מדריד...״?',o:['…ואנחנו בראש','…וִיבָה אספניה','…ואין עוד כמונו','…וְנָאדָה מָאס'],a:3,e:'״Hala Madrid y nada más״, כלומר ״קדימה מדריד, ושום דבר אחר״.'},
-  {q:'מה הסמל של העיר מדריד?',o:['דוב ועץ תות','אריה וכתר','שור וגביע','נשר וחרב'],a:0,e:'הדוב והעץ (מדרוניו) מופיעים על סמל העיר, ויש להם פסל מפורסם בפוארטה דל סול.'},
-  {q:'על איזה שדרה גדולה נמצא האצטדיון?',o:['גרן ויה','פאסאו דה לה קסטלנה','קאלה דה אלקלה','פאסאו דל פראדו'],a:1,e:'פאסאו דה לה קסטלנה, אחד הצירים הראשיים של מדריד.'}]},
- {n:'קשה',qs:[
-  {q:'כמה גביעי אירופה רצופים זכה בהם ריאל מדריד בשנות ה-50 המאוחרות?',o:['2','3','5','7'],a:2,e:'חמישה גביעי אלופות אירופה ברציפות, בין 1956 ל-1960.'},
-  {q:'באיזו מדינה נולד אלפרדו די סטפנו?',o:['ספרד','ארגנטינה','אורוגוואי','קולומביה'],a:1,e:'הוא נולד בארגנטינה, ואחר כך שיחק גם בנבחרת ספרד.'},
-  {q:'כמה שנים כיהן סנטיאגו ברנבאו כנשיא המועדון?',o:['10','20','35','50'],a:2,e:'בערך 35 שנה, בין 1943 ל-1978.'},
-  {q:'איך נקראת קבוצת הרזרבה של ריאל מדריד?',o:['ריאל מדריד ב׳','קסטיליה','אלקלה','צ׳מרטין'],a:1,e:'ריאל מדריד קסטיליה, המקום שבו גדלים הכוכבים הצעירים.'},
-  {q:'מי כבש בראשו בדקה 93 בגמר ״הדסימה״ ב-2014?',o:['גארת׳ בייל','כריסטיאנו רונאלדו','סרחיו ראמוס','קרים בנזמה'],a:2,e:'סרחיו ראמוס כבש בדקה 93 והעביר את המשחק להארכה. מדריד ניצחה 4:1 וזכתה בגביע ה-10.'}]}
-];
+const QB=[[["מה צבע החולצה הביתית של ריאל מדריד?","לבן","כחול","אדום","שחור","לבן, ובגלל זה קוראים להם ״הלבנים״."],["נגד איזו קבוצה משחקים את ״אל קלאסיקו״?","ברצלונה","אתלטיקו מדריד","סביליה","ולנסיה","אל קלאסיקו הוא המשחק מול ברצלונה."],["איך קוראים לאצטדיון של ריאל מדריד?","סנטיאגו ברנבאו","קאמפ נואו","מטרופוליטנו","מסטאיה","סנטיאגו ברנבאו, באמצע העיר מדריד."],["מי מלך השערים של כל הזמנים של ריאל מדריד?","כריסטיאנו רונאלדו","קרים בנזמה","רול גונסאלס","אלפרדו די סטפנו","רונאלדו כבש במדי המועדון 450 שערים."],["מה הכינוי המוכר של ריאל מדריד?","לוס בלאנקוס (הלבנים)","לוס קולצ׳ונרוס","לוס קולֶה","לוס אמארילוס","בגלל החולצות הלבנות. נקראים גם ״לוס מרנגס״."],["איזה עיטור יש בראש הסמל של המועדון?","כתר","כוכב","נשר","גביע","הכתר מסמל את התואר ״ריאל״, כלומר מלכותי."],["איזה מספר חולצה לבש כריסטיאנו רונאלדו בריאל מדריד?","7","9","10","11","המספר 7 הוא אחד המספרים המפורסמים של המועדון."],["באיזו כיכר חוגגים אוהדי ריאל מדריד זכיות?","כיכר סיבלס (Cibeles)","פוארטה דל סול","פלאסה מאיור","כיכר נפטון","בכיכר סיבלס יש מזרקה, ושם האוהדים נפגשים."],["מהי קבוצת הדרבי העירונית של ריאל מדריד?","אתלטיקו מדריד","ראיו וייקאנו","חטאפה","לבאנטה","אתלטיקו מדריד היא היריבה העירונית הגדולה."],["איזה מאמן זכה עם ריאל ב-3 גביעי אלופות ברציפות בשנים 2016 עד 2018?","זינדין זידאן","קרלו אנצ׳לוטי","חוזה מוריניו","פפ גווארדיולה","זידאן זכה שלוש פעמים ברציפות."],["איזה שוער ידוע בכינוי ״סן איקר״?","איקר קסיאס","תיבו קורטואה","קיילור נבאס","ויקטור ואלדס","איקר קסיאס, שוער ואגדה של המועדון."],["מי זכה בכדור הזהב בשנת 2022 כשהיה שחקן ריאל מדריד?","קרים בנזמה","לוקה מודריץ׳","וויניסיוס ג׳וניור","תיבו קורטואה","בנזמה היה הכוכב בעונה המדהימה ההיא."],["מי זכה בכדור הזהב ב-2018 כשהיה שחקן ריאל מדריד?","לוקה מודריץ׳","טוני קרוס","סרחיו ראמוס","גארת׳ בייל","מודריץ׳ שבר את עשור הדומיננטיות של מסי ורונאלדו."],["מאיזו מדינה הגיע וויניסיוס ג׳וניור?","ברזיל","ארגנטינה","פורטוגל","צרפת","הוא הגיע מפלמנגו הברזילאית."],["מאיזו מדינה הגיע ג׳וד בלינגהאם?","אנגליה","גרמניה","ספרד","הולנד","הוא הגיע ב-2023 מבורוסיה דורטמונד."],["מאיזו מדינה הגיע לוקה מודריץ׳?","קרואטיה","סרביה","סלובניה","בוסניה","קרואטיה, והוא הוביל אותה למקום השני במונדיאל 2018."],["מאיזו מדינה הגיע גארת׳ בייל?","ויילס","סקוטלנד","אנגליה","אירלנד","ויילס. הוא הגיע ב-2013 מטוטנהאם."],["מאיזו מדינה הגיע טוני קרוס?","גרמניה","אוסטריה","שווייץ","הולנד","גרמניה, והוא נחשב ממסרים הכי טובים בעולם."],["מאיזו מדינה הגיע פדריקו ואלוורדה?","אורוגוואי","ארגנטינה","קולומביה","צ׳ילה","אורוגוואי. הוא הגיע לריאל כנער מפניארול."],["מה תפקידו של תיבו קורטואה?","שוער","בלם","קשר","חלוץ","קורטואה הוא שוער בלגי."],["מי הייתה היריבה של ריאל בגמר ליגת האלופות 2014?","אתלטיקו מדריד","ברצלונה","באיירן מינכן","יובנטוס","ריאל ניצחה 4:1 והשיגה את ״הדסימה״."],["מי הייתה היריבה של ריאל בגמר ליגת האלופות של 2022?","ליברפול","מנצ׳סטר סיטי","צ׳לסי","פריז סן ז׳רמן","ריאל ניצחה 1:0."],["מי היריבה של ריאל בגמר ליגת האלופות 2024 בווומבלי?","בורוסיה דורטמונד","באיירן מינכן","ליברפול","אינטר","ריאל ניצחה 2:0 וזכתה בגביע ה-15."],["מי כבש את השער בגמר ליגת האלופות 2022?","וויניסיוס ג׳וניור","קרים בנזמה","רודריגו","פדריקו ואלוורדה","וויניסיוס כבש את שער הניצחון."],["מאיזו קבוצה הגיע קיליאן אמבפה לריאל ב-2024?","פריז סן ז׳רמן","מונאקו","ליון","ליברפול","הוא הגיע כשחקן חופשי."],["באיזו עיר נמצא המועדון?","מדריד","ברצלונה","סביליה","ולנסיה","ריאל מדריד, בירת ספרד."],["איך קוראים לחברי המועדון (המנויים)?","סוסיוס","מרנגס","אוראוס","לובוס","״סוסיוס״ הם חברי המועדון בעלי המנוי."],["מה פירוש המילה ״הלה״ בצעקה ״הלה מדריד״?","קדימה","בבקשה","תודה","שלום","״Hala״ היא קריאת עידוד, כמו ״קדימה״."],["באיזו מדינה נערך גמר ליגת האלופות 2016, שבו ריאל ניצחה בפנדלים?","איטליה","צרפת","גרמניה","ספרד","הגמר נערך בסן סירו שבמילאנו."],["מי כבש בראשו בקרן את שער 1:0 בגמר 2024?","דני קרבחאל","וויניסיוס","בנזמה","מודריץ׳","קרבחאל כבש אחרי קרן של טוני קרוס."],["איזה מגן שמאלי ברזילאי היה קפטן ריאל?","מרסלו","קאסמירו","רודריגו","פאבריסיו","מרסלו שיחק ברייאל מ-2007 והיה קפטן."],["איזה בלם הגיע מסביליה ב-2005 והפך לקפטן ריאל?","סרחיו ראמוס","נאצ׳ו","פפה","ראפאל וראן","ראמוס היה בלם וקפטן, וכבש בגמר 2014."],["מה השם העממי של ליגת העל הספרדית?","לה ליגה","סריה א׳","בונדסליגה","פרמייר ליג","ריאל מדריד משחקת בלה ליגה."]],[["באיזו שנה נוסד המועדון?","1902","1889","1920","1947","ב-1902 נוסד ״מדריד פוטבול קלוב״. התואר ״ריאל״ ניתן ב-1920."],["על שם מי נקרא האצטדיון?","סנטיאגו ברנבאו, שחקן ולימים נשיא המועדון","המלך אלפונסו ה-13","אלפרדו די סטפנו","ראול גונסאלס","ברנבאו שיחק במועדון ואחר כך היה נשיאו שנים רבות."],["איך ממשיך ההמנון ״הלה מדריד...״?","…ונאדה מאס","…ואנחנו בראש","…ויבה אספניה","…ואין עוד כמונו","״Hala Madrid y nada más״, כלומר ״קדימה מדריד, ושום דבר אחר״."],["על איזו שדרה גדולה נמצא האצטדיון?","פאסאו דה לה קסטלנה","גרן ויה","קאלה דה אלקלה","פאסאו דל פראדו","פאסאו דה לה קסטלנה, אחד הצירים הראשיים של מדריד."],["איך נקראת קבוצת הרזרבה של ריאל מדריד?","קסטיליה","ריאל מדריד ב׳","אלקלה","צ׳מרטין","ריאל מדריד קסטיליה, שם גדלים הכוכבים הצעירים."],["מי כבש 4 שערים בגמר גביע האלופות 1960 (7:3 על פרנקפורט)?","פרנץ פושקאש","אלפרדו די סטפנו","פרנסיסקו חנטו","ריימון קופה","פושקאש כבש 4, ודי סטפנו שלושה."],["מי הייתה הקבוצה שהפסידה לריאל בגמר הראשון בגביע האלופות ב-1956?","ריימס","יובנטוס","מילאן","בנפיקה","ריאל ניצחה 4:3 את ריימס הצרפתית."],["מאיזו קבוצה הגיע זינדין זידאן ב-2001?","יובנטוס","מרסיי","אינטר","מילאן","זידאן הגיע מיובנטוס בעסקה שהייתה שיא עולמי."],["מאיזו קבוצה הגיע לואיש פיגו ב-2000?","ברצלונה","ספורטינג ליסבון","פורטו","ארסנל","המעבר מברצלונה לריאל עורר סערה גדולה."],["מאיזו קבוצה הגיע כריסטיאנו רונאלדו ב-2009?","מנצ׳סטר יונייטד","ספורטינג ליסבון","יובנטוס","ארסנל","הוא הגיע ב-2009 והפך לכוכב הגדול של המועדון."],["לאיזו קבוצה עבר כריסטיאנו רונאלדו מריאל ב-2018?","יובנטוס","מנצ׳סטר יונייטד","פריז סן ז׳רמן","ברצלונה","הוא עבר ליובנטוס אחרי ארבעה גביעי אלופות עם ריאל."],["מאיזו קבוצה הגיע גארת׳ בייל ב-2013?","טוטנהאם","סאות׳המפטון","מנצ׳סטר סיטי","צ׳לסי","בייל הגיע מטוטנהאם."],["מאיזו קבוצה הגיע לוקה מודריץ׳ ב-2012?","טוטנהאם","ארסנל","דינמו זאגרב","ליברפול","מודריץ׳ הגיע מטוטנהאם."],["מאיזו קבוצה הגיע טוני קרוס ב-2014?","באיירן מינכן","בורוסיה דורטמונד","באייר לברקוזן","שלקה","קרוס הגיע מבאיירן."],["מאיזו קבוצה הגיע תיבו קורטואה ב-2018?","צ׳לסי","אתלטיקו מדריד","ג׳נק","ליברפול","קורטואה הגיע מצ׳לסי."],["מאיזו קבוצה הגיע וויניסיוס ב-2018?","פלמנגו","סנטוס","ברצלונה","פורטו","וויניסיוס הגיע מפלמנגו הברזילאית."],["מאיזו קבוצה הגיע ג׳וד בלינגהאם ב-2023?","בורוסיה דורטמונד","ליברפול","אסטון וילה","אייאקס","בלינגהאם הגיע מדורטמונד."],["איזה מאמן הוביל את ריאל להישג של 100 נקודות בלה ליגה בעונת 2011/12?","חוזה מוריניו","קרלו אנצ׳לוטי","זידאן","ראפא בניטס","בעונה ההיא ריאל כבשה 121 שערים."],["איזה מאמן הביא את ״הדסימה״, הגביע ה-10, ב-2014?","קרלו אנצ׳לוטי","זידאן","חוזה מוריניו","גווארדיולה","אנצ׳לוטי אימן את ריאל בגמר בליסבון."],["איזו קבוצה ניצחה ריאל 1:0 בגמר ״הספטימה״ ב-1998?","יובנטוס","מילאן","באיירן","אייאקס","ריאל זכתה בגביע ה-7 בגמר באמסטרדם."],["מי כבש את שער הניצחון בגמר 1998?","פרדראג מיאטוביץ׳","ראול","רוברטו קרלוס","פרננדו מוריינטס","מיאטוביץ׳ כבש את הגול היחיד."],["מי כבש ווליי אגדי בגמר 2002 נגד באייר לברקוזן?","זינדין זידאן","ראול","לואיש פיגו","רוברטו קרלוס","זידאן כבש בעיטת ווליי בגמר בגלזגו, והמשחק נגמר 2:1."],["עם איזו תוצאה ניצחה ריאל את ולנסיה בגמר 2000?","3:0","1:0","2:1","4:1","ריאל ניצחה 3:0 בפריז."],["באיזו עיר נערך גמר ליגת האלופות 2014?","ליסבון","מדריד","מינכן","לונדון","הגמר נערך בליסבון שבפורטוגל."],["מי כבש את הפנדל המכריע בגמר 2016 מול אתלטיקו?","כריסטיאנו רונאלדו","סרחיו ראמוס","גארת׳ בייל","מרסלו","ריאל ניצחה בדו-קרב פנדלים בסן סירו."],["מי הייתה היריבה בגמר 2017 בקרדיף?","יובנטוס","ליברפול","ברצלונה","מונאקו","ריאל ניצחה 4:1, ורונאלדו כבש פעמיים."],["מי הייתה היריבה בגמר 2018 בקייב?","ליברפול","יובנטוס","פריז","אתלטיקו","ריאל ניצחה 3:1."],["מי כבש בבעיטת מספריים בגמר 2018?","גארת׳ בייל","קרים בנזמה","רונאלדו","מרסלו","הגול של בייל נחשב לאחד היפים בגמרים."],["באיזו עיר נערך גמר 2022 שבו ריאל ניצחה את ליברפול?","פריז","מדריד","ליסבון","מינכן","ליד פריז, באצטדיון סטאד דה פראנס."],["איזו תחנת מטרו נמצאת ליד האצטדיון?","סנטיאגו ברנבאו (קו 10)","סול (קו 1)","אטוצ׳ה (קו 1)","רטירו (קו 2)","תחנת סנטיאגו ברנבאו נמצאת בקו 10."],["מה מיוחד באצטדיון ברנבאו אחרי השיפוץ?","יש גג נסגר ומגרש שאפשר להסתיר","הוא נבנה בלי יציעים","אין בו מושבים","הוא ללא מגרש","השיפוץ הוסיף גג נסגר, והמגרש יכול להיות מתחת לאדמה."],["איפה נמצא מרכז האימונים של ריאל?","ואלדבבאס","קסטיליה","פוארטה דל סול","מרכז העיר","ואלדבבאס, בקצה העיר מדריד."],["מי הנשיא שהביא את ה״גלקטיקוס״ (זידאן, פיגו, בקהאם) בתחילת שנות ה-2000?","פלורנטינו פרס","סנטיאגו ברנבאו","רמון מנדוסה","לורנסו סאנס","פלורנטינו פרס הוא נשיא המועדון."]],[["כמה גביעי אלופות אירופה רצופים זכה בהם ריאל מדריד בין 1956 ל-1960?","5","2","3","7","חמישה גביעים ברציפות, שיא שעוד לא נשבר."],["באיזו מדינה נולד אלפרדו די סטפנו?","ארגנטינה","ספרד","אורוגוואי","קולומביה","הוא נולד בארגנטינה ואחר כך שיחק גם בנבחרת ספרד."],["כמה שנים כיהן סנטיאגו ברנבאו כנשיא המועדון?","בערך 35","10","20","50","בין 1943 ל-1978."],["איזה שחקן זכה בשישה גביעי אלופות עם ריאל, שיא של המועדון?","פרנסיסקו ״פאקו״ חנטו","אלפרדו די סטפנו","פרנץ פושקאש","ראול","חנטו היה כנף מהיר ופורה."],["איזה שחקן כבש בכל אחד מחמשת הגמרים הראשונים?","אלפרדו די סטפנו","פרנץ פושקאש","פרנסיסקו חנטו","ריימון קופה","די סטפנו כבש בכל חמשת הגמרים."],["מאיזו מדינה הגיע פרנץ פושקאש?","הונגריה","רומניה","צ׳כוסלובקיה","פולין","הוא היה כוכב הנבחרת ההונגרית."],["באיזו דקה כבש סרחיו ראמוס את השוויון בגמר 2014?","93","60","75","88","השער בדקה 93 הכניס את המשחק להארכה."],["מי ניצחה ריאל בגמר 1966 במה שנקרא ״הגביע השישי״?","פרטיזן בלגרד","בנפיקה","אינטר","סלטיק","ריאל ניצחה 2:1 את פרטיזן."],["מי נקרא ״הנשר״ (אל בוייטרה) והיה כוכב המועדון בשנות ה-80?","אמיליו בוטרגניו","הוגו סאנצ׳ס","מיצ׳ל","סמיטה","בוטרגניו וחבריו נקראו ״הנשר וחבורתו״."],["מאיזו מדינה הגיע הוגו סאנצ׳ס, מלך השערים של שנות ה-80?","מקסיקו","ארגנטינה","קולומביה","צ׳ילה","הוא היה חלוץ מקסיקני מצליח."],["איזה כדורגלן צרפתי זכה בכדור הזהב ב-1958 כשהיה שחקן ריאל?","ריימון קופה","מישל פלאטיני","זינדין זידאן","קרים בנזמה","קופה זכה בכדור הזהב בתקופה שבה שיחק ברייאל."],["בן כמה היה ראול כשהופיע לראשונה בקבוצה הבוגרת?","17","20","15","22","ראול הופיע לראשונה בגיל 17, ב-1994."],["בן כמה היה איקר קסיאס כשהצטרף לאקדמיה של ריאל?","9","14","12","17","הוא הצטרף כילד בן 9."],["כמה שערים כבש ראול ברייאל מדריד?","323","250","400","500","ראול היה מלך השערים של המועדון עד שרונאלדו עקף אותו ב-2015."],["מי עקף את ראול בטבלת מלכי השערים של המועדון ב-2015?","כריסטיאנו רונאלדו","קרים בנזמה","אלפרדו די סטפנו","גארת׳ בייל","רונאלדו כבש 450 שערים במדי ריאל."],["כמה שערים כבש רונאלדו בעונת הליגה לאלופות 2013/14, שיא עונתי?","17","10","12","22","הוא כבש 17 שערים בליגת האלופות באותה עונה."],["כמה כבשה ריאל מדריד בעונת 2011/12 בלה ליגה?","121 שערים","90 שערים","100 שערים","150 שערים","121 שערים ו-100 נקודות, שיא שהיה ללא תחרות."],["בכמה כסף נחשב המעבר של זידאן לריאל ב-2001?","כ-77 מיליון אירו","10 מיליון אירו","30 מיליון אירו","200 מיליון אירו","זה היה שיא עולמי באותה תקופה."],["איזו תקרית קרתה ב-2002 כשפיגו חזר לקאמפ נואו?","הושלך אליו ראש חזיר","הוא קיבל פרח","הוא כבש שער","הוא נפצע","האוהדים זרקו לעברו חפצים, כולל ראש חזיר, כי עבר לריאל."],["איזה מספר חולצה לבש דייוויד בקהאם בריאל?","23","7","10","11","בקהאם הגיע ב-2003 והתחיל עם חולצה 23."],["מאיזו קבוצה הגיע דייוויד בקהאם ב-2003?","מנצ׳סטר יונייטד","ארסנל","ליברפול","צ׳לסי","הוא הגיע ממנצ׳סטר יונייטד."],["איזה שחקן ברזילאי המכונה ״הפנומנון״ הגיע ב-2002 מאינטר?","רונאלדו נאסאריו","רונאלדיניו","רוברטו קרלוס","קאקה","רונאלדו כבש הרבה שערים גם ברייאל."],["איך נקראה קבוצת הכוכבים של פלורנטינו פרס בתחילת שנות ה-2000?","גלקטיקוס","מרנגס","אל קלאסיקו","ביטלס","זידאן, פיגו, רונאלדו ובקהאם."],["מי כבש ראשון לריאל בגמר 2016 נגד אתלטיקו, בדקה 15?","סרחיו ראמוס","גארת׳ בייל","קרים בנזמה","ראפאל וראן","ראמוס כבש, ואתלטיקו השוותה. ריאל ניצחה בפנדלים."],["באיזה גמר כבש קרים בנזמה אחרי טעות של שוער ליברפול?","גמר 2018","גמר 2014","גמר 2016","גמר 2022","קריוס, שוער ליברפול, טעה, ובנזמה כבש. ריאל ניצחה 3:1."],["באיזה גמר כבשה ריאל 4:1 על יובנטוס בקרדיף?","2017","2016","2018","2014","ריאל הייתה הראשונה שהגנה על התואר בגמר ליגת האלופות."],["באיזו שנה הוקמה קבוצת הנשים של ריאל מדריד?","2020","2002","2010","1990","ב-2020 המועדון הקים קבוצת נשים."],["מי היה קפטן ריאל שהרים את הגביע בגמר 2022?","מרסלו","סרחיו ראמוס","קרים בנזמה","לוקה מודריץ׳","מרסלו היה הקפטן באותה עונה."],["את מי ניצחה ריאל בגביע הבין-יבשתי הראשון ב-1960?","פניארול","סנטוס","בוקה ג׳וניורס","ריבר פלייט","פניארול האורוגוואית הייתה היריבה."],["באיזו עיר נערך גמר 1956, הגמר הראשון בגביע האלופות?","פריז","מדריד","רומא","לונדון","ריאל ניצחה 4:3 את ריימס."],["באיזו עיר נערך גמר 1960 שבו ריאל ניצחה 7:3?","גלזגו","לונדון","מנצ׳סטר","פריז","הגמר היה בהמפדן פארק, ובו 127 אלף צופים."],["באיזו עיר נערך גמר 1998 שבו ריאל זכתה בגביע ה-7?","אמסטרדם","פריז","ברלין","רומא","באמסטרדם ארנה."],["באיזו עיר נערך גמר 2000 שבו ריאל ניצחה את ולנסיה 3:0?","פריז","אמסטרדם","מדריד","מילאנו","בפריז, בסטאד דה פראנס."],["באיזו עיר נערך גמר 2002 בו ריאל ניצחה את לברקוזן?","גלזגו","פריז","לונדון","רומא","הגמר נערך בהמפדן פארק, בעיר גלזגו."]]];
+const QL=[{n:'קל'},{n:'בינוני'},{n:'קשה'}];
+function pickQs(lv){
+  const pool=QB[lv];let seen=store.get('triSeen',[[],[],[]]);if(!Array.isArray(seen[lv]))seen[lv]=[];
+  let free=pool.map((x,i)=>i).filter(i=>!seen[lv].includes(i));
+  if(free.length<5){seen[lv]=[];free=pool.map((x,i)=>i)}
+  free.sort(()=>Math.random()-.5);const ch=free.slice(0,5);seen[lv]=seen[lv].concat(ch);store.set('triSeen',seen);
+  return ch.map(i=>{const r=pool[i];return {q:r[0],o:[r[1],r[2],r[3],r[4]],a:0,e:r[5]}});
+}
 (function(){
   const sh=document.getElementById('shirtEgg');
   sh.addEventListener('click',()=>{
@@ -1364,7 +1532,7 @@ function trivia(){
     o.querySelectorAll('.qzl').forEach(b=>b.onclick=e=>{e.stopPropagation();const k=+b.dataset.l;if(b.classList.contains('lock')){toast('צריך 3 תשובות נכונות ברמה הקודמת');return}play(k)});
   };
   const play=(lv)=>{
-    let i=0,sc=0;const L=QL[lv];
+    let i=0,sc=0;const L={n:QL[lv].n,qs:pickQs(lv)};
     const render=()=>{
       if(i>=L.qs.length){
         const tb=store.get('triB',[0,0,0]);if(sc>tb[lv]){tb[lv]=sc;store.set('triB',tb)}renderAch();
