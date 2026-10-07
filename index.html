@@ -312,6 +312,7 @@ body.flash{animation:fl .6s 3}
 .seg button{flex:1 1 calc(50% - 6px);font:inherit;font-size:13px;font-weight:700;border:1.5px solid #2a3d70;background:var(--navy);color:#fff;border-radius:10px;padding:9px 6px;cursor:pointer}
 .seg button.on{background:linear-gradient(180deg,var(--gold2),var(--gold));color:var(--navy);border-color:var(--gold)}
 textarea.tr{width:100%;min-height:84px;border-radius:12px;border:1.5px solid #2a3d70;background:#fff;color:var(--ink);font:inherit;font-size:16px;padding:10px;resize:vertical;margin-bottom:4px}
+.tipsl{margin:8px 0 0;padding:0 18px 0 0;font-size:14px;line-height:1.7}.tipsl li{margin-bottom:6px}
 .note{font-size:13px;line-height:1.6;margin-top:10px}
 .panel .note{color:var(--ink2)}
 .panel.dark .note{color:var(--muted)}
@@ -597,6 +598,26 @@ details.st ol{margin:0 0 12px;padding-inline-start:22px;line-height:1.75;font-si
           <li>בוחרים "הוסף למסך הבית" ואז "הוסף".</li>
         </ol></details>
       <div class="note">אחרי הפתיחה הראשונה עם אינטרנט, האפליקציה נשמרת בטלפון ופועלת גם בלי חיבור. כשיש חיבור היא מתעדכנת לבד לגרסה האחרונה. הסימונים והכוכבים נשמרים בכל טלפון בנפרד.</div>
+    </div>
+
+    <h2><svg class="i"><use href="#phone"/></svg>אינטרנט (eSIM)</h2>
+    <div class="panel" id="dataBox">
+      <div class="row" style="border:0;padding-top:0"><span><b id="dataLeft">בודקים…</b></span><span id="dataTot" class="note" style="margin:0"></span></div>
+      <div style="height:16px;border-radius:99px;background:#e4e1d6;overflow:hidden;margin:6px 0 8px"><div id="dataBar" style="height:100%;width:0;border-radius:99px;background:#10b04a;transition:width .8s"></div></div>
+      <div class="note" id="dataPace" style="margin-top:0"></div>
+      <div class="note" id="dataAt" style="font-size:12px;margin-top:4px"></div>
+    </div>
+    <div class="panel">
+      <h3>💡 טיפים לחסוך דאטה</h3>
+      <ul class="tipsl">
+        <li><b>וייפיי קודם.</b> במלון, במסעדות ובאצטדיון (אם יש) מתחברים לווייפיי, והדאטה נשמר לדרכים.</li>
+        <li><b>מפה אופליין.</b> במלון, ב-Google Maps: תמונת הפרופיל ← מפות אופליין ← בוחרים את מדריד. אחר כך הניווט כמעט לא צורך דאטה.</li>
+        <li><b>סרטונים רק בווייפיי.</b> לכבות הפעלה אוטומטית באינסטגרם וטיקטוק, והעלאת סרטונים ותמונות רק במלון.</li>
+        <li><b>גיבוי תמונות.</b> לכבות גיבוי אוטומטי ב-Google Photos בזמן שיוצאים מהמלון, ולהשאיר אותו לערב בווייפיי.</li>
+        <li><b>עדכונים.</b> לכבות עדכון אוטומטי של אפליקציות ומערכת ברשת סלולרית.</li>
+        <li><b>מצב חיסכון.</b> בהגדרות הטלפון להפעיל "חיסכון בנתונים" (Data Saver).</li>
+        <li><b>הכי חשוב.</b> שומרים דאטה לדברים החיוניים: ניווט, מונית, הודעה לאבא ולסבא וסבתא.</li>
+      </ul>
     </div>
 
     <h2><svg class="i"><use href="#phone"/></svg>חשוב לדעת</h2>
@@ -1056,7 +1077,7 @@ function renderMissions(){
   const upd=()=>{const w=r.children[0].offsetWidth+12;let k=Math.round(Math.abs(r.scrollLeft)/w);k=Math.max(0,Math.min(n-1,k));[...d.children].forEach((x,i)=>x.classList.toggle('on',i===k))};
   r.addEventListener('scroll',upd,{passive:true});upd();
 })();
-const APP_VER='20261006-1954';
+const APP_VER='20261008-0009';
 function verLabel(){if(!APP_VER)return 'פיתוח';const m=APP_VER.match(/^(\d{4})(\d\d)(\d\d)-(\d\d)(\d\d)$/);return m?(+m[3])+'.'+(+m[2])+' בשעה '+m[4]+':'+m[5]:APP_VER}
 async function hardRefresh(){
   const bt=document.getElementById('refBtn');if(bt)bt.textContent='מתעדכן…';toast('🔄 מתעדכן…');
@@ -1078,6 +1099,28 @@ function checkVer(){
   document.getElementById('updBtn').onclick=hardRefresh;
   setTimeout(checkVer,2500);
   document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')checkVer()});
+})();
+/* ---------- eSIM DATA BAR ---------- */
+(function(){
+  const $=id=>document.getElementById(id);
+  function show(j){
+    if(!j||typeof j.total!=='number'||typeof j.left!=='number'){$('dataLeft').textContent='אין עדכון עדיין';return}
+    const pct=Math.max(0,Math.min(100,j.left/j.total*100));
+    const f=n=>(Math.round(n*100)/100).toString().replace(/\.?0+$/,'');
+    $('dataLeft').textContent='נשארו '+f(j.left)+' GB';
+    $('dataTot').textContent='מתוך '+f(j.total)+' GB';
+    const b=$('dataBar');b.style.width=pct+'%';b.style.background=pct>50?'#10b04a':pct>20?'#e8a317':'#d93a3a';
+    const end=new Date('2026-10-13T23:59:00+03:00'),n=new Date();
+    const days=Math.max(1,Math.ceil((end-(n<new Date('2026-10-08T00:00:00+03:00')?new Date('2026-10-08T00:00:00+03:00'):n))/864e5));
+    $('dataPace').textContent=j.left>0?('נשארו '+days+' ימים בערך, כלומר אפשר להשתמש בכ-'+Math.round(j.left*1000/days)+' MB ליום.'):'הדאטה נגמר. מתחברים לווייפיי, ואם צריך מוסיפים תדלוק באפליקציית eSIMore.';
+    if(j.at){const d=new Date(j.at);if(!isNaN(d))$('dataAt').textContent='עודכן ב-'+d.getDate()+'.'+(d.getMonth()+1)+' בשעה '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0')+'. הנתון מתעדכן פעם ביום ולכן הוא קצת מאחור.'}
+  }
+  function load(){
+    if(!/^https?:$/.test(location.protocol)){$('dataLeft').textContent='3 GB';return}
+    fetch('./esim.json?t='+Date.now(),{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>{try{store.set('esim',j)}catch(e){}show(j)})
+      .catch(()=>{let j=null;try{j=store.get('esim',null)}catch(e){}show(j)});
+  }
+  load();document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')load()});
 })();
 /* ---------- MINI GAMES: runner + sky shooter ---------- */
 function gameShell(){
