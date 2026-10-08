@@ -1077,7 +1077,7 @@ function renderMissions(){
   const upd=()=>{const w=r.children[0].offsetWidth+12;let k=Math.round(Math.abs(r.scrollLeft)/w);k=Math.max(0,Math.min(n-1,k));[...d.children].forEach((x,i)=>x.classList.toggle('on',i===k))};
   r.addEventListener('scroll',upd,{passive:true});upd();
 })();
-const APP_VER='20261008-0009';
+const APP_VER='20261008-2327';
 function verLabel(){if(!APP_VER)return 'פיתוח';const m=APP_VER.match(/^(\d{4})(\d\d)(\d\d)-(\d\d)(\d\d)$/);return m?(+m[3])+'.'+(+m[2])+' בשעה '+m[4]+':'+m[5]:APP_VER}
 async function hardRefresh(){
   const bt=document.getElementById('refBtn');if(bt)bt.textContent='מתעדכן…';toast('🔄 מתעדכן…');
@@ -1482,7 +1482,7 @@ function kickCheck(){
 }
 /* 5: parents' surprise, unlocked after landing */
 const SUR_ENC='16DXldei157Xmden15Ug15fXnteV15Mg16nXnNeg15UhIOKdpO+4j+KciO+4jwoK15DXoNeX16DXlSDXqNeV16bXmdedINec15DXl9ecINec15og15jXmdeV15wg157XlNeg15Qg15XXl9eV15XXmdeUINeR15zXqteZINeg16nXm9eX16ouCgrXqteZ15TXoNeULCDXqteW16jXldedLCDXldeq15bXm9eV16gg16nXm9ecINeU157XodeiINeU15bXlCDXlNeV15Ag15vXldec15Ug15zXm9eR15XXk9eaIOKAkyDXldeW15Qg157XntepINec15Ag157XldeR158g157XkNec15nXlSEg15DXqteUINeW15XXm9eUINec16LXqdeV16og15DXqiDXlNeY15nXldecINeU157XmNeV16jXoyDXlNeW15Qg16LXnSDXodeR15Ag16DXmdeh158g15XXodeR16rXkCDXk9ec15nXlCwg15DXliDXqteg16bXnNeVINeb15wg16jXkteiLCDXqtem15HXqNeVINeX15XXldeZ15XXqiDXldeq15HXmdeQ15Ug15DXmdeq15vXnSDXlNee15XXnyDXlteZ15vXqNeV16DXldeqINee16rXlden15nXnSAo15XXkNecINeq16TXodeZ16fXlSDXnNeU16rXqNeS16kg15HXodeg15jXmdeQ15LXlSDXkdeo16DXkdeQ15UhIOKavfCflKUpLgoK15DXldeU15HXmdedINeQ15XXqteaINeU157XldefINeU157XldefLCDXldee15fXm9eZ150g15vXkdeoINec16nXnteV16Ig15fXldeV15nXldeqIQoK15DXlCwg15XXm9ee15XXkdefLi4uINeU15DXnNeUINee15PXqNeZ15MhIOKaqu+4j/Cfh6rwn4e4CgrXkdeX15nXkdeV16cg15XXkdeQ15TXkdeUINei16DXp9eZ16oK15DXnteQINeV15DXkdeQ';
-const SUR_AT=LAND_HOME;
+const SUR_AT=new Date('2026-10-08T00:00:00+03:00'); // unlocks on his next open (moved up from the landing home)
 function surText(){try{return decodeURIComponent(escape(atob(SUR_ENC)))}catch(e){return ''}}
 function surShow(first){
   if(first){confetti(160);whistle()}
