@@ -1077,7 +1077,7 @@ function renderMissions(){
   const upd=()=>{const w=r.children[0].offsetWidth+12;let k=Math.round(Math.abs(r.scrollLeft)/w);k=Math.max(0,Math.min(n-1,k));[...d.children].forEach((x,i)=>x.classList.toggle('on',i===k))};
   r.addEventListener('scroll',upd,{passive:true});upd();
 })();
-const APP_VER='20261008-2327';
+const APP_VER='20261009-0042';
 function verLabel(){if(!APP_VER)return 'פיתוח';const m=APP_VER.match(/^(\d{4})(\d\d)(\d\d)-(\d\d)(\d\d)$/);return m?(+m[3])+'.'+(+m[2])+' בשעה '+m[4]+':'+m[5]:APP_VER}
 async function hardRefresh(){
   const bt=document.getElementById('refBtn');if(bt)bt.textContent='מתעדכן…';toast('🔄 מתעדכן…');
@@ -1718,6 +1718,21 @@ function syncInit(){
   const today=madridToday();
   const todayDay=DAYS.find(d=>d.date===today);
   renderDay(todayDay?todayDay.id:store.get('day','d1'));
+  /* back in the app after a while, or the date rolled over: jump to the current day */
+  let hiddenAt=0,lastDate=today;
+  function goToday(){
+    const t=madridToday(),d=DAYS.find(x=>x.date===t);
+    if(d&&window.__day!==d.id&&!document.querySelector('.ov,.gm')){renderDay(d.id)}
+    lastDate=t;
+  }
+  window.__goToday=goToday;
+  document.addEventListener('visibilitychange',()=>{
+    if(document.visibilityState==='hidden'){hiddenAt=Date.now();return}
+    if(madridToday()!==lastDate||(hiddenAt&&Date.now()-hiddenAt>20*60*1000))goToday();
+    hiddenAt=0;
+  });
+  window.addEventListener('pageshow',e=>{if(e.persisted)goToday()});
+  setInterval(()=>{if(madridToday()!==lastDate)goToday()},60000);
   renderMissions();renderPhrases();renderMeals();
   renderList('matchList','ml',MATCH_LIST);renderList('packList','pl',PACK_LIST);
   tick();setInterval(tick,1000);
