@@ -419,8 +419,10 @@ details.st ol{margin:0 0 12px;padding-inline-start:22px;line-height:1.75;font-si
 
     <div class="panel" style="margin-top:12px">
       <h3>🎟️ המקומות שלנו</h3>
-      <div class="row"><span>קטגוריה</span><span>פרימיום (חום במפה)</span></div>
+      <div class="row"><span>קטגוריה</span><span>פרימיום</span></div>
       <div class="row"><span>איפה</span><span>היציע הארוך, מול מרכז המגרש</span></div>
+      <div class="row"><span>נועם יושב</span><span><b>שורה 2</b></span></div>
+      <div style="margin-top:10px;text-align:center"><img id="seatMap" src="./seats.jpg" alt="מפת האצטדיון" loading="lazy" style="width:100%;border-radius:12px;display:block"><div class="note" style="margin-top:6px;font-size:12px">האזור המסומן במעגל ירוק הוא איפה שיושבים. לחיצה על המפה מגדילה אותה.</div></div>
       <div class="row"><span>הסוכנות</span><span>Champions Tours</span></div>
     </div>
 
@@ -1077,7 +1079,7 @@ function renderMissions(){
   const upd=()=>{const w=r.children[0].offsetWidth+12;let k=Math.round(Math.abs(r.scrollLeft)/w);k=Math.max(0,Math.min(n-1,k));[...d.children].forEach((x,i)=>x.classList.toggle('on',i===k))};
   r.addEventListener('scroll',upd,{passive:true});upd();
 })();
-const APP_VER='20261009-0042';
+const APP_VER='20261009-2235';
 function verLabel(){if(!APP_VER)return 'פיתוח';const m=APP_VER.match(/^(\d{4})(\d\d)(\d\d)-(\d\d)(\d\d)$/);return m?(+m[3])+'.'+(+m[2])+' בשעה '+m[4]+':'+m[5]:APP_VER}
 async function hardRefresh(){
   const bt=document.getElementById('refBtn');if(bt)bt.textContent='מתעדכן…';toast('🔄 מתעדכן…');
@@ -1100,6 +1102,7 @@ function checkVer(){
   setTimeout(checkVer,2500);
   document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')checkVer()});
 })();
+document.getElementById('seatMap').onclick=()=>overlay('<img src="./seats.jpg" alt="" style="width:100%;border-radius:12px"><button class="btn gold" data-close style="margin-top:12px">סגור</button>');
 /* ---------- eSIM DATA BAR ---------- */
 (function(){
   const $=id=>document.getElementById(id);
