@@ -1079,7 +1079,7 @@ function renderMissions(){
   const upd=()=>{const w=r.children[0].offsetWidth+12;let k=Math.round(Math.abs(r.scrollLeft)/w);k=Math.max(0,Math.min(n-1,k));[...d.children].forEach((x,i)=>x.classList.toggle('on',i===k))};
   r.addEventListener('scroll',upd,{passive:true});upd();
 })();
-const APP_VER='20261009-2235';
+const APP_VER='20261010-2001';
 function verLabel(){if(!APP_VER)return 'פיתוח';const m=APP_VER.match(/^(\d{4})(\d\d)(\d\d)-(\d\d)(\d\d)$/);return m?(+m[3])+'.'+(+m[2])+' בשעה '+m[4]+':'+m[5]:APP_VER}
 async function hardRefresh(){
   const bt=document.getElementById('refBtn');if(bt)bt.textContent='מתעדכן…';toast('🔄 מתעדכן…');
@@ -1116,6 +1116,10 @@ document.getElementById('seatMap').onclick=()=>overlay('<img src="./seats.jpg" a
     const end=new Date('2026-10-13T23:59:00+03:00'),n=new Date();
     const days=Math.max(1,Math.ceil((end-(n<new Date('2026-10-08T00:00:00+03:00')?new Date('2026-10-08T00:00:00+03:00'):n))/864e5));
     $('dataPace').textContent=j.left>0?('נשארו '+days+' ימים בערך, כלומר אפשר להשתמש בכ-'+Math.round(j.left*1000/days)+' MB ליום.'):'הדאטה נגמר. מתחברים לווייפיי, ואם צריך מוסיפים תדלוק באפליקציית eSIMore.';
+    if(j.popup&&j.popupId&&store.get('popSeen','')!==j.popupId&&!document.querySelector('.ov,.gm')){
+      store.set('popSeen',j.popupId);
+      overlay('<div style="font-size:52px">'+(j.popupIcon||'📶')+'</div><h2>'+String(j.popupTitle||'הודעה').replace(/</g,'&lt;')+'</h2><p>'+String(j.popup).replace(/</g,'&lt;').replace(/\n/g,'<br>')+'</p><button class="btn gold" data-close>הבנתי</button>');
+    }
     if(j.at){const d=new Date(j.at);if(!isNaN(d))$('dataAt').textContent='עודכן ב-'+d.getDate()+'.'+(d.getMonth()+1)+' בשעה '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0')+'. הנתון מתעדכן פעם ביום ולכן הוא קצת מאחור.'}
   }
   function load(){
