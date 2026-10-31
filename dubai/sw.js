@@ -1,5 +1,5 @@
-const V='nd-v1';
-const CORE=['./','./index.html','./manifest.webmanifest','../icon-192.png','../icon-512.png','../apple-touch-icon.png'];
+const V='nd-v2';
+const CORE=['./','./index.html','./manifest.webmanifest','./bg.jpg','../icon-192.png','../icon-512.png','../apple-touch-icon.png'];
 const FONT_HOSTS=['fonts.googleapis.com','fonts.gstatic.com'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(V).then(c=>c.addAll(CORE)).then(()=>self.skipWaiting()))});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k.startsWith('nd-')&&k!==V).map(k=>caches.delete(k)))).then(()=>self.clients.claim()))});
