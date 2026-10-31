@@ -367,6 +367,11 @@ details.st ol{margin:0 0 12px;padding-inline-start:22px;line-height:1.75;font-si
 .conv input#cvA,.conv input#cvI{font:inherit;font-size:22px;font-weight:800;padding:10px;border-radius:12px;border:1.5px solid #c6cfe4;width:100%;direction:ltr;text-align:center}
 .cvx{font-size:22px;padding-bottom:12px;color:var(--gold)}
 .cvq{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}.cvq span{font-size:12px;font-weight:700;background:#e8edf7;color:var(--ink2);border-radius:999px;padding:3px 9px;direction:ltr}
+.chips{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;overflow:visible;margin:0;padding:4px 0 12px}
+.chip{min-width:0;padding:7px 2px 6px;border-radius:12px;font-size:12px;line-height:1.2}
+.chip small{display:block;font-size:11px;opacity:.85}
+.chip b{font-size:15px;direction:ltr}
+.chip .dot{display:block;margin:4px auto 0}
 </style>
 </head>
 <body>
@@ -1028,7 +1033,7 @@ function israelToday(){
 }
 function renderChips(active){
   document.getElementById('chips').innerHTML=DAYS.map(d=>
-    `<button class="chip ${d.id===active?'on':''}" data-d="${d.id}"><b>${d.num}</b>${d.chip}<span class="dot ${d.status==='final'?'':'draft'}"></span></button>`).join('');
+    `<button class="chip ${d.id===active?'on':''}" data-d="${d.id}"><small>${d.chip.split(' ')[0]}</small><b>${d.chip.split(' ')[1]}</b><span class="dot ${d.status==='final'?'':'draft'}"></span></button>`).join('');
   document.querySelectorAll('.chip').forEach(c=>c.onclick=()=>{store.set('day',c.dataset.d);renderDay(c.dataset.d)});
 }
 const STATUS={final:['final','✔ מתוכנן'],partial:['partial','◐ מתוכנן חלקית'],draft:['draft','✎ הצעות, עוד לא סגור']};
@@ -1232,7 +1237,7 @@ function renderMissions(){
   const upd=()=>{const w=r.children[0].offsetWidth+12;let k=Math.round(Math.abs(r.scrollLeft)/w);k=Math.max(0,Math.min(n-1,k));[...d.children].forEach((x,i)=>x.classList.toggle('on',i===k))};
   r.addEventListener('scroll',upd,{passive:true});upd();
 })();
-const APP_VER='20261031-1619';
+const APP_VER='20261031-1620';
 function verLabel(){if(!APP_VER)return 'פיתוח';const m=APP_VER.match(/^(\d{4})(\d\d)(\d\d)-(\d\d)(\d\d)$/);return m?(+m[3])+'.'+(+m[2])+' בשעה '+m[4]+':'+m[5]:APP_VER}
 async function hardRefresh(){
   const bt=document.getElementById('refBtn');if(bt)bt.textContent='מתעדכן…';toast('🔄 מתעדכן…');
