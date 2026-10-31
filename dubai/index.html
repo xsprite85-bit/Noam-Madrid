@@ -345,6 +345,28 @@ details.st ol{margin:0 0 12px;padding-inline-start:22px;line-height:1.75;font-si
 .ph .en{font-size:13px;color:var(--ink2);text-align:right;unicode-bidi:isolate}
 .sos .row span:last-child{white-space:nowrap}
 
+.dx{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:10px;font-size:13px;color:var(--gold2);font-weight:700}
+.dxa{margin-top:8px}.dxa .btn{font-size:12px;padding:6px 10px}
+.it.now .card{box-shadow:0 0 0 3px var(--gold),0 6px 18px rgba(0,0,0,.3)}
+.it.now .bub{background:var(--gold);color:var(--navy);animation:pulse 1.6s infinite}
+@keyframes pulse{50%{box-shadow:0 0 0 8px rgba(217,180,74,.25)}}
+.it.next .card{box-shadow:0 0 0 2px rgba(217,180,74,.55),0 6px 18px rgba(0,0,0,.25)}
+.nowtag{float:left;font-size:11px;font-weight:800;background:var(--gold);color:var(--navy);border-radius:999px;padding:2px 9px;margin:-2px 0 4px 0}
+.it.next .nowtag{background:#e8edf7;color:var(--ink2)}
+.kidtabs{display:flex;gap:8px;margin-bottom:10px}
+.kidtabs button{flex:1;font:inherit;font-weight:800;font-size:15px;padding:9px;border-radius:12px;border:1.5px solid #2a3d70;background:var(--navy2);color:#fff}
+.kidtabs button.on{background:linear-gradient(180deg,var(--gold2),var(--gold));color:var(--navy);border-color:var(--gold)}
+.kids{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.kcount{grid-column:1/-1;text-align:center;font-weight:800;color:var(--gold2)}
+.kid{position:relative;display:flex;flex-direction:column;align-items:center;gap:6px;font:inherit;text-align:center;background:var(--card);color:var(--ink);border:2px solid transparent;border-radius:16px;padding:12px 8px;cursor:pointer;min-height:118px}
+.kid .ke{font-size:38px;line-height:1}.kid .kt{font-size:13px;font-weight:700;line-height:1.35}
+.kid .ks{position:absolute;top:6px;left:8px;font-size:18px}
+.kid.on{border-color:var(--gold);background:#fff6dc}
+.conv .cvrow{display:flex;align-items:flex-end;gap:8px}
+.conv label{flex:1;display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--ink2);font-weight:700}
+.conv input#cvA,.conv input#cvI{font:inherit;font-size:22px;font-weight:800;padding:10px;border-radius:12px;border:1.5px solid #c6cfe4;width:100%;direction:ltr;text-align:center}
+.cvx{font-size:22px;padding-bottom:12px;color:var(--gold)}
+.cvq{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}.cvq span{font-size:12px;font-weight:700;background:#e8edf7;color:var(--ink2);border-radius:999px;padding:3px 9px;direction:ltr}
 </style>
 </head>
 <body>
@@ -477,6 +499,9 @@ details.st ol{margin:0 0 12px;padding-inline-start:22px;line-height:1.75;font-si
     </div>
     <div id="ach" class="ach"></div>
     <div id="missions"></div>
+    <h2 style="font-size:18px">🧒 המשימות של רומי וליה</h2>
+    <div class="kidtabs" id="kidTabs"><button data-k="romi" class="on">רומי</button><button data-k="lia">ליה</button></div>
+    <div class="kids" id="kids"></div>
     <div class="trophy" id="trophyBox" style="display:none">
       <svg><use href="#trophy"/></svg>
       <div style="font-weight:900;font-size:20px;color:var(--gold2)">שייח׳ הטיול! 🏆</div>
@@ -670,6 +695,12 @@ details.st ol{margin:0 0 12px;padding-inline-start:22px;line-height:1.75;font-si
       <div class="note">אחרי הפתיחה הראשונה עם אינטרנט, האפליקציה נשמרת בטלפון ופועלת גם בלי חיבור. הסימונים והכוכבים נשמרים בכל טלפון בנפרד.</div>
     </div>
 
+    <h2>💱 מחשבון דירהם</h2>
+    <div class="panel conv">
+      <div class="cvrow"><label>דירהם (AED)<input id="cvA" type="number" inputmode="decimal" placeholder="100"></label><span class="cvx">⇄</span><label>שקלים (₪)<input id="cvI" type="number" inputmode="decimal" placeholder="86"></label></div>
+      <div class="cvq" id="cvQ"></div>
+      <div class="note">שער: <input id="cvR" type="number" step="0.01" inputmode="decimal" style="width:70px;font:inherit;padding:2px 6px;border-radius:6px;border:1px solid #c6cfe4"> ₪ לדירהם. ברירת המחדל לקוחה מההזמנה של The WB, ואפשר לעדכן לפי השער ביום התשלום.</div>
+    </div>
     <h2><svg class="i"><use href="#info"/></svg>חשוב לדעת</h2>
     <div class="panel">
       <div class="row"><span>הפרש שעות</span><span>שעתיים קדימה מישראל</span></div>
@@ -1016,11 +1047,31 @@ function calURL(d,i,title,loc){
   const q=(k,v)=>'&'+k+'='+encodeURIComponent(v);
   return 'https://calendar.google.com/calendar/render?action=TEMPLATE'+q('text','האמירויות: '+title.replace(/[⭐]/g,'').trim())+'&dates='+s+'/'+e+q('ctz',tz)+q('details',it.d||'')+q('location',loc||'');
 }
-function actsHTML(key,nav,cal,isDone){
+function actsHTML(key,nav,cal,isDone,live){
   return `<div class="acts">
+    ${live?`<a class="btn gold" target="_blank" rel="noopener" href="${live[0]}">${ico('plane')}${live[1]}</a>`:''}
     ${nav?`<a class="btn nav" target="_blank" rel="noopener" href="${nav}">${ico('map')}ניווט</a>`:''}
     ${cal?`<a class="btn cal" target="_blank" rel="noopener" href="${cal}">${ico('cal')}ליומן</a>`:''}
     <button class="btn chk" data-k="${key}">${ico('check')}${isDone?'בוצע!':'סמן כבוצע'}</button></div>`;
+}
+/* ---------- sunset (no network needed) ---------- */
+function sunsetHM(date,loc){
+  const lat=WXC[loc][0],lon=WXC[loc][1];
+  const R=Math.PI/180,J=Date.parse(date+'T12:00:00Z')/864e5+2440587.5,n=Math.round(J-2451545+0.0008),Js=n-lon/360;
+  const M=(357.5291+0.98560028*Js)%360,C=1.9148*Math.sin(M*R)+0.02*Math.sin(2*M*R)+0.0003*Math.sin(3*M*R);
+  const L=(M+C+282.9372)%360,Jt=2451545+Js+0.0053*Math.sin(M*R)-0.0069*Math.sin(2*L*R);
+  const dec=Math.asin(Math.sin(L*R)*Math.sin(23.44*R));
+  const w=Math.acos((Math.sin(-0.833*R)-Math.sin(lat*R)*Math.sin(dec))/(Math.cos(lat*R)*Math.cos(dec)))/R;
+  try{return new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Dubai',hour:'2-digit',minute:'2-digit',hour12:false}).format(new Date(((Jt+w/360)-2440587.5)*864e5))}catch(e){return ''}
+}
+const HN_NAMES=['','ראשון','שני','שלישי','רביעי','חמישי','שישי','שביעי','שמיני'];
+function dayExtras(d){
+  const ss=sunsetHM(d.date,d.loc),n=Math.round((Date.parse(d.date)-Date.parse('2026-12-04'))/864e5)+1,fri=new Date(d.date+'T12:00:00Z').getUTCDay()===5;
+  let h=`<div class="dx"><span>🌅 שקיעה ${ss}</span>`;
+  if(n>=1&&n<=8&&d.id!=='d11')h+=`<span>🕎 נר ${HN_NAMES[n]}${fri?' · לפני השקיעה (ערב שבת)':' · עם צאת הכוכבים'}</span>`;
+  const hk=d.loc==='auh'||d.id==='d7'?1:0;
+  h+=`</div><div class="acts dxa"><a class="btn nav" target="_blank" rel="noopener" href="${mapQ(hk?HOTEL2:HOTEL)}">${ico('bed')}ניווט למלון</a><button class="btn ghost" onclick="showAddr(${hk})">${ico('taxi')}כתובת לנהג</button></div>`;
+  return h;
 }
 /* ---------- weather (Open-Meteo, cached, per city) ---------- */
 const WXC={dxb:[25.2048,55.2708,'דובאי'],auh:[24.4672,54.6031,'אבו דאבי']};
@@ -1031,7 +1082,8 @@ function wxInfo(c){
   if((c>=61&&c<=67)||(c>=80&&c<=82))return['🌧️','גשם'];if(c>=95)return['⛈️','סופת רעמים'];return['🌡️','מזג אוויר'];
 }
 function wxHTML(d){
-  const w=store.get('wx2',null),x=w&&w[d.loc]&&w[d.loc][d.date];if(!x)return'';
+  const w=store.get('wx2',null),x=w&&w[d.loc]&&w[d.loc][d.date];
+  if(!x)return `<a class="wx old" href="${wxURL(d.loc)}" target="_blank" rel="noopener" title="ממוצע לדצמבר. התחזית מופיעה כשבועיים לפני"><span class="e">🌤️</span><span>~26°</span></a>`;
   const i=wxInfo(x.c),when=new Date(w.ts).toLocaleString('he-IL',{day:'numeric',month:'numeric',hour:'2-digit',minute:'2-digit'});
   return `<a class="wx${Date.now()-w.ts>6*3600e3?' old':''}" data-date="${d.date}" href="${wxURL(d.loc)}" target="_blank" rel="noopener" title="${WXC[d.loc][2]} · ${i[1]} · עודכן ${when}"><span class="e">${i[0]}</span><span>${Math.round(x.max)}°</span></a>`;
 }
@@ -1057,6 +1109,19 @@ function wxInit(){
   wxSync();setInterval(()=>{if(document.visibilityState==='visible')wxSync()},1800000);
   document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')wxSync()});
 }
+function nowMins(){try{const p=new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Dubai',hour:'2-digit',minute:'2-digit',hour12:false}).format(new Date()).split(':');return +p[0]*60+ +p[1]}catch(e){return -1}}
+function markNow(scroll){
+  const d=DAYS.find(x=>x.id===window.__day);const its=[...document.querySelectorAll('#day .it')];
+  its.forEach(e=>{e.classList.remove('now','next');const t=e.querySelector('.nowtag');if(t)t.remove()});
+  if(!d||d.date!==uaeToday())return;
+  const m=nowMins();let cur=-1,nx=-1;
+  d.items.forEach((it,i)=>{const t=hmOf(it.t);if(!t)return;let v=t[0]*60+t[1]+(it.tz?120:0);if(v<=m)cur=i;else if(nx<0)nx=i});
+  const tag=(e,txt)=>{const c=e.querySelector('.card');if(c)c.insertAdjacentHTML('afterbegin','<span class="nowtag">'+txt+'</span>')};
+  if(cur>=0&&its[cur]){its[cur].classList.add('now');tag(its[cur],'עכשיו')}
+  if(nx>=0&&its[nx]){its[nx].classList.add('next');tag(its[nx],'הבא בתור')}
+  const tg=its[cur>=0?cur:nx];if(scroll&&tg&&!markNow._done){markNow._done=1;setTimeout(()=>tg.scrollIntoView({behavior:'smooth',block:'center'}),400)}
+}
+setInterval(()=>{if(document.visibilityState==='visible')markNow(false)},60000);
 function renderDay(id){
   window.__day=id;renderChips(id);
   const d=DAYS.find(x=>x.id===id)||DAYS[0];
@@ -1064,7 +1129,7 @@ function renderDay(id){
   const dateStr=dt.toLocaleDateString('he-IL',{weekday:'long',day:'numeric',month:'long'});
   const st=STATUS[d.status];
   let h=`<div class="dayhead">${wxHTML(d)}<div class="num">${d.num} מתוך ${DAYS.length}</div><div class="ttl">${d.title}</div><div class="dt">${dateStr}</div>
-    <span class="badge ${st[0]}">${st[1]}</span></div>`;
+    <span class="badge ${st[0]}">${st[1]}</span>${dayExtras(d)}</div>`;
   if(d.alert)h+=`<div class="alert">${d.alert}</div>`;
   if(d.tipText)h+=`<div class="tip">${d.tipText}</div>`;
   h+=`<div class="tl">`;
@@ -1077,7 +1142,7 @@ function renderDay(id){
       ${it.d?`<div class="d">${it.d}</div>`:''}
       ${it.tz?`<div class="tz">🕐 ${it.tz}</div>`:''}
       ${alts?`<div class="hint">יש חלופה בהחלקה הצידה: ${alts[0].title}</div>`:''}
-      ${actsHTML(key,nav,calURL(d,i,it.title,it.map),isDone)}`;
+      ${actsHTML(key,nav,calURL(d,i,it.title,it.map),isDone,it.live)}`;
     let body;
     if(alts){
       const slides=`<div class="slide card">${main}</div>`+alts.map(a=>`<div class="slide card alt">
@@ -1093,6 +1158,7 @@ function renderDay(id){
   });
   h+=`</div>`;
   const el=document.getElementById('day');el.innerHTML=h;
+  markNow(true);
   el.querySelectorAll('.btn.chk').forEach(b=>b.onclick=()=>{
     const k=b.dataset.k;done[k]=!done[k];if(!done[k])delete done[k];store.set('done',done);
     if(done[k])toast('⭐ מעולה!');renderDay(id);
@@ -1166,7 +1232,7 @@ function renderMissions(){
   const upd=()=>{const w=r.children[0].offsetWidth+12;let k=Math.round(Math.abs(r.scrollLeft)/w);k=Math.max(0,Math.min(n-1,k));[...d.children].forEach((x,i)=>x.classList.toggle('on',i===k))};
   r.addEventListener('scroll',upd,{passive:true});upd();
 })();
-const APP_VER='20261031-1614';
+const APP_VER='20261031-1619';
 function verLabel(){if(!APP_VER)return 'פיתוח';const m=APP_VER.match(/^(\d{4})(\d\d)(\d\d)-(\d\d)(\d\d)$/);return m?(+m[3])+'.'+(+m[2])+' בשעה '+m[4]+':'+m[5]:APP_VER}
 async function hardRefresh(){
   const bt=document.getElementById('refBtn');if(bt)bt.textContent='מתעדכן…';toast('🔄 מתעדכן…');
@@ -1511,6 +1577,32 @@ function showAddr(k){
   w.onclick=()=>w.remove();document.body.appendChild(w);
 }
 
+/* ---------- KIDS MISSIONS ---------- */
+const KIDS={
+ romi:[['🏎️','לספור כמה מכוניות פרארי אדומות רואים בטיול'],['✍️','ללמוד לכתוב את השם שלך בערבית: رومي'],['🐬','לצלם דולפין בסי וורלד'],['🛍️','לבחור מזכרת לעצמך בשוק'],['🌊','לרדת במגלשה הכי גבוהה שמותר'],['🗣️','להגיד "שֻׁכְּרַן" למלצר'],['📸','להיות הצלמת של המשפחה לחצי יום'],['🕎','להדליק נר חנוכה ולומר את הברכה']],
+ lia:[['🐪','לראות גמל, ואולי ללטף'],['🐟','למצוא דג כתום באקווריום'],['🐧','להגיד שלום לפינגווין'],['🏖️','לבנות ארמון חול'],['✈️','לנופף לשלום לטייס'],['🎂','לכבות את הנרות על העוגה'],['🌟','להגיד "מַרְחַבָּא" למישהו'],['🕎','לספור כמה נרות דולקים בחנוכייה']]
+};
+let kidSel='romi';
+function renderKids(){
+  const st=store.get('kids',{}),el=document.getElementById('kids');if(!el)return;
+  el.innerHTML=KIDS[kidSel].map((m,i)=>{const k=kidSel+i;return `<button class="kid ${st[k]?'on':''}" data-k="${k}"><span class="ke">${m[0]}</span><span class="kt">${m[1]}</span><span class="ks">${st[k]?'⭐':''}</span></button>`}).join('');
+  const n=KIDS[kidSel].filter((m,i)=>st[kidSel+i]).length;
+  el.insertAdjacentHTML('afterbegin',`<div class="kcount">${n} מתוך ${KIDS[kidSel].length} ⭐</div>`);
+  el.querySelectorAll('.kid').forEach(b=>b.onclick=()=>{const k=b.dataset.k;if(st[k])delete st[k];else{st[k]=1;toast('⭐ כל הכבוד!');beep(700,.08)}store.set('kids',st);
+    if(KIDS[kidSel].every((m,i)=>st[kidSel+i]))confetti(120);renderKids()});
+  document.querySelectorAll('#kidTabs button').forEach(b=>{b.classList.toggle('on',b.dataset.k===kidSel);b.onclick=()=>{kidSel=b.dataset.k;renderKids()}});
+}
+/* ---------- CURRENCY ---------- */
+function convInit(){
+  const a=document.getElementById('cvA'),i=document.getElementById('cvI'),r=document.getElementById('cvR'),q=document.getElementById('cvQ');if(!a)return;
+  r.value=store.get('rate',0.86);
+  const f=n=>(Math.round(n*100)/100).toLocaleString('he-IL');
+  const quick=()=>{const R=+r.value||0.86;q.innerHTML=[10,50,100,500].map(v=>`<span>${v} AED ≈ ${f(v*R)} ₪</span>`).join('')};
+  a.oninput=()=>{const R=+r.value||0.86;i.value=a.value?Math.round(a.value*R*100)/100:''};
+  i.oninput=()=>{const R=+r.value||0.86;a.value=i.value?Math.round(i.value/R*100)/100:''};
+  r.oninput=()=>{store.set('rate',+r.value||0.86);a.oninput();quick()};
+  quick();
+}
 /* ---------- NAV ---------- */
 document.querySelectorAll('.bnav button').forEach(b=>b.onclick=()=>{
   document.querySelectorAll('.bnav button').forEach(x=>x.classList.toggle('on',x===b));
@@ -1914,7 +2006,7 @@ function syncInit(){
   window.addEventListener('pageshow',e=>{if(e.persisted)goToday()});
   setInterval(()=>{if(uaeToday()!==lastDate)goToday()},60000);
   renderMissions();renderPhrases();renderMeals();
-  renderList('matchList','ml',MATCH_LIST);renderList('packList','pl',PACK_LIST);renderDocs();renderMenorah();setInterval(renderMenorah,60000);
+  renderList('matchList','ml',MATCH_LIST);renderList('packList','pl',PACK_LIST);renderDocs();renderMenorah();setInterval(renderMenorah,60000);renderKids();convInit();
   tick();setInterval(tick,1000);
 })();
 </script>
