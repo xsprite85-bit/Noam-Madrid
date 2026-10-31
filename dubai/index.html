@@ -382,6 +382,15 @@ body{background:#0a4a94!important}
 @keyframes inL{from{opacity:0;transform:translateX(-36px)}to{opacity:1;transform:none}}
 @keyframes inR{from{opacity:0;transform:translateX(36px)}to{opacity:1;transform:none}}
 .chips{position:relative}
+.menorah .cn{cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation;user-select:none}
+.menorah .cn.tap{animation:ctap .35s ease-out}
+@keyframes ctap{40%{transform:translateY(-6px) scale(1.08)}}
+.dr{width:120px;height:120px;margin:4px auto 8px;perspective:400px}
+.drt{width:100%;height:100%;border-radius:22px;background:linear-gradient(145deg,#f6d77a,#e0b23a 50%,#b98a2c);color:#0a4a94;font-size:72px;font-weight:900;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+.drt.spin{animation:drs 1.3s cubic-bezier(.2,.7,.3,1)}
+@keyframes drs{from{transform:rotateY(0) rotateZ(0)}to{transform:rotateY(1440deg) rotateZ(20deg)}}
+.drs{display:flex;gap:14px;justify-content:center;font-size:16px;margin:8px 0}
+.drm{min-height:28px;font-weight:800;color:#f6d77a;font-size:18px;margin-bottom:6px}
 </style>
 </head>
 <body>
@@ -1264,7 +1273,7 @@ function renderMissions(){
   const upd=()=>{const w=r.children[0].offsetWidth+12;let k=Math.round(Math.abs(r.scrollLeft)/w);k=Math.max(0,Math.min(n-1,k));[...d.children].forEach((x,i)=>x.classList.toggle('on',i===k))};
   r.addEventListener('scroll',upd,{passive:true});upd();
 })();
-const APP_VER='20261031-1625';
+const APP_VER='20261031-1629';
 function verLabel(){if(!APP_VER)return 'פיתוח';const m=APP_VER.match(/^(\d{4})(\d\d)(\d\d)-(\d\d)(\d\d)$/);return m?(+m[3])+'.'+(+m[2])+' בשעה '+m[4]+':'+m[5]:APP_VER}
 async function hardRefresh(){
   const bt=document.getElementById('refBtn');if(bt)bt.textContent='מתעדכן…';toast('🔄 מתעדכן…');
@@ -1469,6 +1478,10 @@ function achData(){
   if(eggsFound.pen){rows.push(['🥅','פנדלים','שיא '+pb+' מתוך 5 · '+pt+' גולים']);chs.push(['p','גולים בפנדלים (מצטבר)',pt,[10,25,40]])}
   if(eggsFound.trivia){rows.push(['🧠','טריוויה','קל '+tb[0]+'/5 · בינוני '+tb[1]+'/5 · קשה '+tb[2]+'/5']);chs.push(['t','רמות טריוויה שעברת',[0,1,2].filter(i=>tb[i]>=3).length,[1,2,3]])}
   if(eggsFound.run){rows.push(['🏃','ריצה וקפיצה','שיא '+rb+' מ׳']);chs.push(['r','מטרים בריצה',rb,[300,600,1000]])}
+  const db=store.get('drBest',0),fb=store.get('sfBest',0),hb=store.get('htriB',[0,0,0]);
+  if(eggsFound.dreidel){rows.push(['🎲','סביבון','שיא '+db+' מטבעות']);chs.push(['d','מטבעות בסביבון',db,[15,25,40]])}
+  if(eggsFound.sufg){rows.push(['🍩','תופסים סופגניות','שיא '+fb]);chs.push(['f','סופגניות שנתפסו',fb,[25,50,90]])}
+  if(eggsFound.hntrivia){rows.push(['🕎','טריוויה חנוכה','קל '+hb[0]+'/5 · בינוני '+hb[1]+'/5 · קשה '+hb[2]+'/5']);chs.push(['h','רמות בטריוויה של חנוכה',[0,1,2].filter(i=>hb[i]>=3).length,[1,2,3]])}
   if(eggsFound.shoot){rows.push(['✈️','מטוס קרב','שיא '+sb+' נקודות']);chs.push(['s','נקודות במטוס',sb,[500,1200,2000]])}
   chs.forEach(c=>{const T=c[3];c.goal=T[T.length-1];c.k=T.findIndex(x=>c[2]<x);if(c.k<0)c.k=T.length-1;c.done=c[2]>=c.goal;c.tgt=T[c.k]});
   return {rows,chs};
@@ -1664,7 +1677,10 @@ const EGGS=[
  ['trivia','טריוויה דובאי ואבו דאבי','בלשונית "חוגגים", לחיצה על העוגה של ליה'],
  ['run','ריצה וקפיצה','3 לחיצות מהירות על ה-🎉 בלשונית "חוגגים"'],
  ['shoot','מטוס קרב','3 לחיצות מהירות על הכותרת של הספירה לאחור'],
- ['abra','שיט באברה','לסמן את המשימה "שיט באברה" אחרי שחוצים את הקריק']
+ ['abra','שיט באברה','לסמן את המשימה "שיט באברה" אחרי שחוצים את הקריק'],
+ ['dreidel','סביבון','בלשונית "חוגגים", לחיצה על השמש של החנוכייה'],
+ ['hntrivia','טריוויה חנוכה','3 לחיצות מהירות על אחד הנרות בחנוכייה'],
+ ['sufg','תופסים סופגניות','לחיצה ארוכה על החנוכייה']
 ];
 const eggsFound=store.get('eggs',{});
 function found(id){if(!eggsFound[id]){eggsFound[id]=1;store.set('eggs',eggsFound);try{renderAch()}catch(e){}}}
@@ -1862,10 +1878,10 @@ const QB=[[
 ]];
 const QL=[{n:'קל'},{n:'בינוני'},{n:'קשה'}];
 function pickQs(lv){
-  const pool=QB[lv];let seen=store.get('triSeen',[[],[],[]]);if(!Array.isArray(seen[lv]))seen[lv]=[];
+  const pool=TV.qb[lv];let seen=store.get(TV.k+'Seen',[[],[],[]]);if(!Array.isArray(seen[lv]))seen[lv]=[];
   let free=pool.map((x,i)=>i).filter(i=>!seen[lv].includes(i));
   if(free.length<5){seen[lv]=[];free=pool.map((x,i)=>i)}
-  free.sort(()=>Math.random()-.5);const ch=free.slice(0,5);seen[lv]=seen[lv].concat(ch);store.set('triSeen',seen);
+  free.sort(()=>Math.random()-.5);const ch=free.slice(0,5);seen[lv]=seen[lv].concat(ch);store.set(TV.k+'Seen',seen);
   return ch.map(i=>{const r=pool[i];return {q:r[0],o:[r[1],r[2],r[3],r[4]],a:0,e:r[5]}});
 }
 (function(){
@@ -1874,14 +1890,15 @@ function pickQs(lv){
     sh.classList.remove('tap');void sh.getBoundingClientRect();sh.classList.add('tap');
     beep(660,.08);setTimeout(()=>beep(880,.1),90);
     if(navigator.vibrate)try{navigator.vibrate(30)}catch(e){}
-    setTimeout(trivia,420);
+    setTimeout(()=>trivia(TVD),420);
   });
 })();
-function trivia(){
+function trivia(cfg){
+  TV=(cfg&&cfg.qb)?cfg:TVD;
   const o=overlay('');
   const menu=()=>{
-    const tb=store.get('triB',[0,0,0]);
-    o.innerHTML='<div style="font-size:52px">🧠</div><h2>טריוויה דובאי ואבו דאבי</h2><p style="margin-bottom:10px">5 שאלות בכל רמה. 3 תשובות נכונות פותחות את הרמה הבאה.</p>'
+    const tb=store.get(TV.k+'B',[0,0,0]);
+    o.innerHTML='<div style="font-size:52px">'+TV.ic+'</div><h2>'+TV.t+'</h2><p style="margin-bottom:10px">5 שאלות בכל רמה. 3 תשובות נכונות פותחות את הרמה הבאה.</p>'
      +QL.map((l,k)=>{const open=k===0||tb[k-1]>=3;return '<button class="qzl '+(open?'':'lock')+'" data-l="'+k+'"><span>'+(open?'':'🔒 ')+'רמה '+(k+1)+': '+l.n+'</span><small>'+(tb[k]>=3?'✅ ':'')+'שיא '+tb[k]+'/5</small></button>'}).join('')
      +'<button class="btn" data-close style="margin-top:6px">סגירה</button>';
     o.querySelectorAll('.qzl').forEach(b=>b.onclick=e=>{e.stopPropagation();const k=+b.dataset.l;if(b.classList.contains('lock')){toast('צריך 3 תשובות נכונות ברמה הקודמת');return}play(k)});
@@ -1890,7 +1907,7 @@ function trivia(){
     let i=0,sc=0;const L={n:QL[lv].n,qs:pickQs(lv)};
     const render=()=>{
       if(i>=L.qs.length){
-        const tb=store.get('triB',[0,0,0]);if(sc>tb[lv]){tb[lv]=sc;store.set('triB',tb)}renderAch();
+        const tb=store.get(TV.k+'B',[0,0,0]);if(sc>tb[lv]){tb[lv]=sc;store.set(TV.k+'B',tb)}renderAch();
         const pass=sc>=3,last=lv===QL.length-1;
         const msg=sc===5?'מושלם! 🏆':pass?'כל הכבוד!':'כמעט! צריך לפחות 3 כדי להתקדם.';
         o.innerHTML='<div style="font-size:56px">'+(pass?'🏆':'⚽')+'</div><h2>'+sc+' מתוך 5</h2><p>'+msg+(pass&&!last?'\nנפתחה רמה '+(lv+2)+': '+QL[lv+1].n:'')+'</p>'
@@ -1905,7 +1922,7 @@ function trivia(){
       const q=L.qs[i],idx=q.o.map((t,k)=>k).sort(()=>Math.random()-.5);
       o.innerHTML='<div class="qzh">רמה '+(lv+1)+': '+L.n+' · שאלה '+(i+1)+' מתוך 5 · ניקוד '+sc+'</div><div class="qzq">'+q.q+'</div>'+idx.map(k=>'<button class="qzb" data-k="'+k+'">'+q.o[k]+'</button>').join('')+'<div class="qze" id="qze"></div><div id="qzn"></div>';
       o.querySelectorAll('.qzb').forEach(b=>b.onclick=e=>{
-        e.stopPropagation();found('trivia');
+        e.stopPropagation();found(TV.egg);
         const k=+b.dataset.k,okk=k===q.a;
         o.querySelectorAll('.qzb').forEach(x=>{x.style.pointerEvents='none';if(+x.dataset.k===q.a)x.classList.add('ok')});
         if(okk){sc++;beep(780,.1);setTimeout(()=>beep(1040,.15),110)}else{b.classList.add('no');beep(200,.3,'sawtooth')}
@@ -1918,6 +1935,108 @@ function trivia(){
   };
   menu();
 }
+/* ---------- HANUKKAH EASTER EGGS ---------- */
+const HQB=[[
+ ["כמה נרות מדליקים בערב האחרון של חנוכה (בלי השמש)?","8","7","10","6","בערב השמיני מדליקים 8 נרות, ועוד השמש."],
+ ["איך קוראים לנר שמדליק את כל השאר?","שמש","מלך","מאיר","ראשון","השמש עומד גבוה יותר או בצד, ומדליקים איתו את הנרות."],
+ ["איזה מאכל מטוגן אוכלים בחנוכה?","סופגניות","חלה","אוזני המן","מצות","מטגנים בשמן לזכר נס פך השמן."],
+ ["מה היה הנס של חנוכה?","פך שמן קטן הספיק לשמונה ימים","ירד גשם במדבר","הים נבקע","החומות נפלו","השמן הספיק ליום אחד, ודלק שמונה ימים."],
+ ["מי היו הגיבורים של סיפור חנוכה?","המכבים","הפלשתים","הרומאים","המצרים","המכבים מרדו ושחררו את בית המקדש."],
+ ["כמה ימים נמשך חנוכה?","8","7","10","3","שמונה ימים, כמו שמונת ימי הנס."],
+ ["מה עוד מטוגן ואוכלים בחנוכה חוץ מסופגניות?","לביבות","פיצה","גלידה","פופקורן","לביבות תפוחי אדמה, גם מטוגנות בשמן."],
+ ["מה כתוב על הסביבון בארץ ישראל?","נס גדול היה פה","נס גדול היה שם","נס גדול היה כאן","נס קטן היה פה","נ, ג, ה, פ: נס גדול היה פה."]
+],[
+ ["מה כתוב על הסביבון מחוץ לישראל (וגם באמירויות)?","נס גדול היה שם","נס גדול היה פה","נס גדול היה כאן","נס גדול היה אז","בחוץ לארץ האות האחרונה היא ש׳: שם."],
+ ["מה פירוש המילה ״חנוכה״?","חנוכת בית המקדש מחדש","אור גדול","שמונה ימים","שמן זית","אחרי הניצחון המכבים טיהרו וחנכו מחדש את בית המקדש."],
+ ["מי היה מנהיג המכבים?","יהודה המכבי","דוד המלך","שמשון","גדעון","יהודה, בנו של מתתיהו, הוביל את המרד."],
+ ["באיזה חודש עברי מתחיל חנוכה?","כסלו","טבת","אדר","ניסן","חנוכה מתחיל בכ״ה בכסלו."],
+ ["נגד מי נלחמו המכבים?","היוונים, צבא אנטיוכוס","הרומאים","הבבלים","הפרסים","הממלכה הסלווקית היוונית."],
+ ["איזה נר מדליקים ראשון בכל ערב?","הנר החדש, השמאלי","הנר הימני","הנר האמצעי","לא משנה","מוסיפים מימין, ומדליקים קודם את הנר החדש."],
+ ["כמה נרות מדליקים בכל החנוכה, כולל השמש?","44","36","52","40","36 נרות ועוד 8 פעמים שמש."],
+ ["איך מתחיל השיר המפורסם של חנוכה ״מעוז ___״?","צור","אור","חיים","שלום","״מעוז צור ישועתי״."]
+],[
+ ["איזה מלך גזר גזירות על היהודים בסיפור חנוכה?","אנטיוכוס הרביעי","הורדוס","נבוכדנצר","טיטוס","אנטיוכוס אפיפנס, מלך יווני-סלווקי."],
+ ["מה היה שמו של אבי המכבים?","מתתיהו","אלעזר","יוחנן","שמעון","מתתיהו הכהן, ממודיעין."],
+ ["באיזו עיר גרה משפחת המכבים?","מודיעין","ירושלים","חברון","יפו","ליד מודיעין של היום יש גם ״קברי המכבים״."],
+ ["לפי המסורת, מה ראשי התיבות של המילה ״מכבי״?","מי כמוכה באלים ה׳","מלך כל בני ישראל","מכה בכוח","מגן כל בית ישראל","מתוך שירת הים."],
+ ["מאיזה שמן הדליקו את המנורה בבית המקדש?","שמן זית","שמן תמרים","שמן שקדים","שמן אגוזים","שמן זית זך."],
+ ["למה מציבים את החנוכייה בחלון או ליד הדלת?","כדי לפרסם את הנס","כדי שיהיה חם","כדי לחסוך מקום","בגלל הרוח","״פרסומי ניסא״: שכולם יראו."],
+ ["לפי בית הלל, למה מוסיפים נר בכל ערב?","״מוסיף והולך״: מעלים בקדושה","כדי שיהיה יותר אור","כי השמן נגמר","כי ככה מסורת המכבים","בית שמאי חשבו להתחיל משמונה ולרדת."],
+ ["באיזה תאריך עברי מסתיים חנוכה (בשנה כמו השנה)?","ב׳ בטבת","כ״ה בכסלו","י׳ בטבת","ל׳ בכסלו","כשכסלו מלא ל׳ יום, חנוכה מסתיים בב׳ בטבת."]
+]];
+let TV=null;
+const TVD={qb:QB,k:'tri',egg:'trivia',t:'טריוויה דובאי ואבו דאבי',ic:'🧠'};
+const TVH={qb:HQB,k:'htri',egg:'hntrivia',t:'טריוויה חנוכה',ic:'🕎'};
+/* dreidel */
+function dreidel(){
+  found('dreidel');
+  const L=[['נ','נס','לא קורה כלום'],['ג','גדול','לוקחים את כל הקופה!'],['ה','היה','לוקחים חצי מהקופה'],['ש','שם','שמים מטבע אחד בקופה']];
+  let coins=10,pot=4,spins=0,busy=false,best=store.get('drBest',0);
+  const o=overlay('');
+  const draw=(msg,let_)=>{
+    o.innerHTML='<div class="dr"><div class="drt" id="drT">'+(let_||'ש')+'</div></div><h2>סביבון באמירויות</h2><p style="margin:0 0 6px">מחוץ לישראל הסביבון אומר: נס גדול היה <b>שם</b> 🇦🇪</p>'
+     +'<div class="drs"><span>🪙 שלך: <b>'+coins+'</b></span><span>🏺 בקופה: <b>'+pot+'</b></span><span>🌀 '+spins+'/10</span></div>'
+     +'<div class="drm">'+(msg||'')+'</div>'
+     +(spins<10?'<button class="btn gold" id="drGo">🌀 סובבו!</button>':'<h2 style="font-size:24px">סיימת עם '+coins+' מטבעות</h2><button class="btn gold" id="drAg">עוד סיבוב</button>')
+     +'<div class="note" style="color:#d4e7fa">שיא: '+best+' מטבעות</div><button class="btn" data-close style="margin-top:10px;background:rgba(255,255,255,.15);color:#fff">סגירה</button>';
+    const g=o.querySelector('#drGo'),a=o.querySelector('#drAg');
+    if(g)g.onclick=e=>{e.stopPropagation();if(busy)return;busy=true;const t=o.querySelector('#drT');t.classList.add('spin');beep(300,.2,'triangle');
+      let n=0;const iv=setInterval(()=>{t.textContent=L[n++%4][0];beep(500+n*20,.03)},90);
+      setTimeout(()=>{clearInterval(iv);const r=L[Math.floor(Math.random()*4)];spins++;let m='';
+        if(r[0]==='ג'){coins+=pot;m='ג׳ = גדול! לקחת '+pot+' 🎉';pot=0;confetti(50)}
+        else if(r[0]==='ה'){const h=Math.ceil(pot/2);coins+=h;pot-=h;m='ה׳ = היה: לקחת '+h}
+        else if(r[0]==='ש'){if(coins>0){coins--;pot++}m='ש׳ = שם: שמת מטבע בקופה'}
+        else m='נ׳ = נס: לא קורה כלום';
+        if(pot===0){pot=2;m+=' · כולם מוסיפים לקופה 2'}
+        if(spins>=10&&coins>best){best=coins;store.set('drBest',best);renderAch();confetti(90)}
+        busy=false;draw(m,r[0]);},1300);};
+    if(a)a.onclick=e=>{e.stopPropagation();coins=10;pot=4;spins=0;draw('')};
+  };
+  draw('');
+}
+/* sufganiyot catcher */
+function sufGame(){
+  const {g,ctx,W,H,sc,bs,msg,cl}=gameShell();g.style.background='linear-gradient(#2a90e6,#0a4a94)';
+  const u=Math.min(W/400,1.3);let alive=true,state='ready',x=W/2,score=0,lives=3,items=[],spT=0,last=performance.now(),best=store.get('sfBest',0),deadAt=0;
+  bs.textContent='שיא: '+best;msg.innerHTML='גוררים את הצלחת ותופסים סופגניות 🍩<br><small style="font-size:16px;font-weight:600;opacity:.85">⭐ סופגנייה זהובה = 5 נקודות · לא לתפוס טיפות שמן 💧</small>';
+  const hud=document.createElement('div');hud.style.cssText='position:absolute;left:0;right:0;top:100px;text-align:center;color:#fff;font-size:20px;pointer-events:none';g.appendChild(hud);
+  const paint=()=>{hud.textContent='❤️'.repeat(lives)};paint();
+  const stop=()=>{alive=false;g.remove()};cl.onclick=e=>{e.stopPropagation();stop()};
+  const move=e=>{const r=g.getBoundingClientRect();x=Math.max(40*u,Math.min(W-40*u,e.clientX-r.left))};
+  g.addEventListener('pointerdown',e=>{if(e.target.closest('.cl'))return;found('sufg');move(e);if(state==='ready'||(state==='dead'&&performance.now()-deadAt>600)){state='play';score=0;lives=3;items=[];msg.textContent='';paint()}});
+  g.addEventListener('pointermove',e=>{if(e.buttons||e.pointerType==='touch')move(e)});
+  const py=H*.86;
+  (function loop(now){
+    if(!alive)return;requestAnimationFrame(loop);const dt=Math.min(40,now-last),f=dt/16.67;last=now;
+    if(state==='play'){
+      spT-=dt;if(spT<=0){const r=Math.random();items.push({x:20*u+Math.random()*(W-40*u),y:-30,v:(2.2+Math.min(score,80)/30+Math.random())*u,k:r<.12?'gold':r<.3?'oil':'don'});spT=Math.max(320,900-score*6)}
+      items.forEach(it=>it.y+=it.v*f);
+      for(const it of items){if(!it.hit&&it.y>py-26*u&&it.y<py+10*u&&Math.abs(it.x-x)<46*u){it.hit=1;
+        if(it.k==='oil'){lives--;paint();beep(150,.25,'sawtooth')}else{score+=it.k==='gold'?5:1;beep(it.k==='gold'?990:660,.06)}}}
+      items.forEach(it=>{if(!it.hit&&it.y>H+20&&it.k!=='oil'){it.hit=1;lives--;paint();beep(200,.15,'triangle')}});
+      items=items.filter(it=>!it.hit&&it.y<H+40);sc.textContent=score;
+      if(lives<=0){state='dead';deadAt=performance.now();if(score>store.get('sfBest',0)){store.set('sfBest',score);best=score;renderAch();confetti(80)}
+        bs.textContent='שיא: '+store.get('sfBest',0);msg.innerHTML=score+' סופגניות<br><small style="font-size:16px;font-weight:600;opacity:.85">לחצו כדי לנסות שוב</small>'}
+    }
+    ctx.clearRect(0,0,W,H);ctx.textAlign='center';ctx.textBaseline='middle';
+    items.forEach(it=>{ctx.font=(it.k==='gold'?40:34)*u+'px serif';ctx.fillText(it.k==='oil'?'💧':it.k==='gold'?'🌟':'🍩',it.x,it.y)});
+    ctx.fillStyle='#fffdf7';ctx.beginPath();ctx.ellipse(x,py,50*u,12*u,0,0,7);ctx.fill();ctx.fillStyle='#e0b23a';ctx.beginPath();ctx.ellipse(x,py,36*u,7*u,0,0,7);ctx.fill();
+  })(performance.now());
+}
+/* menorah triggers: tap shamash = dreidel, 3 quick taps on a candle = trivia, long press = sufganiyot */
+(function(){
+  const m=document.getElementById('menorah');if(!m)return;let n=0,t0=0,lp=null,lpFired=false;
+  m.addEventListener('pointerdown',()=>{lpFired=false;lp=setTimeout(()=>{lpFired=true;beep(880,.1);if(navigator.vibrate)try{navigator.vibrate(40)}catch(e){}sufGame()},900)});
+  ['pointerup','pointerleave','pointercancel'].forEach(ev=>m.addEventListener(ev,()=>clearTimeout(lp)));
+  m.addEventListener('click',e=>{
+    if(lpFired)return;const c=e.target.closest('.cn');if(!c)return;
+    c.classList.remove('tap');void c.offsetWidth;c.classList.add('tap');
+    if(c.classList.contains('sh')){beep(700,.08);setTimeout(dreidel,250);return}
+    const now=Date.now();if(now-t0>1200)n=0;t0=now;n++;beep(500+n*150,.06);
+    if(n>=3){n=0;setTimeout(()=>trivia(TVH),300)}
+  });
+})();
+
 function eggMenu(){
   const n=EGGS.filter(e=>eggsFound[e[0]]).length;
   overlay('<h2>🥚 כל ה-Easter eggs</h2><p style="margin-bottom:6px">מצאת '+n+' מתוך '+EGGS.length+'</p><div style="width:100%;max-width:340px;text-align:right">'+EGGS.map(e=>`<div style="display:flex;gap:10px;align-items:flex-start;background:rgba(255,255,255,.08);border-radius:12px;padding:10px 12px;margin:8px 0"><div style="font-size:22px">${eggsFound[e[0]]?'✅':'🔒'}</div><div><b>${e[1]}</b><div style="font-size:14px;opacity:.8;line-height:1.5">${e[2]}</div></div></div>`).join('')+'</div><button class="btn gold" data-close>סגירה</button>',()=>{surCheck()});
