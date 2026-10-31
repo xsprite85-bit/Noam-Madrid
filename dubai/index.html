@@ -592,7 +592,7 @@ body{background:#0a4a94!important}
       <div class="row"><span>🏥 Saudi German Hospital Dubai</span><span class="ltr"><a href="tel:+9718002211">800 2211</a></span></div>
       <div class="row"><span>Hertz אבו דאבי</span><span class="ltr"><a href="tel:+97128058089">+971 2 805 8089</a></span></div>
       <div class="row"><span>The WB Abu Dhabi</span><span class="ltr"><a href="tel:+97122086830">+971 2 208 6830</a></span></div>
-      <div class="alert" style="margin-top:10px">💉 <b>האלרגיה של ליה:</b> האפיפן תמיד בתיק היד ולא נשאר ברכב החם. אחרי הזרקה מתקשרים מיד ל-998 (אמבולנס), גם אם נראה שעבר. במסעדות אומרים מראש: "My daughter has a severe allergy".</div>
+      <div class="alert" style="margin-top:10px">💉 <b>האלרגיה של ליה לבוטנים:</b> האפיפן תמיד בתיק היד ולא נשאר ברכב החם. אחרי הזרקה מתקשרים מיד ל-998 (אמבולנס), גם אם נראה שעבר. במסעדות מראים את כרטיס האלרגיה.<div class="acts"><button class="btn gold" onclick="allergyCard()">🥜 כרטיס אלרגיה למלצר</button></div></div>
       <div class="note">במקרה חירום מתקשרים קודם למספר המקומי, ואחר כך לחברת הביטוח (המספר בפוליסה). הטלפונים של השגרירות והקונסוליה לחירום בלבד. השגרירות: Etihad Towers, Al Bateen, אבו דאבי. קבלת קהל בימים ב׳–ו׳, 10:00–13:00, בתיאום מראש במייל: <span class="ltr">info@abudhabi.mfa.gov.il</span> · <span class="ltr">info@dubai.mfa.gov.il</span>. מספרים מאתר משרד החוץ, 31.10.2026.</div>
     </div>
 
@@ -786,6 +786,7 @@ body{background:#0a4a94!important}
   <section class="view" id="v-food">
     <h2><svg class="i"><use href="#food"/></svg>ארוחות</h2>
     <div class="tip">באמירויות אוכלים בשעות רגילות, כמו בארץ. בקניונים יש מתחמי אוכל ענקיים שמתאימים לכל אחד מהילדים. בית המלון יכול להכין ארוחה כשרה אם מבקשים מראש, במיוחד באבו דאבי.</div>
+    <div class="alert" style="margin-top:12px">🥜 <b>ליה אלרגית לבוטנים.</b> לשים לב במיוחד: רטבי סאטה ומנות אסייתיות, מתוקים ערביים (בקלאווה, כנאפה, חלבה) שלפעמים יש בהם אגוזים או בוטנים, טיגון בשמן בוטנים, ומזנונים במלון עם סכנה של מגע. בכל מסעדה מראים למלצר את הכרטיס.<div class="acts"><button class="btn gold" onclick="allergyCard()">🥜 כרטיס אלרגיה למלצר</button></div></div>
     <div id="mealDays" style="margin-top:12px"></div>
     <div class="panel">
       <h3>🕍 אוכל כשר</h3>
@@ -1095,8 +1096,9 @@ const DISHES=[
  ['ماء · Water','מים','מַאא']
 ];
 const TABLE=[
- ['לבת שלי יש אלרגיה חמורה','My daughter has a severe allergy · لدى ابنتي حساسية شديدة','מַיי דוֹטֶר הֶז אֶ סִבִיר אֶלֶרְגִ׳י'],
- ['יש בזה...?','Does this contain...?','דָז דִיס קוֹנְטֵיין...?'],
+ ['לבת שלי יש אלרגיה חמורה לבוטנים','My daughter has a severe peanut allergy · ابنتي لديها حساسية شديدة من الفول السوداني','מַיי דוֹטֶר הֶז אֶ סִבִיר פִּינַאט אֶלֶרְגִ׳י'],
+ ['יש בזה בוטנים או אגוזים?','Does this contain peanuts or nuts? · هل فيه فول سوداني أو مكسرات؟','דָז דִיס קוֹנְטֵיין פִּינַאטְס אוֹר נַאטְס?'],
+ ['מטוגן בשמן בוטנים?','Is it fried in peanut oil?','אִיז אִיט פְרַייד אִין פִּינַאט אוֹיְל?'],
  ['שולחן לחמישה, בבקשה','طاولة لخمسة من فضلك · Table for five, please','טַאוִלַה לִ-חַ׳מְסַה מִן פַדְלַכּ'],
  ['התפריט, בבקשה','القائمة من فضلك · The menu, please','אַל-קַאאִמַה מִן פַדְלַכּ'],
  ['בלי חריף','بدون حار · Not spicy','בִּדוּן חַאר'],
@@ -1144,7 +1146,7 @@ const PHRASES=[
 ];
 
 const MATCH_LIST=['להזמין עוגה (במלון או בקונדיטוריה ביאס), ולוודא שמתאימה לאלרגיה של ליה','בלונים ושלט "יום הולדת שמח" במזוודה','מתנה, מוסתרת היטב 🎁','נרות יום הולדת ומצית','לבקש מהמלון קישוט בחדר או עוגה בארוחת הבוקר','להזמין שולחן לארוחת הערב ולספר שיש יום הולדת','ללמוד את השיר: "עִיד מִילַאד סַעִיד"'];
-const PACK_LIST=['💉 אפיפן לליה (עדיף שניים), בתיק היד ולא במזוודה, עם מכתב רופא באנגלית','דרכונים, בתוקף לפחות 6 חודשים','כרטיסי הטיסה ושוברים (באפליקציה)','רישיון נהיגה (לבדוק עם Hertz אם צריך גם רישיון בינלאומי)','כרטיס אשראי של הנהג, עם מסגרת פנויה לפיקדון','כיסא בטיחות או בוסטר לליה (או להזמין מ-Hertz)','מתאם חשמל בריטי (סוג G)','מטען נייד ומטען לרכב','בגדי ים, כובעים וקרם הגנה','בגד ארוך וכיסוי ראש למסגד','מעיל קל למזגנים ולערב במדבר','🕎 חנוכייה לנסיעה','🕯️ נרות חנוכה: קופסה של 44 (בטיול מדליקים 35, כולל שמש)','מצית אחד בתיק היד או בכיס, לא במזוודה','מתנה ונרות ליום ההולדת של ליה','משחקים ושירים לנסיעות ברכב','ביטוח נסיעות','תרופות קבועות'];
+const PACK_LIST=['💉 אפיפן לליה (עדיף שניים), בתיק היד ולא במזוודה, עם מכתב רופא באנגלית','🥜 להודיע לאתיחאד מראש על אלרגיה לבוטנים, ולהזכיר בעלייה למטוס','דרכונים, בתוקף לפחות 6 חודשים','כרטיסי הטיסה ושוברים (באפליקציה)','רישיון נהיגה (לבדוק עם Hertz אם צריך גם רישיון בינלאומי)','כרטיס אשראי של הנהג, עם מסגרת פנויה לפיקדון','כיסא בטיחות או בוסטר לליה (או להזמין מ-Hertz)','מתאם חשמל בריטי (סוג G)','מטען נייד ומטען לרכב','בגדי ים, כובעים וקרם הגנה','בגד ארוך וכיסוי ראש למסגד','מעיל קל למזגנים ולערב במדבר','🕎 חנוכייה לנסיעה','🕯️ נרות חנוכה: קופסה של 44 (בטיול מדליקים 35, כולל שמש)','מצית אחד בתיק היד או בכיס, לא במזוודה','מתנה ונרות ליום ההולדת של ליה','משחקים ושירים לנסיעות ברכב','ביטוח נסיעות','תרופות קבועות'];
 
 /* ---------- ICON helper ---------- */
 const ico=(id,cls='')=>`<svg class="i ${cls}"><use href="#${id}"/></svg>`;
@@ -1381,7 +1383,7 @@ function renderMissions(){
   const upd=()=>{const w=r.children[0].offsetWidth+12;let k=Math.round(Math.abs(r.scrollLeft)/w);k=Math.max(0,Math.min(n-1,k));[...d.children].forEach((x,i)=>x.classList.toggle('on',i===k))};
   r.addEventListener('scroll',upd,{passive:true});upd();
 })();
-const APP_VER='20261031-2040';
+const APP_VER='20261031-2045';
 function verLabel(){if(!APP_VER)return 'פיתוח';const m=APP_VER.match(/^(\d{4})(\d\d)(\d\d)-(\d\d)(\d\d)$/);return m?(+m[3])+'.'+(+m[2])+' בשעה '+m[4]+':'+m[5]:APP_VER}
 async function hardRefresh(){
   const bt=document.getElementById('refBtn');if(bt)bt.textContent='מתעדכן…';toast('🔄 מתעדכן…');
@@ -1718,6 +1720,18 @@ document.getElementById('hnBtn').onclick=()=>{
   store.set('hn',lit);renderMenorah();
 };
 
+/* ---------- ALLERGY CARD ---------- */
+function allergyCard(){
+  const w=document.createElement('div');
+  w.style.cssText='position:fixed;inset:0;z-index:50;background:#fff;color:#0a1633;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:22px;overflow:auto';
+  w.innerHTML='<div style="font-size:54px">🥜🚫</div>'
+   +'<div style="font-size:24px;font-weight:900;line-height:1.35;direction:ltr;margin-top:8px">My daughter has a <span style="color:#c0262f">SEVERE PEANUT ALLERGY</span> (anaphylaxis).</div>'
+   +'<div style="font-size:18px;line-height:1.5;direction:ltr;margin-top:8px">Her food must contain <b>no peanuts, no peanut oil and no nuts</b>, and must not touch them in the kitchen. Please check with the chef. Thank you!</div>'
+   +'<div style="font-size:24px;font-weight:900;line-height:1.5;direction:rtl;margin-top:18px">ابنتي لديها <span style="color:#c0262f">حساسية شديدة من الفول السوداني</span>.</div>'
+   +'<div style="font-size:18px;line-height:1.6;direction:rtl;margin-top:6px">يجب ألا يحتوي طعامها على فول سوداني أو زيت فول سوداني أو مكسرات. من فضلك اسأل الطاهي. شكراً!</div>'
+   +'<div style="margin-top:24px;font-size:15px;color:#4a5878;direction:rtl">לחיצה בכל מקום תסגור</div>';
+  w.onclick=()=>w.remove();document.body.appendChild(w);
+}
 /* ---------- TAXI ADDRESS ---------- */
 const ADDR=[
  ['Dusit Thani Dubai','فندق دوسيت ثاني دبي','Sheikh Zayed Road, Dubai','شارع الشيخ زايد، دبي'],
