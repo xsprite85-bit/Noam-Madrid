@@ -413,6 +413,8 @@ body{background:#0a4a94!important}
 .alert{background:rgba(150,28,22,.72)!important;color:#fff!important;border-color:rgba(255,160,150,.6)!important}
 .panel .alert{background:#ffece8!important;color:#7a1810!important;border-color:#f0a39b!important}
 .tip{background:rgba(8,58,118,.72)!important;color:#fff8e1!important}
+.emo2{font-size:28px;line-height:1;width:44px!important;height:44px!important;filter:drop-shadow(0 2px 6px rgba(0,0,0,.35));opacity:.92}
+.ballegg.emo2{left:10px;top:10px}.goalegg.emo2{right:10px;top:10px}
 </style>
 </head>
 <body>
@@ -457,8 +459,8 @@ body{background:#0a4a94!important}
 <div class="bgv" aria-hidden="true"><img id="bgImg" src="bg.jpg" alt=""><i></i></div>
 <header class="hero wrap">
   <div class="lights"><span></span><span></span></div>
-  <button class="ballegg" id="ballEgg" aria-label="כדור"><svg><use href="#ball"/></svg></button>
-  <button class="goalegg" id="goalEgg" aria-label="פנדלים"><svg><use href="#goalI"/></svg></button>
+  <button class="ballegg emo2" id="ballEgg" aria-label="גמל">🐪</button>
+  <button class="goalegg emo2" id="goalEgg" aria-label="פרארי">🏎️</button>
   <img class="crown logo" id="crownEgg" src="icon-512.png" alt="">
   <div class="kicker">BAR MITZVAH · DUBAI &amp; ABU DHABI 2026</div>
   <h1>האמירויות <em>של נועם</em></h1>
@@ -1399,7 +1401,7 @@ function renderMissions(){
   const upd=()=>{const w=r.children[0].offsetWidth+12;let k=Math.round(Math.abs(r.scrollLeft)/w);k=Math.max(0,Math.min(n-1,k));[...d.children].forEach((x,i)=>x.classList.toggle('on',i===k))};
   r.addEventListener('scroll',upd,{passive:true});upd();
 })();
-const APP_VER='20261031-2239';
+const APP_VER='20261031-2241';
 function verLabel(){if(!APP_VER)return 'פיתוח';const m=APP_VER.match(/^(\d{4})(\d\d)(\d\d)-(\d\d)(\d\d)$/);return m?(+m[3])+'.'+(+m[2])+' בשעה '+m[4]+':'+m[5]:APP_VER}
 async function hardRefresh(){
   const bt=document.getElementById('refBtn');if(bt)bt.textContent='מתעדכן…';toast('🔄 מתעדכן…');
@@ -1600,8 +1602,9 @@ function shootGame(){
 function achData(){
   const kb=store.get('keepy',0),pb=store.get('pkBest',0),pt=store.get('pkTot',0),tb=store.get('triB',[0,0,0]),rb=store.get('runBest',0),sb=store.get('shBest',0);
   const rows=[],chs=[];
-  if(eggsFound.keepy){rows.push(['⚽','הקפצות','שיא '+kb]);chs.push(['k','הקפצות ברצף',kb,[5,12,20]])}
-  if(eggsFound.pen){rows.push(['🥅','פנדלים','שיא '+pb+' מתוך 5 · '+pt+' גולים']);chs.push(['p','גולים בפנדלים (מצטבר)',pt,[10,25,40]])}
+  const cmb=store.get('camelBest',0),frb=store.get('ferBest',0);
+  if(eggsFound.camel){rows.push(['🐪','גמל במדבר','שיא '+cmb+' מ׳']);chs.push(['c','מטרים עם הגמל',cmb,[300,700,1200]])}
+  if(eggsFound.ferrari){rows.push(['🏎️','מרוץ פרארי','שיא '+frb+' ק״מ']);chs.push(['f2','ק״מ במרוץ פרארי',frb,[50,120,200]])}
   if(eggsFound.trivia){rows.push(['🧠','טריוויה','קל '+tb[0]+'/5 · בינוני '+tb[1]+'/5 · קשה '+tb[2]+'/5']);chs.push(['t','רמות טריוויה שעברת',[0,1,2].filter(i=>tb[i]>=3).length,[1,2,3]])}
   if(eggsFound.run){rows.push(['🏃','ריצה וקפיצה','שיא '+rb+' מ׳']);chs.push(['r','מטרים בריצה',rb,[300,600,1000]])}
   const db=store.get('drBest',0),fb=store.get('sfBest',0),hb=store.get('htriB',[0,0,0]);
@@ -1827,12 +1830,12 @@ document.querySelectorAll('.bnav button').forEach(b=>b.onclick=()=>{
 /* ---------- EASTER EGGS ---------- */
 const EGGS=[
  ['crown','המגדל','לחיצות מהירות על בורג׳ ח׳ליפה או על MARHABA בראש המסך'],
- ['keepy','משחק הכדור','לחיצה על הכדור הקטן בפינה של הכותרת, ואז להקפיץ אותו'],
+ ['camel','גמל במדבר','לחיצה על הגמל הקטן בפינה השמאלית של הכותרת'],
  ['gol','יאללה!','בלשונית הערבית, לחיצה על הרמקול ליד !يلا'],
  ['night','לילה במדבר','החזקה ארוכה על לוח הספירה לאחור'],
  ['kick','יום הולדת שמח','לפתוח את האפליקציה ביום ההולדת של ליה (9.12) או של נועם (12.12)'],
  ['secret','המשימה הסודית','לסמן 5 משימות בלשונית המשימות'],
- ['pen','בעיטות פנדל','לחיצה על אייקון השער בצד ימין של הכותרת'],
+ ['ferrari','מרוץ פרארי','לחיצה על המכונית בפינה הימנית של הכותרת'],
  ['trivia','טריוויה דובאי ואבו דאבי','בלשונית "חוגגים", לחיצה על העוגה של ליה'],
  ['run','ריצה וקפיצה','3 לחיצות מהירות על ה-🎉 בלשונית "חוגגים"'],
  ['shoot','מטוס קרב','3 לחיצות מהירות על הכותרת של הספירה לאחור'],
@@ -2196,6 +2199,96 @@ function sufGame(){
   });
 })();
 
+/* ---------- CAMEL RUNNER (tap to jump) ---------- */
+function camelGame(){
+  const {g,ctx,W,H,sc,bs,msg,cl}=gameShell();
+  const u=Math.min(H/700,W/380,1.4),gy=H*.72,px=W*.2;
+  let alive=true,state='ready',dist=0,py=gy,vy=0,obs=[],next=0,best=store.get('camelBest',0),deadAt=0,last=performance.now(),t=0,jumps=0;
+  const m=()=>Math.floor(dist/(u*10));
+  const sp=()=>Math.min(13,6+m()/90)*u;
+  bs.textContent='שיא: '+best+' מ׳';
+  msg.innerHTML='🐪 לוחצים כדי לקפוץ<br><small style="font-size:16px;font-weight:600;opacity:.85">קפיצה כפולה מותרת! קופצים מעל קקטוסים, סלעים ודקלים</small>';
+  const stop=()=>{alive=false;g.remove()};cl.onclick=e=>{e.stopPropagation();stop()};
+  const T=[{e:'🌵',w:30,h:44,s:0},{e:'🪨',w:34,h:28,s:0},{e:'🌴',w:40,h:70,s:300},{e:'🌵🌵',w:58,h:44,s:500},{e:'🛞',w:30,h:30,s:150}];
+  const reset=()=>{dist=0;py=gy;vy=0;obs=[];next=W*.8;state='run';msg.textContent='';jumps=0};
+  g.addEventListener('pointerdown',e=>{if(e.target.closest('.cl'))return;found('camel');
+    if(state==='ready'||(state==='dead'&&performance.now()-deadAt>500)){reset();vy=-14*u;jumps=1;beep(520,.05);return}
+    if(state==='run'&&jumps<2){vy=-13*u;jumps++;beep(jumps===2?620:440,.05,'triangle')}});
+  (function loop(now){
+    if(!alive)return;requestAnimationFrame(loop);const f=Math.min(2,(now-last)/16.67);last=now;t+=f;
+    if(state==='run'){
+      const s=sp();dist+=s*f;vy+=.8*u*f;py+=vy*f;if(py>=gy){py=gy;vy=0;jumps=0}
+      next-=s*f;if(next<=0){const pool=T.filter(o=>o.s<=m());const o=pool[Math.floor(Math.random()*pool.length)];obs.push({e:o.e,x:W+40,w:o.w*u,h:o.h*u});next=s*(34+Math.random()*40)}
+      obs.forEach(o=>o.x-=s*f);obs=obs.filter(o=>o.x>-80*u);
+      const cx=px-18*u,cw=36*u;
+      for(const o of obs){if(cx+cw>o.x+6*u&&cx<o.x+o.w-6*u&&py>gy-o.h+8*u){state='dead';deadAt=performance.now();beep(160,.35,'sawtooth');
+        const sc2=m();if(sc2>store.get('camelBest',0)){store.set('camelBest',sc2);best=sc2;renderAch();confetti(60)}
+        bs.textContent='שיא: '+store.get('camelBest',0)+' מ׳';msg.innerHTML=sc2+' מטר במדבר<br><small style="font-size:16px;font-weight:600;opacity:.85">לחצו כדי לנסות שוב</small>';break}}
+      sc.textContent=m()+' מ׳';
+    }
+    const night=Math.floor(m()/400)%2===1;
+    const sky=ctx.createLinearGradient(0,0,0,gy);sky.addColorStop(0,night?'#06244f':'#2a90e6');sky.addColorStop(1,night?'#1a3f73':'#f6d77a');ctx.fillStyle=sky;ctx.fillRect(0,0,W,H);
+    ctx.fillStyle=night?'#fffbe0':'#fff3c4';ctx.beginPath();ctx.arc(W*.8,H*.18,28*u,0,7);ctx.fill();
+    ctx.fillStyle=night?'#22406e':'#e9c36a';for(let i=-1;i<4;i++){const x=((i*W*.6-dist*.2)%(W*1.8)+W*1.8)%(W*1.8)-W*.4;ctx.beginPath();ctx.ellipse(x,gy+10*u,W*.45,70*u,0,Math.PI,0);ctx.fill()}
+    ctx.fillStyle=night?'#2c4c7c':'#d9a52a';ctx.fillRect(0,gy,W,H-gy);
+    ctx.fillStyle=night?'#3a5a8a':'#c99a2e';for(let i=0;i<14;i++){const x=((i*67-dist)%W+W)%W;ctx.fillRect(x,gy+14*u+(i%3)*10*u,10*u,3*u)}
+    ctx.textAlign='center';ctx.textBaseline='bottom';
+    obs.forEach(o=>{ctx.font=Math.round(o.h)+'px serif';ctx.fillText(o.e,o.x+o.w/2,gy+4*u)});
+    ctx.save();ctx.translate(px,py+4*u);ctx.scale(-1,1);ctx.font=Math.round(56*u)+'px serif';
+    const bob=state==='run'&&py>=gy?Math.sin(t*.5)*2*u:0;ctx.fillText('🐪',0,bob);ctx.restore();
+  })(performance.now());
+}
+/* ---------- FERRARI RACER (tap left/right to change lane) ---------- */
+function ferrariGame(){
+  const {g,ctx,W,H,sc,bs,msg,cl}=gameShell();
+  const u=Math.min(W/380,1.4),RW=Math.min(W*.86,340),L0=(W-RW)/2,LN=3,lw=RW/LN,py=H*.8;
+  let alive=true,state='ready',lane=1,x=L0+lw*1.5,dist=0,obs=[],next=0,stars=0,best=store.get('ferBest',0),deadAt=0,last=performance.now();
+  const sp=()=>Math.min(16,6+dist/1800)*u;
+  bs.textContent='שיא: '+best+' ק״מ';
+  msg.innerHTML='🏎️ לוחצים ימינה או שמאלה כדי להחליף נתיב<br><small style="font-size:16px;font-weight:600;opacity:.85">עוקפים מכוניות, אוספים ⭐ ומאיצים</small>';
+  const stop=()=>{alive=false;g.remove()};cl.onclick=e=>{e.stopPropagation();stop()};
+  const km=()=>Math.floor(dist/(u*60))+stars*5;
+  const reset=()=>{lane=1;x=L0+lw*1.5;dist=0;obs=[];next=0;stars=0;state='run';msg.textContent=''};
+  g.addEventListener('pointerdown',e=>{if(e.target.closest('.cl'))return;found('ferrari');
+    if(state==='ready'||(state==='dead'&&performance.now()-deadAt>500)){reset();beep(520,.06);return}
+    if(state!=='run')return;const r=g.getBoundingClientRect();const right=e.clientX-r.left>W/2;
+    lane=Math.max(0,Math.min(LN-1,lane+(right?1:-1)));beep(right?560:500,.04,'triangle')});
+  const COLS=['#2a90e6','#f6d77a','#ffffff','#3ccf7a','#7b2ff7','#ff8a4c'];
+  function car(cx,cy,col,me){const w=lw*.5,h=w*1.9;ctx.save();ctx.translate(cx,cy);
+    ctx.fillStyle='rgba(0,0,0,.25)';ctx.fillRect(-w/2+4,-h/2+6,w,h);
+    ctx.fillStyle=col;ctx.beginPath();ctx.roundRect(-w/2,-h/2,w,h,w*.3);ctx.fill();
+    ctx.fillStyle='#14325c';ctx.beginPath();ctx.roundRect(-w*.35,-h*.18,w*.7,h*.28,6);ctx.fill();
+    ctx.fillStyle='#111';[[-1,-1],[1,-1],[-1,1],[1,1]].forEach(([a,b])=>ctx.fillRect(a*w/2-(a>0?0:5),b*h*.3-6,5,12));
+    if(me){ctx.fillStyle='#f6d77a';ctx.fillRect(-3,-h/2+6,6,h*.25);ctx.fillStyle='#fff';ctx.font='bold '+(w*.32)+'px sans-serif';ctx.textAlign='center';ctx.fillText('13',0,h*.32)}
+    ctx.restore()}
+  (function loop(now){
+    if(!alive)return;requestAnimationFrame(loop);const f=Math.min(2,(now-last)/16.67);last=now;
+    const tx=L0+lw*(lane+.5);x+=(tx-x)*.3*f;
+    if(state==='run'){
+      const s=sp();dist+=s*f;next-=s*f;
+      if(next<=0){const l=Math.floor(Math.random()*LN),r=Math.random();obs.push({l,y:-60,k:r<.18?'star':r<.3?'cone':'car',c:COLS[Math.floor(Math.random()*COLS.length)],v:r<.3?0:(1.5+Math.random()*2)*u});
+        if(Math.random()<.25){const l2=(l+1+Math.floor(Math.random()*2))%LN;obs.push({l:l2,y:-60-80*u,k:'car',c:COLS[Math.floor(Math.random()*COLS.length)],v:2*u})}
+        next=Math.max(110,240-dist/60)*u}
+      obs.forEach(o=>o.y+=(s-o.v)*f);
+      for(const o of obs){if(o.hit)continue;const ox=L0+lw*(o.l+.5);if(Math.abs(ox-x)<lw*.45&&Math.abs(o.y-py)<lw*.85){
+        if(o.k==='star'){o.hit=1;stars++;beep(990,.06);toast('⭐ +5 ק״מ')}
+        else{state='dead';deadAt=performance.now();beep(140,.4,'sawtooth');const k=km();if(k>store.get('ferBest',0)){store.set('ferBest',k);best=k;renderAch();confetti(60)}
+          bs.textContent='שיא: '+store.get('ferBest',0)+' ק״מ';msg.innerHTML='💥 '+k+' ק״מ<br><small style="font-size:16px;font-weight:600;opacity:.85">לחצו כדי לנסות שוב</small>';break}}}
+      obs=obs.filter(o=>!o.hit&&o.y<H+80);sc.textContent=km()+' ק״מ';
+    }
+    ctx.fillStyle='#d9a52a';ctx.fillRect(0,0,W,H);
+    ctx.fillStyle='#2b2f3a';ctx.fillRect(L0,0,RW,H);
+    ctx.fillStyle='#c0262f';for(let y=-40;y<H+40;y+=40){const yy=(y+dist%40);ctx.fillRect(L0-8,yy,8,20);ctx.fillRect(L0+RW,yy,8,20)}
+    ctx.fillStyle='#fff';for(let y=-40;y<H+40;y+=40){const yy=(y+dist%40);ctx.fillRect(L0+RW-8-8,yy,0,0);ctx.fillRect(L0-8,yy+20,8,20);ctx.fillRect(L0+RW,yy+20,8,20)}
+    ctx.fillStyle='rgba(255,255,255,.7)';for(let i=1;i<LN;i++)for(let y=-60;y<H+60;y+=60)ctx.fillRect(L0+lw*i-2,(y+dist%60),4,30);
+    obs.forEach(o=>{const ox=L0+lw*(o.l+.5);if(o.k==='car')car(ox,o.y,o.c,false);else{ctx.font=(lw*.5)+'px serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(o.k==='star'?'⭐':'🚧',ox,o.y)}});
+    car(x,py,'#d40000',true);
+  })(performance.now());
+}
+
+/* rebind header corner eggs to the new games (drops the old football listeners) */
+(function(){[['ballEgg',camelGame],['goalEgg',ferrariGame]].forEach(([id,fn])=>{const el=document.getElementById(id);if(!el)return;const n=el.cloneNode(true);el.replaceWith(n);
+  n.addEventListener('click',()=>{n.classList.add('tap');setTimeout(()=>n.classList.remove('tap'),250);beep(620,.08);setTimeout(fn,180)})})})();
 function eggMenu(){
   const n=EGGS.filter(e=>eggsFound[e[0]]).length;
   overlay('<h2>🥚 כל ה-Easter eggs</h2><p style="margin-bottom:6px">מצאת '+n+' מתוך '+EGGS.length+'</p><div style="width:100%;max-width:340px;text-align:right">'+EGGS.map(e=>`<div style="display:flex;gap:10px;align-items:flex-start;background:rgba(255,255,255,.08);border-radius:12px;padding:10px 12px;margin:8px 0"><div style="font-size:22px">${eggsFound[e[0]]?'✅':'🔒'}</div><div><b>${e[1]}</b><div style="font-size:14px;opacity:.8;line-height:1.5">${e[2]}</div></div></div>`).join('')+'</div><button class="btn gold" data-close>סגירה</button>',()=>{surCheck()});
