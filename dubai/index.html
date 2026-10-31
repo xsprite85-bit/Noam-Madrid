@@ -404,6 +404,15 @@ body{background:#0a4a94!important}
 .bkgo{flex:1;min-width:0;text-align:right;background:none;border:0;color:#fff;font:inherit;padding:0;cursor:pointer}
 .bkgo b{display:block;font-size:14px}.bkgo small{display:block;font-size:12px;color:var(--muted);margin-top:2px}
 .bkr .btn{flex:none;font-size:12px;padding:6px 9px}
+.panel .alert{background:#ffece8;border:1.5px solid #f0a39b;color:#7a1810}
+.panel .alert b{color:#a3150c}
+.whob{margin-top:10px;background:rgba(8,58,118,.55);color:#fff;border:1px solid rgba(246,215,122,.6);border-radius:999px;padding:6px 14px;font:inherit;font-size:13px;font-weight:700;cursor:pointer}
+.whog{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:100%;max-width:340px}
+.whoc{display:flex;flex-direction:column;align-items:center;gap:4px;background:rgba(255,255,255,.1);border:2px solid rgba(246,215,122,.55);border-radius:16px;padding:12px 4px;color:#fff;font:inherit;font-size:16px;font-weight:800;cursor:pointer}
+.whoc span{font-size:40px;line-height:1}
+.alert{background:rgba(150,28,22,.72)!important;color:#fff!important;border-color:rgba(255,160,150,.6)!important}
+.panel .alert{background:#ffece8!important;color:#7a1810!important;border-color:#f0a39b!important}
+.tip{background:rgba(8,58,118,.72)!important;color:#fff8e1!important}
 </style>
 </head>
 <body>
@@ -455,6 +464,7 @@ body{background:#0a4a94!important}
   <h1>האמירויות <em>של נועם</em></h1>
   <div class="sub">נועם · אבא · אמא · רומי · ליה · 1–11 בדצמבר</div>
   <div class="hala"><bdi>MARHABA</bdi> · <bdi>مرحبا</bdi></div>
+  <div><button class="whob" id="whoBtn" onclick="pickWho()"></button></div>
 
   <div class="board" id="board">
     <div class="lbl" id="cdLabel">ספירה לאחור</div>
@@ -528,7 +538,8 @@ body{background:#0a4a94!important}
 
   <!-- ====== MISSIONS ====== -->
   <section class="view" id="v-missions">
-    <h2><svg class="i"><use href="#trophy"/></svg>המשימות של נועם</h2>
+    <h2><svg class="i"><use href="#trophy"/></svg><span id="misTitle">המשימות של נועם</span></h2>
+    <div id="noamSec">
     <div class="panel dark">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
         <b id="misCount">0 / 0 כוכבים</b><span id="misRank" style="color:var(--gold2);font-weight:700"></span>
@@ -537,14 +548,17 @@ body{background:#0a4a94!important}
     </div>
     <div id="ach" class="ach"></div>
     <div id="missions"></div>
-    <h2 style="font-size:18px">🧒 המשימות של רומי וליה</h2>
-    <div class="kidtabs" id="kidTabs"><button data-k="romi" class="on">רומי</button><button data-k="lia">ליה</button></div>
-    <div class="kids" id="kids"></div>
     <div class="trophy" id="trophyBox" style="display:none">
       <svg><use href="#trophy"/></svg>
       <div style="font-weight:900;font-size:20px;color:var(--gold2)">שייח׳ הטיול! 🏆</div>
       <div class="sub">כל המשימות הושלמו. מזל טוב לבר המצווה!</div>
     </div>
+    </div>
+    <div id="kidSec">
+    <div class="kidtabs" id="kidTabs"></div>
+    <div class="kids" id="kids"></div>
+    </div>
+    <div class="note" style="text-align:center;color:var(--muted)">הסימונים של רומי, ליה והמשימות הזוגיות משותפים לכל הטלפונים של המשפחה.</div>
   </section>
 
   <!-- ====== ARABIC ====== -->
@@ -1035,6 +1049,7 @@ function applyShared(data){
   let ch=false;
   Object.keys(data||{}).forEach(k=>{const v=data[k]==='1';
     if(k.startsWith('b:')){const key=k.slice(2);if(!!booked[key]!==v){if(v)booked[key]=1;else delete booked[key];ch=true}}
+    else if(k.startsWith('k:')){const kk=k.slice(2),st=store.get('kids',{});if(!!st[kk]!==v){if(v)st[kk]=1;else delete st[kk];store.set('kids',st);ch=true;if(typeof renderKids==='function')renderKids()}}
     else if(k.startsWith('l:')){const [,lk,i]=k.split(':');const st=store.get(lk,{});if(!!st[i]!==v){if(v)st[i]=1;else delete st[i];store.set(lk,st);ch=true;
       const box=document.querySelector('#'+(lk==='pl'?'packList':'matchList')+' input[data-i="'+i+'"]');if(box)box.checked=v}}
   });
@@ -1383,7 +1398,7 @@ function renderMissions(){
   const upd=()=>{const w=r.children[0].offsetWidth+12;let k=Math.round(Math.abs(r.scrollLeft)/w);k=Math.max(0,Math.min(n-1,k));[...d.children].forEach((x,i)=>x.classList.toggle('on',i===k))};
   r.addEventListener('scroll',upd,{passive:true});upd();
 })();
-const APP_VER='20261031-2045';
+const APP_VER='20261031-2058';
 function verLabel(){if(!APP_VER)return 'פיתוח';const m=APP_VER.match(/^(\d{4})(\d\d)(\d\d)-(\d\d)(\d\d)$/);return m?(+m[3])+'.'+(+m[2])+' בשעה '+m[4]+':'+m[5]:APP_VER}
 async function hardRefresh(){
   const bt=document.getElementById('refBtn');if(bt)bt.textContent='מתעדכן…';toast('🔄 מתעדכן…');
@@ -1749,15 +1764,36 @@ const KIDS={
  romi:[['🏎️','לספור כמה מכוניות פרארי אדומות רואים בטיול'],['✍️','ללמוד לכתוב את השם שלך בערבית: رومي'],['🐬','לצלם דולפין בסי וורלד'],['🛍️','לבחור מזכרת לעצמך בשוק'],['🌊','לרדת במגלשה הכי גבוהה שמותר'],['🗣️','להגיד "שֻׁכְּרַן" למלצר'],['📸','להיות הצלמת של המשפחה לחצי יום'],['🕎','להדליק נר חנוכה ולומר את הברכה']],
  lia:[['🐪','לראות גמל, ואולי ללטף'],['🐟','למצוא דג כתום באקווריום'],['🐧','להגיד שלום לפינגווין'],['🏖️','לבנות ארמון חול'],['✈️','לנופף לשלום לטייס'],['🎂','לכבות את הנרות על העוגה'],['🌟','להגיד "מַרְחַבָּא" למישהו'],['🕎','לספור כמה נרות דולקים בחנוכייה']]
 };
-let kidSel='romi';
+KIDS.couple=[['🌅','שקיעה רק שנינו, עשר דקות בלי טלפונים'],['☕','קפה כרק או תה ביחד בבוקר, לפני שכולם קמים'],['🤳','סלפי זוגי עם הבורג׳ ח׳ליפה מאחור'],['💃','לרקוד דקה אחת ליד מופע המזרקות'],['🍽️','ארוחת ערב זוגית (אחרי שהילדים נרדמים, בשירות חדרים)'],['🎁','לקנות אחד לשנייה מזכרת בשוק, עד 20 דירהם'],['✉️','לכתוב ביחד מכתב קצר לנועם לבר המצווה'],['😴','לתת לשני לישון עד מאוחר בוקר אחד'],['🚶','הליכה יד ביד לאורך המים בערב'],['🫖','תה מנטה בשקיעה במדבר'],['💬','להגיד אחד לשנייה "يا حبيبي" (יא חביבי)'],['📸','תמונה משפחתית שבה כל החמישה מחייכים']];
+const KNAME={romi:'רומי',lia:'ליה',couple:'לירז וסהר 💑'};
+let kidTabsList=['romi','lia'],kidSel='romi';
 function renderKids(){
   const st=store.get('kids',{}),el=document.getElementById('kids');if(!el)return;
+  if(!kidTabsList.includes(kidSel))kidSel=kidTabsList[0];
+  const tabs=document.getElementById('kidTabs');
+  tabs.innerHTML=kidTabsList.length>1?kidTabsList.map(k=>`<button data-k="${k}" class="${k===kidSel?'on':''}">${KNAME[k]}</button>`).join(''):'';
+  tabs.querySelectorAll('button').forEach(b=>b.onclick=()=>{kidSel=b.dataset.k;renderKids()});
   el.innerHTML=KIDS[kidSel].map((m,i)=>{const k=kidSel+i;return `<button class="kid ${st[k]?'on':''}" data-k="${k}"><span class="ke">${m[0]}</span><span class="kt">${m[1]}</span><span class="ks">${st[k]?'⭐':''}</span></button>`}).join('');
   const n=KIDS[kidSel].filter((m,i)=>st[kidSel+i]).length;
-  el.insertAdjacentHTML('afterbegin',`<div class="kcount">${n} מתוך ${KIDS[kidSel].length} ⭐</div>`);
-  el.querySelectorAll('.kid').forEach(b=>b.onclick=()=>{const k=b.dataset.k;if(st[k])delete st[k];else{st[k]=1;toast('⭐ כל הכבוד!');beep(700,.08)}store.set('kids',st);
-    if(KIDS[kidSel].every((m,i)=>st[kidSel+i]))confetti(120);renderKids()});
-  document.querySelectorAll('#kidTabs button').forEach(b=>{b.classList.toggle('on',b.dataset.k===kidSel);b.onclick=()=>{kidSel=b.dataset.k;renderKids()}});
+  el.insertAdjacentHTML('afterbegin',`<div class="kcount">${n} מתוך ${KIDS[kidSel].length} ${kidSel==='couple'?'💛':'⭐'}</div>`);
+  el.querySelectorAll('.kid').forEach(b=>b.onclick=()=>{const k=b.dataset.k,st2=store.get('kids',{});if(st2[k])delete st2[k];else{st2[k]=1;toast(kidSel==='couple'?'💛 יפה לכם!':'⭐ כל הכבוד!');beep(700,.08)}store.set('kids',st2);
+    syncSet('k:'+k,st2[k]?'1':'0');if(KIDS[kidSel].every((m,i)=>st2[kidSel+i]))confetti(120);renderKids()});
+}
+/* ---------- WHO IS USING THIS PHONE ---------- */
+const WHO={noam:['👦','נועם'],romi:['👧','רומי'],lia:['🧒','ליה'],liraz:['👨','לירז'],sahar:['👩','סהר']};
+function applyWho(){
+  const w=store.get('who','');const k=WHO[w]?w:'noam';
+  document.getElementById('whoBtn').textContent=w?WHO[k][0]+' '+WHO[k][1]+' · החלפה':'👤 מי משתמש בטלפון?';
+  document.getElementById('noamSec').style.display=k==='noam'?'':'none';
+  document.getElementById('kidSec').style.display=k==='noam'?'none':'';
+  kidTabsList=k==='romi'?['romi','lia']:k==='lia'?['lia']:k==='noam'?['romi']:['couple','romi','lia'];
+  kidSel=kidTabsList[0];
+  document.getElementById('misTitle').textContent=k==='noam'?'המשימות של נועם':k==='romi'?'המשימות של רומי וליה':k==='lia'?'המשימות של ליה':'המשימות שלנו';
+  renderKids();
+}
+function pickWho(){
+  const o=overlay('<div style="font-size:52px">👋</div><h2>מי משתמש בטלפון?</h2><p style="margin-bottom:12px">ככה כל אחד רואה את המשימות שלו.</p><div class="whog">'+Object.keys(WHO).map(k=>`<button class="whoc" data-w="${k}"><span>${WHO[k][0]}</span>${WHO[k][1]}</button>`).join('')+'</div>');
+  o.querySelectorAll('.whoc').forEach(b=>b.onclick=e=>{e.stopPropagation();store.set('who',b.dataset.w);o.remove();applyWho();toast('שלום '+WHO[b.dataset.w][1]+'! '+WHO[b.dataset.w][0]);beep(660,.08)});
 }
 /* ---------- CURRENCY ---------- */
 function convInit(){
@@ -2288,7 +2324,7 @@ function syncInit(){
   window.addEventListener('pageshow',e=>{if(e.persisted)goToday()});
   setInterval(()=>{if(uaeToday()!==lastDate)goToday()},60000);
   renderMissions();renderPhrases();renderMeals();
-  renderList('matchList','ml',MATCH_LIST);renderList('packList','pl',PACK_LIST);renderDocs();renderMenorah();setInterval(renderMenorah,60000);renderKids();convInit();renderBookList();syncStart();
+  renderList('matchList','ml',MATCH_LIST);renderList('packList','pl',PACK_LIST);renderDocs();renderMenorah();setInterval(renderMenorah,60000);applyWho();convInit();renderBookList();syncStart();if(!store.get('who',''))setTimeout(()=>{if(!document.querySelector('.ov'))pickWho()},900);
   tick();setInterval(tick,1000);
 })();
 </script>
