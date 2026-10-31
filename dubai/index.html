@@ -539,6 +539,7 @@ body{background:#0a4a94!important}
   <!-- ====== MISSIONS ====== -->
   <section class="view" id="v-missions">
     <h2><svg class="i"><use href="#trophy"/></svg><span id="misTitle">המשימות של נועם</span></h2>
+    <div style="text-align:center;margin:-4px 0 12px"><button class="whob" onclick="pickWho()" style="margin:0">👤 החלפת משתמש</button></div>
     <div id="noamSec">
     <div class="panel dark">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
@@ -793,7 +794,7 @@ body{background:#0a4a94!important}
       <h3>🎒 רשימת אריזה</h3>
     </div>
   <button class="surbtn" id="surBtn">💌 הברכה של אבא ואמא</button>
-  <div class="panel dark" style="text-align:center;margin-top:14px"><div class="note" id="verInfo" style="margin-bottom:10px"></div><button class="btn gold" id="refBtn" style="display:inline-flex">🔄 רענון האפליקציה</button><div class="note" style="margin-top:8px;font-size:12px">מוחק את העותק השמור ומוריד את הגרסה העדכנית. ההתקדמות והשיאים נשמרים.</div></div>
+  <div class="panel dark" style="text-align:center;margin-top:14px"><div class="note" id="verInfo" style="margin-bottom:10px"></div><button class="btn gold" id="refBtn" style="display:inline-flex">🔄 רענון האפליקציה</button> <button class="btn ghost" onclick="pickWho()" style="display:inline-flex">👤 החלפת משתמש</button><div class="note" style="margin-top:8px;font-size:12px">מוחק את העותק השמור ומוריד את הגרסה העדכנית. ההתקדמות והשיאים נשמרים.</div></div>
   </section>
 
   <!-- ====== FOOD ====== -->
@@ -1398,7 +1399,7 @@ function renderMissions(){
   const upd=()=>{const w=r.children[0].offsetWidth+12;let k=Math.round(Math.abs(r.scrollLeft)/w);k=Math.max(0,Math.min(n-1,k));[...d.children].forEach((x,i)=>x.classList.toggle('on',i===k))};
   r.addEventListener('scroll',upd,{passive:true});upd();
 })();
-const APP_VER='20261031-2213';
+const APP_VER='20261031-2239';
 function verLabel(){if(!APP_VER)return 'פיתוח';const m=APP_VER.match(/^(\d{4})(\d\d)(\d\d)-(\d\d)(\d\d)$/);return m?(+m[3])+'.'+(+m[2])+' בשעה '+m[4]+':'+m[5]:APP_VER}
 async function hardRefresh(){
   const bt=document.getElementById('refBtn');if(bt)bt.textContent='מתעדכן…';toast('🔄 מתעדכן…');
