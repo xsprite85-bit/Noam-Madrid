@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1a1030">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>דובאי ואבו דאבי של נועם</title>
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:dark;--bg:#1a1030;--bg2:#2a1748;--card:#ffffff10;--line:#ffffff22;--gold:#f2c14e;--sun:#ff8a4c;--teal:#3fd0c9;--txt:#fff;--mut:#c4b8de;--ok:#4fd98a}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;font-family:Rubik,system-ui,Arial,sans-serif;color:var(--txt);background:linear-gradient(180deg,#ff8a4c33,transparent 260px),var(--bg);min-height:100vh;padding-bottom:calc(76px + env(safe-area-inset-bottom))}
+.wrap{max-width:560px;margin:0 auto;padding:0 16px}
+.hero{text-align:center;padding:28px 0 8px}
+.sk{font-size:44px;line-height:1}
+h1{margin:6px 0 2px;font-size:30px;font-weight:900}
+h1 em{font-style:normal;color:var(--gold)}
+.sub{color:var(--mut);font-size:14px}
+.cd{display:flex;justify-content:center;gap:8px;direction:ltr;margin:16px 0 4px}
+.cd div{min-width:64px;background:#0d0719;border:1px solid var(--line);border-radius:12px;padding:8px 4px}
+.cd b{display:block;font-size:28px;font-weight:900;font-variant-numeric:tabular-nums;color:var(--gold)}
+.cd small{font-size:11px;color:var(--mut)}
+.lbl{text-align:center;color:var(--mut);font-size:13px}
+section{display:none;padding-top:14px}section.on{display:block}
+h2{font-size:20px;margin:8px 0 10px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:12px}
+.card h3{margin:0 0 6px;font-size:16px}
+.row{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-top:1px solid var(--line);font-size:14px}
+.row:first-of-type{border-top:0}
+.row span:first-child{color:var(--mut)}
+.row span:last-child{text-align:left;font-weight:500}
+.tag{display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border-radius:99px;background:#ff8a4c33;color:var(--sun);margin-inline-start:6px}
+.tag.ok{background:#4fd98a2a;color:var(--ok)}
+.tl{position:relative;margin:0;padding:0;list-style:none}
+.tl li{position:relative;padding:0 26px 14px 0;border-right:2px solid var(--line);margin-right:8px}
+.tl li::before{content:"";position:absolute;right:-7px;top:3px;width:12px;height:12px;border-radius:50%;background:var(--gold)}
+.tl .t{font-weight:700;font-size:14px;color:var(--gold)}
+.tl .d{font-size:14px}
+.day{font-weight:900;color:var(--teal);font-size:13px;letter-spacing:.04em}
+a.btn{display:inline-block;margin-top:8px;padding:8px 14px;border-radius:10px;background:var(--gold);color:#1a1030;font-weight:700;text-decoration:none;font-size:13px}
+.big{font-size:40px;text-align:center}
+label.ck{display:flex;gap:10px;align-items:flex-start;padding:9px 0;border-top:1px solid var(--line);font-size:14px}
+label.ck:first-of-type{border-top:0}
+input[type=checkbox]{width:20px;height:20px;accent-color:var(--gold);flex:none;margin-top:1px}
+input:checked+span{text-decoration:line-through;opacity:.55}
+nav{position:fixed;bottom:0;left:0;right:0;background:#0d0719ee;backdrop-filter:blur(10px);border-top:1px solid var(--line);display:flex;padding:6px 4px calc(6px + env(safe-area-inset-bottom));z-index:9}
+nav button{flex:1;background:none;border:0;color:var(--mut);font:inherit;font-size:11px;padding:4px 0;display:flex;flex-direction:column;align-items:center;gap:2px}
+nav button i{font-style:normal;font-size:20px}
+nav button.on{color:var(--gold)}
+.note{font-size:12px;color:var(--mut);margin-top:6px}
+</style>
+</head>
+<body>
+<div class="wrap">
+ <div class="hero">
+  <div class="sk">🏙️ 🐪 🕌</div>
+  <h1>דובאי ו<em>אבו דאבי</em></h1>
+  <div class="sub">טיול בר המצווה של נועם · 1–11 בדצמבר 2026</div>
+  <div class="cd" id="cd"></div>
+  <div class="lbl" id="cdl">עד ההמראה</div>
+ </div>
+
+ <section id="s-plan" class="on">
+  <h2>לוז הטיול</h2>
+  <div class="card">
+   <div class="day">יום ג׳ 1.12 · נחיתה</div>
+   <ul class="tl">
+    <li><div class="t">14:25</div><div class="d">המראה מתל אביב (טרמינל 3), EY608</div></li>
+    <li><div class="t">19:25</div><div class="d">נחיתה באבו דאבי, טרמינל A (שעון מקומי, פער של שעתיים)</div></li>
+    <li><div class="t">20:30</div><div class="d">איסוף רכב Hertz בשדה התעופה, הונדה HR-V</div></li>
+    <li><div class="t">לילה</div><div class="d">נסיעה למלון בדובאי (כשעה וחצי)</div></li>
+   </ul>
+  </div>
+  <div class="card">
+   <div class="day">2–6.12 · דובאי</div>
+   <div class="d">מלון Dusit Thani Dubai <span class="tag">לאשר תאריכים</span></div>
+   <div class="note">כאן ייכנס הלוז היומי: בורג׳ חליפה, ים, קניונים, ספארי ועוד. מחכה לרעיונות שלכם.</div>
+  </div>
+  <div class="card">
+   <div class="day">7–10.12 · מעבר לאבו דאבי</div>
+   <div class="d">The WB Abu Dhabi, האי יאס <span class="tag">לאשר תאריכים</span></div>
+   <div class="note">ליד המלון: פרארי וורלד, וורנר ברוס וורלד, יאס ווטרוורלד.</div>
+  </div>
+  <div class="card">
+   <div class="day">🎂 יום ד׳ 9.12 · יום ההולדת של ליה</div>
+   <div class="d">להפתיע בארוחת בוקר, עוגה וקישוט בחדר. כדאי לתאם עם המלון מראש.</div>
+  </div>
+  <div class="card">
+   <div class="day">יום ו׳ 11.12 · חזרה</div>
+   <ul class="tl">
+    <li><div class="t">עד 10:00</div><div class="d">החזרת הרכב בשדה התעופה של אבו דאבי (Terminal A, Short Term Park, קומה 2)</div></li>
+    <li><div class="t">14:25</div><div class="d">המראה מאבו דאבי, EY597</div></li>
+    <li><div class="t">16:05</div><div class="d">נחיתה בתל אביב (טרמינל 3)</div></li>
+   </ul>
+  </div>
+  <div class="card"><div class="day">🎉 12.12 · נועם בן 13</div><div class="d">יום ההולדת של נועם, יום אחרי החזרה (י׳ בטבת). המסיבה: 24.12.</div></div>
+ </section>
+
+ <section id="s-fly">
+  <h2>טיסות</h2>
+  <div class="card"><h3>הלוך · יום ג׳ 1.12.2026</h3>
+   <div class="row"><span>טיסה</span><span>EY608 אתיחאד</span></div>
+   <div class="row"><span>יציאה</span><span>14:25 תל אביב, טרמינל 3</span></div>
+   <div class="row"><span>נחיתה</span><span>19:25 אבו דאבי, טרמינל A</span></div>
+   <div class="row"><span>משך</span><span>3 שעות</span></div>
+   <div class="row"><span>מושבים</span><span>שורה 7: B, C, D, E, F</span></div>
+  </div>
+  <div class="card"><h3>חזור · יום ו׳ 11.12.2026</h3>
+   <div class="row"><span>טיסה</span><span>EY597 אתיחאד</span></div>
+   <div class="row"><span>יציאה</span><span>14:25 אבו דאבי</span></div>
+   <div class="row"><span>נחיתה</span><span>16:05 תל אביב, טרמינל 3</span></div>
+   <div class="row"><span>משך</span><span>3 שעות 40 דקות</span></div>
+   <div class="row"><span>מזוודות</span><span>יחידה אחת לכל נוסע</span></div>
+  </div>
+  <div class="card"><h3>קטעי האוטובוס של אתיחאד <span class="tag">לטפל</span></h3>
+   <div class="d" style="font-size:14px">בכרטיס יש גם EY5424 (אבו דאבי–דובאי, 1.12 ב-20:50) ו-EY5417 (דובאי–אבו דאבי, 11.12 ב-10:20). אתם נוסעים ברכב, אז כדאי לבקש להסיר אותם, כדי שלא יחשבו אי-הגעה.</div>
+  </div>
+ </section>
+
+ <section id="s-stay">
+  <h2>מלונות ורכב</h2>
+  <div class="card"><h3>🏨 Dusit Thani Dubai <span class="tag">לאשר תאריכים</span></h3>
+   <div class="note">הוסיפו כאן תאריכי כניסה ויציאה אחרי האישור.</div>
+  </div>
+  <div class="card"><h3>🏨 The WB Abu Dhabi, Curio Collection by Hilton</h3>
+   <div class="row"><span>לילה</span><span>10–11.12 (כניסה מ-15:00, יציאה עד 11:00)</span></div>
+   <div class="row"><span>חדרים</span><span>2 חדרי דלאקס, שתי מיטות זוגיות</span></div>
+   <div class="row"><span>ביטול חינם</span><span>עד 5.12 ב-23:59</span></div>
+   <div class="row"><span>טלפון</span><span dir="ltr">+971 2 208 6830</span></div>
+   <a class="btn" href="https://www.google.com/maps/search/?api=1&query=The+WB+Abu+Dhabi" target="_blank" rel="noopener">פתח במפה</a>
+  </div>
+  <div class="card"><h3>🚗 Hertz · הונדה HR-V</h3>
+   <div class="row"><span>איסוף</span><span>1.12 ב-20:30, שדה התעופה אבו דאבי</span></div>
+   <div class="row"><span>החזרה</span><span>11.12 ב-10:00, אותו מקום</span></div>
+   <div class="row"><span>קילומטראז׳</span><span>ללא הגבלה</span></div>
+   <div class="row"><span>פיקדון</span><span>3,000 AED בכרטיס אשראי של הנהג</span></div>
+   <div class="row"><span>טלפון</span><span dir="ltr">+971 2 805 8089</span></div>
+   <div class="note">הכרטיס חייב להיות על שם הנהג, עם שבב, ולא כרטיס נטען או וירטואלי.</div>
+  </div>
+ </section>
+
+ <section id="s-bday">
+  <h2>ימי הולדת</h2>
+  <div class="card"><div class="big">🎂</div><h3 style="text-align:center">ליה · 9.12</h3>
+   <div class="lbl" id="bl">…</div>
+   <div class="note" style="text-align:center">יחגגו באמצע הטיול. עוגה, בלונים ושיר בחדר.</div></div>
+  <div class="card"><div class="big">🥳</div><h3 style="text-align:center">נועם · 12.12 · י׳ בטבת</h3>
+   <div class="lbl" id="bn">…</div>
+   <div class="note" style="text-align:center">נועם חוגג 13 יום אחרי החזרה, והמסיבה ב-24.12.</div></div>
+ </section>
+
+ <section id="s-todo">
+  <h2>רשימת משימות</h2>
+  <div class="card" id="todo"></div>
+  <div class="note">הסימונים נשמרים במכשיר הזה בלבד.</div>
+ </section>
+</div>
+
+<nav id="nav">
+ <button data-s="plan" class="on"><i>🗓️</i>לוז</button>
+ <button data-s="fly"><i>✈️</i>טיסות</button>
+ <button data-s="stay"><i>🏨</i>מלון ורכב</button>
+ <button data-s="bday"><i>🎂</i>ימי הולדת</button>
+ <button data-s="todo"><i>✅</i>משימות</button>
+</nav>
+
+<script>
+const $=id=>document.getElementById(id);
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('nav button,section').forEach(e=>e.classList.remove('on'));
+  b.classList.add('on');$('s-'+b.dataset.s).classList.add('on');scrollTo(0,0);
+});
+const TAKEOFF=new Date('2026-12-01T14:25:00+02:00'),LAND=new Date('2026-12-11T16:05:00+02:00');
+function parts(ms){const s=Math.max(0,Math.floor(ms/1000));return[Math.floor(s/86400),Math.floor(s%86400/3600),Math.floor(s%3600/60),s%60]}
+function dayDiff(iso){const n=new Date();const t=new Date(iso+'T00:00:00+02:00');const a=new Date(n.toLocaleString('en-US',{timeZone:'Asia/Jerusalem'}));a.setHours(0,0,0,0);return Math.round((t-a)/864e5)}
+function tick(){
+  const now=new Date();let target=TAKEOFF,l='עד ההמראה';
+  if(now>=TAKEOFF&&now<LAND){target=LAND;l='עד הנחיתה בבית'}
+  else if(now>=LAND){$('cd').innerHTML='';$('cdl').textContent='חזרנו הביתה, איזה טיול!';}
+  if(now<LAND){const p=parts(target-now);
+   $('cd').innerHTML=['ימים','שעות','דקות','שניות'].map((n,i)=>`<div><b>${String(p[i]).padStart(2,'0')}</b><small>${n}</small></div>`).join('');
+   $('cdl').textContent=l;}
+  const f=(iso,id,name)=>{const d=dayDiff(iso);$(id).textContent=d>1?`עוד ${d} ימים`:d===1?'מחר!':d===0?`היום יום ההולדת של ${name}! 🎉`:'כבר חגגנו, מזל טוב!'};
+  f('2026-12-09','bl','ליה');f('2026-12-12','bn','נועם');
+}
+tick();setInterval(tick,1000);
+const TODO=['לבקש מאתיחאד להסיר את קטעי האוטובוס EY5424 ו-EY5417','לאשר תאריכי Dusit Thani ולרשום אותם באפליקציה','לבדוק שהפיקדון על כרטיס האשראי של הנהג פנוי (3,000 AED)','לבדוק שהכרטיס של הנהג עם שבב ופתוח לחו״ל','לקשר את הלילה הנוסף ב-WB לשהות ב-7–10.12 (טלפון למלון)','לתאם עוגה והפתעה ליום ההולדת של ליה ב-9.12','להזמין כרטיסים לאטרקציות ביאס (פרארי וורלד, וורנר ברוס)','כרטיס eSIM או חבילת גלישה','מתאם חשמל לשקע בריטי (סוג G)','דרכונים בתוקף ל-6 חודשים לפחות','צ׳ק אין אונליין לטיסה'];
+let st={};try{st=JSON.parse(localStorage.getItem('dubai-todo')||'{}')}catch(e){}
+$('todo').innerHTML=TODO.map((t,i)=>`<label class="ck"><input type="checkbox" data-i="${i}" ${st[i]?'checked':''}><span>${t}</span></label>`).join('');
+$('todo').onchange=e=>{st[e.target.dataset.i]=e.target.checked;try{localStorage.setItem('dubai-todo',JSON.stringify(st))}catch(_){}};
+</script>
+</body>
+</html>
