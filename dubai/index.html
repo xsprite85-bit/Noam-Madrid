@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0a4a94">
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" href="../icon-192.png">
-<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -391,6 +391,7 @@ body{background:#0a4a94!important}
 @keyframes drs{from{transform:rotateY(0) rotateZ(0)}to{transform:rotateY(1440deg) rotateZ(20deg)}}
 .drs{display:flex;gap:14px;justify-content:center;font-size:16px;margin:8px 0}
 .drm{min-height:28px;font-weight:800;color:#f6d77a;font-size:18px;margin-bottom:6px}
+.crown.logo{width:96px;height:96px;border-radius:24px;box-shadow:0 8px 26px rgba(4,30,70,.45),0 0 0 2px rgba(246,215,122,.7);margin-bottom:10px}
 </style>
 </head>
 <body>
@@ -437,7 +438,7 @@ body{background:#0a4a94!important}
   <div class="lights"><span></span><span></span></div>
   <button class="ballegg" id="ballEgg" aria-label="כדור"><svg><use href="#ball"/></svg></button>
   <button class="goalegg" id="goalEgg" aria-label="פנדלים"><svg><use href="#goalI"/></svg></button>
-  <svg class="crown" id="crownEgg"><use href="#burj"/></svg>
+  <img class="crown logo" id="crownEgg" src="icon-512.png" alt="">
   <div class="kicker">BAR MITZVAH · DUBAI &amp; ABU DHABI 2026</div>
   <h1>האמירויות <em>של נועם</em></h1>
   <div class="sub">נועם · אבא · אמא · רומי · ליה · 1–11 בדצמבר</div>
@@ -1273,7 +1274,7 @@ function renderMissions(){
   const upd=()=>{const w=r.children[0].offsetWidth+12;let k=Math.round(Math.abs(r.scrollLeft)/w);k=Math.max(0,Math.min(n-1,k));[...d.children].forEach((x,i)=>x.classList.toggle('on',i===k))};
   r.addEventListener('scroll',upd,{passive:true});upd();
 })();
-const APP_VER='20261031-1629';
+const APP_VER='20261031-1640';
 function verLabel(){if(!APP_VER)return 'פיתוח';const m=APP_VER.match(/^(\d{4})(\d\d)(\d\d)-(\d\d)(\d\d)$/);return m?(+m[3])+'.'+(+m[2])+' בשעה '+m[4]+':'+m[5]:APP_VER}
 async function hardRefresh(){
   const bt=document.getElementById('refBtn');if(bt)bt.textContent='מתעדכן…';toast('🔄 מתעדכן…');
