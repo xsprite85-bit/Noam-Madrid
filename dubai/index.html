@@ -392,6 +392,18 @@ body{background:#0a4a94!important}
 .drs{display:flex;gap:14px;justify-content:center;font-size:16px;margin:8px 0}
 .drm{min-height:28px;font-weight:800;color:#f6d77a;font-size:18px;margin-bottom:6px}
 .crown.logo{width:96px;height:96px;border-radius:24px;box-shadow:0 8px 26px rgba(4,30,70,.45),0 0 0 2px rgba(246,215,122,.7);margin-bottom:10px}
+.bk{margin-top:10px;border-radius:12px;padding:9px 11px;background:#fff3d6;border:1.5px dashed #e0b23a}
+.bk.must{background:#ffe9e2;border-color:#e2554f}
+.bk.ok{background:#e3f7ea;border:1.5px solid #3ccf7a}
+.bkh{font-weight:800;font-size:14px}.bkb{font-size:13px;color:var(--ink2);margin-top:2px}
+.btn.bkt{background:#fff;color:var(--ink);border:1.5px solid #c6cfe4}
+.bkday{margin-top:8px;font-size:13px;font-weight:700;color:#ffd2cf}
+.bkc{font-weight:800;color:var(--gold2);margin-bottom:6px}
+.bkr{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.12)}
+.bkr:last-child{border:none}.bkr.ok{opacity:.65}
+.bkgo{flex:1;min-width:0;text-align:right;background:none;border:0;color:#fff;font:inherit;padding:0;cursor:pointer}
+.bkgo b{display:block;font-size:14px}.bkgo small{display:block;font-size:12px;color:var(--muted);margin-top:2px}
+.bkr .btn{flex:none;font-size:12px;padding:6px 9px}
 </style>
 </head>
 <body>
@@ -583,6 +595,10 @@ body{background:#0a4a94!important}
       <div class="note">במקרה חירום מתקשרים קודם למספר המקומי, ואחר כך לחברת הביטוח (המספר בפוליסה). הטלפונים של השגרירות והקונסוליה לחירום בלבד. השגרירות: Etihad Towers, Al Bateen, אבו דאבי. קבלת קהל בימים ב׳–ו׳, 10:00–13:00, בתיאום מראש במייל: <span class="ltr">info@abudhabi.mfa.gov.il</span> · <span class="ltr">info@dubai.mfa.gov.il</span>. מספרים מאתר משרד החוץ, 31.10.2026.</div>
     </div>
 
+    <h2>🎟️ הזמנות מראש</h2>
+    <div class="panel dark" id="bookList"></div>
+    <div class="tip">💡 האפליקציה לא יכולה לבדוק בעצמה אם יש מקום. לוחצים על הכפתור, בודקים זמינות באתר ומזמינים, ואז מסמנים "הוזמן". ❗ = נגמר מהר או חובה להירשם. הסימון נשמר בטלפון הזה בלבד.</div>
+
     <h2>🕍 בית חב״ד באמירויות</h2>
     <div class="panel">
       <div class="row"><span>וואטסאפ</span><span class="ltr"><a href="https://wa.me/971569582971" target="_blank" rel="noopener">+971 56 958 2971</a></span></div>
@@ -773,10 +789,10 @@ body{background:#0a4a94!important}
       <h3>🕍 אוכל כשר</h3>
       <div class="note" style="margin:6px 0 10px">הרשימה מבוססת על מדריכי כשרות, ולא ביקרתי בעצמי באף מקום. רוב המקומות בהשגחת EAKC (הרב לוי דוכמן, חב״ד). <b>כדאי לבדוק שעות פתיחה בגוגל מפות או בוואטסאפ</b> לפני שהולכים, כי שעות ושמות משתנים.</div>
       <div class="meal"><div class="mx"><b>מסעדה ישראלית בשרית במלון The H<em class="tag" style="font-style:normal">בשרי · קרוב למלון</em></b><span>בקומה 37 של מלון The H בשדרות שייח׳ זאיד, ממש קרוב ל-Dusit Thani. יש גם משלוחים בכל דובאי.</span><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=The+H+Dubai+Sheikh+Zayed+Road">📍 במפה</a></div></div>
-      <div class="meal"><div class="mx"><b>המסעדה הכשרה במלון ארמני<em class="tag" style="font-style:normal">בשרי · בורג׳ ח׳ליפה</em></b><span>בקומת הקרקע של מלון ארמני, בתוך בורג׳ ח׳ליפה. מתאים לארוחה חגיגית ביום של הבורג׳. כדאי להזמין מקום.</span><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Armani+Hotel+Dubai+Burj+Khalifa">📍 במפה</a></div></div>
+      <div class="meal"><div class="mx"><b>המסעדה הכשרה במלון ארמני<em class="tag" style="font-style:normal">בשרי · בורג׳ ח׳ליפה</em></b><span>בקומת הקרקע של מלון ארמני, בתוך בורג׳ ח׳ליפה. מתאים לארוחה חגיגית ביום של הבורג׳. כדאי להזמין מקום.</span><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Armani+Hotel+Dubai+Burj+Khalifa">📍 במפה</a> · <a href="tel:+97148883666">📞 הזמנת שולחן</a></div></div>
       <div class="meal"><div class="mx"><b>KIKKO'S<em class="tag" style="font-style:normal">בשרי · מהדרין</em></b><span>בביזנס ביי, The Bay Tower. לא רחוק מהמלון.</span><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Kikkos+kosher+Business+Bay+Dubai">📍 במפה</a></div></div>
       <div class="meal"><div class="mx"><b>BAMIDBAR<em class="tag" style="font-style:normal">סושי ודגים</em></b><span>ב-JLT, עם משלוחים.</span><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Bamidbar+kosher+JLT+Dubai">📍 במפה</a></div></div>
-      <div class="meal"><div class="mx"><b>מזנון ישראלי ב-InterContinental Festival City<em class="tag" style="font-style:normal">בשרי · ארוחות שבת</em></b><span>מגישים גם ארוחות שבת בשישי בערב, בהזמנה מראש.</span><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=InterContinental+Dubai+Festival+City">📍 במפה</a></div></div>
+      <div class="meal"><div class="mx"><b>מזנון ישראלי ב-InterContinental Festival City<em class="tag" style="font-style:normal">בשרי · ארוחות שבת</em></b><span>מגישים גם ארוחות שבת בשישי בערב, בהזמנה מראש.</span><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=InterContinental+Dubai+Festival+City">📍 במפה</a> · <a target="_blank" rel="noopener" href="https://wa.me/971527849508">💬 הזמנה בוואטסאפ</a></div></div>
       <div class="meal"><div class="mx"><b>בית קפה חלבי בפאלם ג׳ומיירה<em class="tag" style="font-style:normal">חלבי · OU</em></b><span>ב-Golden Mile Galleria. בשישי בבוקר יש בדרך כלל "שוק שבת".</span><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Golden+Mile+Galleria+Palm+Jumeirah+kosher">📍 במפה</a></div></div>
       <div class="meal"><div class="mx"><b>The Kosher Place, אבו דאבי<em class="tag" style="font-style:normal">אבו דאבי</em></b><span>המסעדה הכשרה הראשונה באבו דאבי, בכפר הוונציאני של הריץ-קרלטון (Grand Canal). כ-25 דקות מהאי יאס.</span><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=The+Kosher+Place+Ritz-Carlton+Abu+Dhabi+Grand+Canal">📍 במפה</a></div></div>
       <div class="meal"><div class="mx"><b>חב״ד באמירויות<em class="tag" style="font-style:normal">קהילה</em></b><span>אפשר לשאול שם איפה אוכלים כשר השבוע, ארוחות שבת והדלקת נרות חנוכה.</span><a target="_blank" rel="noopener" href="https://wa.me/971569582971">💬 וואטסאפ: +971 56 958 2971</a></div></div>
@@ -977,6 +993,47 @@ const ALTS={
  ]
 };
 const CALX={ d1_1:{end:'17:25'}, d11_4:{end:'18:05'} };
+
+/* ---------- PRE-BOOKING ---------- */
+const GS=q=>'https://www.google.com/search?q='+encodeURIComponent(q);
+const PL_YAS='https://abu-dhabi.platinumlist.net/event-tickets/yas-island-theme-parks-ferrari-world-abu-dhabi-yas-waterworld-warner-bros-world';
+const BOOK={
+ d2_1:{u:'https://dubai.platinumlist.net/event-tickets/dubai-frame',l:'כרטיסים',by:'אפשר גם בקופה. באינטרנט חוסכים תור'},
+ d2_3:{u:GS('Global Village Dubai tickets online'),l:'חיפוש כרטיסים',by:'כרטיס זול, אפשר גם בקופה'},
+ d3_0:{u:GS('Dubai Aquarium Underwater Zoo tickets'),l:'חיפוש כרטיסים',by:'כמה ימים לפני'},
+ d3_2:{u:'https://dubai.platinumlist.net/event-tickets/at-the-top',l:'כרטיסים',by:'שעת השקיעה נגמרת מהר: להזמין 2–3 שבועות מראש',must:1},
+ d3_4:{u:'tel:+97148883666',l:'📞 הזמנת שולחן',by:'כמה ימים לפני (טלפון לפי מדריך כשרות)'},
+ d4_0:{u:GS('Dubai Miracle Garden tickets'),l:'חיפוש כרטיסים',by:'אפשר גם בקופה'},
+ d4_2:{u:GS('family desert safari Dubai hotel pickup camel ride sandboarding'),l:'חיפוש ספארי',by:'שבוע לפני. לבדוק גיל מינימום לליה',must:1},
+ d4_4:{u:'https://wa.me/971527849508',l:'💬 ארוחת שבת',by:'עד יום רביעי 2.12. או דרך חב״ד: +971 56 958 2971',must:1},
+ d5_0:{u:GS('Aquaventure Waterpark Atlantis tickets'),l:'חיפוש כרטיסים',by:'כמה ימים לפני, באינטרנט זול יותר'},
+ d5_1:{u:GS('The View at The Palm tickets'),l:'חיפוש כרטיסים',by:'אפשר גם בקופה'},
+ d6_3:{u:GS('Museum of the Future Dubai tickets official'),l:'חיפוש כרטיסים',by:'כניסה בשעה קבועה ונגמר: 1–2 שבועות מראש',must:1},
+ d7_2:{u:'https://szgmc.gov.ae/en/individualsbookingdetailpage',l:'רישום (חינם)',by:'רישום חובה באתר, חינם. אפשר כמה ימים לפני',must:1},
+ d8_0:{u:PL_YAS,l:'כרטיס משולב ליאס',by:'כרטיס ל-2–3 פארקים (וורנר, פרארי, ווטרוורלד) יוצא זול יותר'},
+ d9_1:{u:GS('SeaWorld Abu Dhabi tickets'),l:'חיפוש כרטיסים',by:'כמה ימים לפני'},
+ d9_4:{u:GS('Yas Bay Waterfront restaurants reservation family'),l:'חיפוש מסעדה',by:'שבוע לפני. לספר שיש יום הולדת',must:1},
+ d10_0:{u:'https://abu-dhabi.platinumlist.net/event-tickets/43806/ferrari-world-abu-dhabi',l:'כרטיסים',by:'או בכרטיס המשולב של יאס'},
+ d10_2:{u:GS('Abrahamic Family House book visit tickets'),l:'הזמנת ביקור (חינם)',by:'להזמין מראש, במיוחד לביקור בבית הכנסת',must:1},
+ d10_3:{u:GS('Louvre Abu Dhabi tickets'),l:'חיפוש כרטיסים',by:'אפשר גם בקופה'}
+};
+DAYS.forEach(d=>d.items.forEach((it,i)=>{const b=BOOK[d.id+'_'+i];if(b)it.book=b}));
+let booked=store.get('booked',{});
+function bookHTML(key,b){
+  const ok=!!booked[key];
+  return `<div class="bk ${ok?'ok':''}${b.must&&!ok?' must':''}"><div class="bkh">${ok?'✅ הוזמן':'🎟️ צריך להזמין'+(b.must?' · חשוב':'')}</div><div class="bkb">${ok?'':b.by}</div>
+    <div class="acts" style="margin-top:6px">${ok?'':`<a class="btn gold" target="_blank" rel="noopener" href="${b.u}">${b.l}</a>`}<button class="btn bkt" data-b="${key}">${ok?'↩️ לא הוזמן':'✔ סימנתי: הוזמן'}</button></div></div>`;
+}
+function toggleBook(k){if(booked[k])delete booked[k];else{booked[k]=1;toast('✅ סומן כהוזמן');beep(780,.08)}store.set('booked',booked);renderBookList()}
+function renderBookList(){
+  const el=document.getElementById('bookList');if(!el)return;
+  const rows=[];DAYS.forEach(d=>d.items.forEach((it,i)=>{if(it.book)rows.push({d,it,k:d.id+'_'+i})}));
+  const open=rows.filter(r=>!booked[r.k]).length;
+  el.innerHTML=`<div class="bkc">${open?open+' הזמנות פתוחות מתוך '+rows.length:'הכול הוזמן! 🎉'}</div>`+rows.sort((a,b)=>(!!booked[a.k])-(!!booked[b.k])||(b.it.book.must||0)-(a.it.book.must||0)).map(r=>{const ok=!!booked[r.k];
+    return `<div class="bkr ${ok?'ok':''}"><button class="bkgo" data-d="${r.d.id}"><b>${ok?'✅':r.it.book.must?'❗':'🎟️'} ${r.it.title.replace(/^[^\u0590-\u05FFA-Za-z]+/,'')}</b><small>${r.d.chip} · ${ok?'הוזמן':r.it.book.by}</small></button>${ok?'':`<a class="btn gold" target="_blank" rel="noopener" href="${r.it.book.u}">${r.it.book.l}</a>`}</div>`}).join('');
+  el.querySelectorAll('.bkgo').forEach(b=>b.onclick=()=>{document.querySelector('.bnav button[data-v=plan]').click();renderDay(b.dataset.d)});
+}
+
 
 /* ---------- MEALS ---------- */
 const MEALS=[
@@ -1187,7 +1244,7 @@ function renderDay(id){
   const dateStr=dt.toLocaleDateString('he-IL',{weekday:'long',day:'numeric',month:'long'});
   const st=STATUS[d.status];
   let h=`<div class="dayhead">${wxHTML(d)}<div class="num">${d.num} מתוך ${DAYS.length}</div><div class="ttl">${d.title}</div><div class="dt">${dateStr}</div>
-    <span class="badge ${st[0]}">${st[1]}</span>${dayExtras(d)}</div>`;
+    <span class="badge ${st[0]}">${st[1]}</span>${dayExtras(d)}${(()=>{const n=d.items.filter((it,i)=>it.book&&!booked[d.id+'_'+i]).length;return n?`<div class="bkday">🎟️ ${n} ${n===1?'דבר צריך':'דברים צריכים'} הזמנה מראש ביום הזה</div>`:''})()}</div>`;
   if(d.alert)h+=`<div class="alert">${d.alert}</div>`;
   if(d.tipText)h+=`<div class="tip">${d.tipText}</div>`;
   h+=`<div class="tl">`;
@@ -1200,6 +1257,7 @@ function renderDay(id){
       ${it.d?`<div class="d">${it.d}</div>`:''}
       ${it.tz?`<div class="tz">🕐 ${it.tz}</div>`:''}
       ${alts?`<div class="hint">יש חלופה בהחלקה הצידה: ${alts[0].title}</div>`:''}
+      ${it.book?bookHTML(key,it.book):''}
       ${actsHTML(key,nav,calURL(d,i,it.title,it.map),isDone,it.live)}`;
     let body;
     if(alts){
@@ -1219,6 +1277,7 @@ function renderDay(id){
   if(__prevDay!==null&&prevI!==newI){el.classList.remove('inL','inR');void el.offsetWidth;el.classList.add(newI>prevI?'inL':'inR')}
   __prevDay=id;
   markNow(true);
+  el.querySelectorAll('.bkt').forEach(b=>b.onclick=()=>{toggleBook(b.dataset.b);renderDay(id)});
   el.querySelectorAll('.btn.chk').forEach(b=>b.onclick=()=>{
     const k=b.dataset.k;done[k]=!done[k];if(!done[k])delete done[k];store.set('done',done);
     if(done[k])toast('⭐ מעולה!');renderDay(id);
@@ -1292,7 +1351,7 @@ function renderMissions(){
   const upd=()=>{const w=r.children[0].offsetWidth+12;let k=Math.round(Math.abs(r.scrollLeft)/w);k=Math.max(0,Math.min(n-1,k));[...d.children].forEach((x,i)=>x.classList.toggle('on',i===k))};
   r.addEventListener('scroll',upd,{passive:true});upd();
 })();
-const APP_VER='20261031-1706';
+const APP_VER='20261031-2010';
 function verLabel(){if(!APP_VER)return 'פיתוח';const m=APP_VER.match(/^(\d{4})(\d\d)(\d\d)-(\d\d)(\d\d)$/);return m?(+m[3])+'.'+(+m[2])+' בשעה '+m[4]+':'+m[5]:APP_VER}
 async function hardRefresh(){
   const bt=document.getElementById('refBtn');if(bt)bt.textContent='מתעדכן…';toast('🔄 מתעדכן…');
@@ -2185,7 +2244,7 @@ function syncInit(){
   window.addEventListener('pageshow',e=>{if(e.persisted)goToday()});
   setInterval(()=>{if(uaeToday()!==lastDate)goToday()},60000);
   renderMissions();renderPhrases();renderMeals();
-  renderList('matchList','ml',MATCH_LIST);renderList('packList','pl',PACK_LIST);renderDocs();renderMenorah();setInterval(renderMenorah,60000);renderKids();convInit();
+  renderList('matchList','ml',MATCH_LIST);renderList('packList','pl',PACK_LIST);renderDocs();renderMenorah();setInterval(renderMenorah,60000);renderKids();convInit();renderBookList();
   tick();setInterval(tick,1000);
 })();
 </script>
