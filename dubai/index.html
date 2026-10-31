@@ -1043,7 +1043,7 @@ function bookHTML(key,b){
 }
 function toggleBook(k){if(booked[k])delete booked[k];else{booked[k]=1;toast('✅ סומן כהוזמן');beep(780,.08)}store.set('booked',booked);renderBookList();syncSet('b:'+k,booked[k]?'1':'0')}
 /* ---------- FAMILY SYNC (Google Sheet via Apps Script) ---------- */
-const SYNC_URL='__SYNC_URL__',SYNC_T='ganon-dxb-2026';
+const SYNC_URL='https://script.google.com/macros/s/AKfycbwU3_SaqLAlRfTWVTDw22uZ2qVvzl0k8CtDA_Q9UECx1ZJaMmCPCeZsz6KqKo3mVZ3q/exec',SYNC_T='ganon-dxb-2026';
 let syncAt=0;
 function applyShared(data){
   let ch=false;
@@ -1398,7 +1398,7 @@ function renderMissions(){
   const upd=()=>{const w=r.children[0].offsetWidth+12;let k=Math.round(Math.abs(r.scrollLeft)/w);k=Math.max(0,Math.min(n-1,k));[...d.children].forEach((x,i)=>x.classList.toggle('on',i===k))};
   r.addEventListener('scroll',upd,{passive:true});upd();
 })();
-const APP_VER='20261031-2058';
+const APP_VER='20261031-2213';
 function verLabel(){if(!APP_VER)return 'פיתוח';const m=APP_VER.match(/^(\d{4})(\d\d)(\d\d)-(\d\d)(\d\d)$/);return m?(+m[3])+'.'+(+m[2])+' בשעה '+m[4]+':'+m[5]:APP_VER}
 async function hardRefresh(){
   const bt=document.getElementById('refBtn');if(bt)bt.textContent='מתעדכן…';toast('🔄 מתעדכן…');
