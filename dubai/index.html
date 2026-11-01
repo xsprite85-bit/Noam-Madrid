@@ -705,6 +705,7 @@ body{background:#0a4a94!important}
       <div class="row"><span>קילומטראז׳</span><span>ללא הגבלה</span></div>
       <div class="row"><span>פיקדון</span><span>3,000 AED בכרטיס אשראי</span></div>
       <div class="row"><span>דלק</span><span>מחזירים כמו שקיבלנו</span></div>
+      <div class="row"><span>⚠️ Europcar (דרך Expedia)</span><span>בוטלה ב-1.11 · לוודא החזר בכרטיס</span></div>
       <div class="acts">
         <a class="btn gold" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&origin=Zayed%20International%20Airport%20Abu%20Dhabi&destination=Dusit%20Thani%20Dubai&travelmode=driving"><svg><use href="#map"/></svg>מהשדה למלון בדובאי</a>
         <a class="btn nav" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&origin=Dusit%20Thani%20Dubai&destination=The%20WB%20Abu%20Dhabi&travelmode=driving"><svg><use href="#map"/></svg>דובאי ← יאס</a>
@@ -1415,7 +1416,7 @@ function renderMissions(){
   const upd=()=>{const w=r.children[0].offsetWidth+12;let k=Math.round(Math.abs(r.scrollLeft)/w);k=Math.max(0,Math.min(n-1,k));[...d.children].forEach((x,i)=>x.classList.toggle('on',i===k))};
   r.addEventListener('scroll',upd,{passive:true});upd();
 })();
-const APP_VER='20261101-2240';
+const APP_VER='20261101-2245';
 function verLabel(){if(!APP_VER)return 'פיתוח';const m=APP_VER.match(/^(\d{4})(\d\d)(\d\d)-(\d\d)(\d\d)$/);return m?(+m[3])+'.'+(+m[2])+' בשעה '+m[4]+':'+m[5]:APP_VER}
 async function hardRefresh(){
   const bt=document.getElementById('refBtn');if(bt)bt.textContent='מתעדכן…';toast('🔄 מתעדכן…');
