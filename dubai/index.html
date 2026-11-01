@@ -685,10 +685,13 @@ body{background:#0a4a94!important}
     <div class="panel">
       <h3>🏝️ The WB Abu Dhabi, Curio Collection by Hilton</h3>
       <div class="row"><span>איפה</span><span>האי יאס, ליד וורנר ברוס וורלד</span></div>
-      <div class="row"><span>לילות</span><span>7–11.12 (הלילה האחרון 10–11 בהזמנה נפרדת)</span></div>
-      <div class="row"><span>צ'ק-אין / אאוט</span><span>מ-15:00 / עד 11:00</span></div>
-      <div class="row"><span>חדרים</span><span>2 חדרי דלאקס, צמודים (ביקשנו)</span></div>
-      <div class="row"><span>ביטול חינם (הלילה האחרון)</span><span>עד 5.12 ב-23:59</span></div>
+      <div class="row"><span>הזמנה 1 · 7–10.12</span><span>חדר משפחתי WB עם דלת מקשרת · ארוחת בוקר · 9,637 AED</span></div>
+      <div class="row"><span>🎢 כלול בהזמנה 1</span><span>כניסה לפארק אחת לכל אורח לכל לילה: 15 כניסות (פרארי, וורנר, סי וורלד או ווטרוורלד)</span></div>
+      <div class="row"><span>ביטול חינם (הזמנה 1)</span><span>עד 6.12 ב-23:59</span></div>
+      <div class="row"><span>הזמנה 2 · 10–11.12</span><span>2 חדרי דלאקס · 4,105 AED</span></div>
+      <div class="row"><span>ביטול חינם (הזמנה 2)</span><span>עד 5.12 ב-23:59</span></div>
+      <div class="row"><span>צ'ק-אין / אאוט</span><span>מ-15:00 / עד 11:00 · משלמים במלון</span></div>
+      <div class="note">את הכרטיסים לפארקים מקבלים בצ'ק-אין, בדלפק הקונסיירז׳. ביקשנו להישאר באותם חדרים גם בלילה האחרון.</div>
       <div class="acts">
         <a class="btn nav" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=The%20WB%20Abu%20Dhabi%20Yas%20Island"><svg><use href="#map"/></svg>המלון במפה</a>
         <button class="btn chk" onclick="showAddr(1)"><svg><use href="#taxi"/></svg>כתובת לנהג מונית</button>
@@ -1049,14 +1052,14 @@ const BOOK={
  d5_1:{u:GS('The View at The Palm tickets'),l:'חיפוש כרטיסים',by:'אפשר גם בקופה'},
  d6_3:{u:GS('Museum of the Future Dubai tickets official'),l:'חיפוש כרטיסים',by:'כניסה בשעה קבועה ונגמר: 1–2 שבועות מראש',must:1},
  d7_2:{u:'https://szgmc.gov.ae/en/individualsbookingdetailpage',l:'רישום (חינם)',by:'רישום חובה באתר, חינם. אפשר כמה ימים לפני',must:1},
- d8_0:{u:PL_YAS,l:'כרטיס משולב ליאס',by:'כרטיס ל-2–3 פארקים (וורנר, פרארי, ווטרוורלד) יוצא זול יותר'},
- d9_1:{u:GS('SeaWorld Abu Dhabi tickets'),l:'חיפוש כרטיסים',by:'כמה ימים לפני'},
+ d8_0:{inc:1,u:PL_YAS,l:'כרטיס משולב ליאס',by:'כרטיס ל-2–3 פארקים (וורנר, פרארי, ווטרוורלד) יוצא זול יותר'},
+ d9_1:{inc:1,u:GS('SeaWorld Abu Dhabi tickets'),l:'חיפוש כרטיסים',by:'כמה ימים לפני'},
  d9_4:{u:GS('Yas Bay Waterfront restaurants reservation family'),l:'חיפוש מסעדה',by:'שבוע לפני. לספר שיש יום הולדת',must:1},
- d10_0:{u:'https://abu-dhabi.platinumlist.net/event-tickets/43806/ferrari-world-abu-dhabi',l:'כרטיסים',by:'או בכרטיס המשולב של יאס'},
+ d10_0:{inc:1,u:'https://abu-dhabi.platinumlist.net/event-tickets/43806/ferrari-world-abu-dhabi',l:'כרטיסים',by:'או בכרטיס המשולב של יאס'},
  d10_2:{u:GS('Abrahamic Family House book visit tickets'),l:'הזמנת ביקור (חינם)',by:'להזמין מראש, במיוחד לביקור בבית הכנסת',must:1},
  d10_3:{u:GS('Louvre Abu Dhabi tickets'),l:'חיפוש כרטיסים',by:'אפשר גם בקופה'}
 };
-DAYS.forEach(d=>d.items.forEach((it,i)=>{const b=BOOK[d.id+'_'+i];if(b)it.book=b}));
+DAYS.forEach(d=>d.items.forEach((it,i)=>{const b=BOOK[d.id+'_'+i];if(b){if(b.inc){it.d=(it.d?it.d+' ':'')+'🎟️ הכניסה כלולה בהזמנת המלון: מקבלים כרטיסים בקונסיירז׳ בצ׳ק-אין.'}else it.book=b}}));
 let booked=store.get('booked',{});
 function bookHTML(key,b){
   const ok=!!booked[key];
@@ -1420,7 +1423,7 @@ function renderMissions(){
   const upd=()=>{const w=r.children[0].offsetWidth+12;let k=Math.round(Math.abs(r.scrollLeft)/w);k=Math.max(0,Math.min(n-1,k));[...d.children].forEach((x,i)=>x.classList.toggle('on',i===k))};
   r.addEventListener('scroll',upd,{passive:true});upd();
 })();
-const APP_VER='20261101-2255';
+const APP_VER='20261101-2303';
 function verLabel(){if(!APP_VER)return 'פיתוח';const m=APP_VER.match(/^(\d{4})(\d\d)(\d\d)-(\d\d)(\d\d)$/);return m?(+m[3])+'.'+(+m[2])+' בשעה '+m[4]+':'+m[5]:APP_VER}
 async function hardRefresh(){
   const bt=document.getElementById('refBtn');if(bt)bt.textContent='מתעדכן…';toast('🔄 מתעדכן…');
@@ -1703,6 +1706,7 @@ const DOCS=[
  ['t-romi','✈️','כרטיס טיסה · רומי','romi-ticket.pdf'],
  ['t-lia','✈️','כרטיס טיסה · ליה','lia-ticket.pdf'],
  ['car','🚙','שובר הרכב · Enterprise, Ford Everest','enterprise-voucher.pdf'],
+ ['wb2','🏨','אישור הזמנה · The WB 7–10.12 (כולל פארקים)','wb-7-10.pdf'],
  ['wb','🏨','אישור הזמנה · The WB (לילה 10–11.12)','wb-booking.pdf'],
  ['ins','🩺','ביטוח נסיעות · הראל (כל החמישה)','harel-travel-insurance.pdf']
 ];
