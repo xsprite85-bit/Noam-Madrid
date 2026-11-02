@@ -697,10 +697,10 @@ body{background:#0a4a94!important}
       <div class="row"><span>הזמנה 1 · 7–10.12</span><span>חדר משפחתי WB עם דלת מקשרת · ארוחת בוקר · 9,637 AED</span></div>
       <div class="row"><span>🎢 כלול בהזמנה 1</span><span>כניסה לפארק אחת לכל אורח לכל לילה: 15 כניסות (פרארי, וורנר, סי וורלד או ווטרוורלד)</span></div>
       <div class="row"><span>ביטול חינם (הזמנה 1)</span><span>עד 6.12 ב-23:59</span></div>
-      <div class="row"><span>הזמנה 2 · 10–11.12</span><span>2 חדרי דלאקס · 4,105 AED</span></div>
+      <div class="row"><span>הזמנה 2 · 10–11.12</span><span>2 חדרי Artist עם 2 מיטות זוגיות · כולל כניסה לפארק · 4,105 AED</span></div>
       <div class="row"><span>ביטול חינם (הזמנה 2)</span><span>עד 5.12 ב-23:59</span></div>
       <div class="row"><span>צ'ק-אין / אאוט</span><span>מ-15:00 / עד 11:00 · משלמים במלון</span></div>
-      <div class="note">את הכרטיסים לפארקים מקבלים בצ'ק-אין, בדלפק הקונסיירז׳. ביקשנו להישאר באותם חדרים גם בלילה האחרון.</div>
+      <div class="note">בסך הכול 20 כניסות לפארקים (5 אורחים × 4 לילות). את הכרטיסים מקבלים בצ'ק-אין, בדלפק הקונסיירז׳. המלון רשם את הבקשה להישאר באותם חדרים כל 4 הלילות, בכפוף לזמינות (מייל מ-2.11).</div>
       <div class="acts">
         <a class="btn nav" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=The%20WB%20Abu%20Dhabi%20Yas%20Island"><svg><use href="#map"/></svg>המלון במפה</a>
         <button class="btn chk" onclick="showAddr(1)"><svg><use href="#taxi"/></svg>כתובת לנהג מונית</button>
@@ -1432,7 +1432,7 @@ function renderMissions(){
   const upd=()=>{const w=r.children[0].offsetWidth+12;let k=Math.round(Math.abs(r.scrollLeft)/w);k=Math.max(0,Math.min(n-1,k));[...d.children].forEach((x,i)=>x.classList.toggle('on',i===k))};
   r.addEventListener('scroll',upd,{passive:true});upd();
 })();
-const APP_VER='20261101-2308';
+const APP_VER='20261102-1314';
 function verLabel(){if(!APP_VER)return 'פיתוח';const m=APP_VER.match(/^(\d{4})(\d\d)(\d\d)-(\d\d)(\d\d)$/);return m?(+m[3])+'.'+(+m[2])+' בשעה '+m[4]+':'+m[5]:APP_VER}
 async function hardRefresh(){
   const bt=document.getElementById('refBtn');if(bt)bt.textContent='מתעדכן…';toast('🔄 מתעדכן…');
