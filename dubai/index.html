@@ -825,10 +825,10 @@ body{background:#0a4a94!important}
     <h2>🚙 ביטוח השתתפות עצמית לרכב · RentalCover</h2>
     <div class="panel">
       <div class="row"><span>מספר הזמנה</span><span class="ltr">SJUG-KYCK-INS</span></div>
-      <div class="row"><span>תקופה</span><span>מ-1.12.2026 · איחוד האמירויות · Full Protection</span></div>
+      <div class="row"><span>תקופה</span><span>1–11.12.2026 · איחוד האמירויות · Full Protection עד 80,300 $</span></div>
       <div class="row"><span>מה מכוסה</span><span>ההשתתפות העצמית ברכב השכור (אצל Enterprise: 2,000 AED), גם גניבה, צמיגים, שמשות, גרירה ואובדן מפתח</span></div>
       <div class="row"><span>נהגים נוספים</span><span>מכוסים בחינם, אם רשומים בחוזה ההשכרה</span></div>
-      <div class="acts"><a class="btn gold" target="_blank" rel="noopener" href="https://rentalcover.com/en/account">🔑 החשבון ב-RentalCover</a><a class="btn nav" target="_blank" rel="noopener" href="https://www.rentalcover.com/en/claim">📝 הגשת תביעה</a></div>
+      <div class="acts"><a class="btn gold" target="_blank" rel="noopener" href="https://rentalcover.com/en/account">🔑 החשבון ב-RentalCover</a><a class="btn nav" target="_blank" rel="noopener" href="https://www.rentalcover.com/en/claim">📝 הגשת תביעה</a><button class="btn ghost" style="color:var(--ink);border-color:#c6cfe4" onclick="openDoc('rc')">📄 התעודה</button></div>
       <div class="note">בדלפק של Enterprise לא צריך לקנות את ביטוח ההשתתפות העצמית שלהם. הם עדיין יחסמו פיקדון בכרטיס האשראי. אם יש נזק: מצלמים, לוקחים מהם חשבונית מפורטת, משלמים, ואז מגישים תביעה ל-RentalCover.</div>
     </div>
 
@@ -1464,7 +1464,7 @@ function renderMissions(){
   const upd=()=>{const w=r.children[0].offsetWidth+12;let k=Math.round(Math.abs(r.scrollLeft)/w);k=Math.max(0,Math.min(n-1,k));[...d.children].forEach((x,i)=>x.classList.toggle('on',i===k))};
   r.addEventListener('scroll',upd,{passive:true});upd();
 })();
-const APP_VER='20261127-2345';
+const APP_VER='20261127-2350b';
 function verLabel(){if(!APP_VER)return 'פיתוח';const m=APP_VER.match(/^(\d{4})(\d\d)(\d\d)-(\d\d)(\d\d)$/);return m?(+m[3])+'.'+(+m[2])+' בשעה '+m[4]+':'+m[5]:APP_VER}
 async function hardRefresh(){
   const bt=document.getElementById('refBtn');if(bt)bt.textContent='מתעדכן…';toast('🔄 מתעדכן…');
@@ -1750,7 +1750,8 @@ const DOCS=[
  ['dusit','🏙️','אישור הזמנה · Dusit Thani 1–7.12','dusit-1-7.pdf'],
  ['wb2','🏨','אישור הזמנה · The WB 7–10.12 (כולל פארקים)','wb-7-10.pdf'],
  ['wb','🏨','אישור הזמנה · The WB (לילה 10–11.12)','wb-booking.pdf'],
- ['ins','🩺','ביטוח נסיעות · הראל (כל החמישה)','harel-travel-insurance.pdf']
+ ['ins','🩺','ביטוח נסיעות · הראל (כל החמישה)','harel-travel-insurance.pdf'],
+ ['rc','🛡️','ביטוח השתתפות עצמית לרכב · RentalCover','rentalcover-SJUG-KYCK-INS.pdf']
 ];
 function renderDocs(){
   const el=document.getElementById('docs');if(!el)return;
