@@ -652,10 +652,11 @@ body{background:#0a4a94!important}
 
     <h2><svg class="i"><use href="#plane"/></svg>טיסות</h2>
     <div class="panel">
+      <div class="alert" style="margin:0 0 8px">⏰ אל על עדכנו (27.11): ההלוך הוקדם ל-13:50, והחזור זז ל-14:20 עם נחיתה ב-16:25.</div>
       <h3>✈️ הלוך · שלישי 1.12</h3>
       <div class="row"><span>טיסה</span><span class="ltr">EY608 · Etihad</span></div>
-      <div class="row"><span>להיות בנתב"ג (טרמינל 3) עד</span><span class="ltr">11:25</span></div>
-      <div class="row"><span>המראה (שעון ישראל)</span><span class="ltr">14:25</span></div>
+      <div class="row"><span>להיות בנתב"ג (טרמינל 3) עד</span><span class="ltr">10:50</span></div>
+      <div class="row"><span>המראה (שעון ישראל)</span><span class="ltr">13:50 <s style="opacity:.6">14:25</s></span></div>
       <div class="row"><span>נחיתה באבו דאבי, טרמינל A</span><span class="ltr">19:25</span></div>
       <div class="row"><span>מושבים</span><span>שורה 7: סהר B · רומי C · נועם D · ליה E · לירז F</span></div>
       <div class="acts">
@@ -667,9 +668,9 @@ body{background:#0a4a94!important}
       <h3>✈️ חזור · שישי 11.12</h3>
       <div class="row"><span>טיסה</span><span class="ltr">EY597 · Etihad</span></div>
       <div class="row"><span>החזרת הרכב בשדה</span><span class="ltr">עד 10:00</span></div>
-      <div class="row"><span>להיות בטרמינל A עד</span><span class="ltr">11:25</span></div>
-      <div class="row"><span>המראה מאבו דאבי</span><span class="ltr">14:25</span></div>
-      <div class="row"><span>נחיתה בנתב"ג (שעון ישראל)</span><span class="ltr">16:05</span></div>
+      <div class="row"><span>להיות בטרמינל A עד</span><span class="ltr">11:20</span></div>
+      <div class="row"><span>המראה מאבו דאבי</span><span class="ltr">14:20 <s style="opacity:.6">14:25</s></span></div>
+      <div class="row"><span>נחיתה בנתב"ג (שעון ישראל)</span><span class="ltr">16:25 <s style="opacity:.6">16:05</s></span></div>
       <div class="row"><span>מושבים</span><span>שורה 7: לירז A · ליה B · נועם C · רומי D · סהר E</span></div>
       <div class="acts">
         <a class="btn gold" target="_blank" rel="noopener" href="https://www.flightradar24.com/data/flights/ey597"><svg><use href="#plane"/></svg>מצב הטיסה עכשיו</a>
@@ -938,8 +939,8 @@ const DAYS=[
  {id:'d1',date:'2026-12-01',loc:'dxb',chip:'ג׳ 1.12',num:'יום 1',title:'טסים לאמירויות! ✈️',status:'final',
   tipText:'🕐 באמירויות השעון שעתיים קדימה. מהנחיתה כל השעות באפליקציה לפי שעון מקומי.',
   items:[
-   {t:'11:25',ic:'plane',title:'מגיעים לנתב"ג, טרמינל 3',d:'שלוש שעות לפני הטיסה. בודקים שיש 5 דרכונים ושהכרטיסים פתוחים באפליקציה.',tz:'שעון ישראל',map:'Ben Gurion Airport Terminal 3'},
-   {t:'14:25',ic:'plane',title:'המראה! EY608 אתיחאד',live:FR('ey608'),d:'שורה 7. ארוחות ילדים מאושרות לרומי ולליה. מזיזים את השעון שעתיים קדימה.',tz:'שעון ישראל'},
+   {t:'10:50',ic:'plane',title:'מגיעים לנתב"ג, טרמינל 3',d:'שלוש שעות לפני הטיסה (הטיסה הוקדמה ל-13:50). בודקים שיש 5 דרכונים ושהכרטיסים פתוחים באפליקציה.',tz:'שעון ישראל',map:'Ben Gurion Airport Terminal 3'},
+   {t:'13:50',ic:'plane',title:'המראה! EY608 אתיחאד',live:FR('ey608'),d:'שורה 7. ארוחות ילדים מאושרות לרומי ולליה. מזיזים את השעון שעתיים קדימה.',tz:'שעון ישראל'},
    {t:'19:25',ic:'plane',title:'נחיתה באבו דאבי, טרמינל A',live:FR('ey608'),d:'ביקורת דרכונים, מזוודות, ויוצאים לדלפקי השכרת הרכב.'},
    {t:'20:15',ic:'bag',title:'💵 משיכת מזומן מכספומט',d:'באולם ההגעה בטרמינל A. מושכים דירהמים (AED) לטיפים, מוניות, אברה ושווקים: בערך 500–1,000 AED מספיקים להתחלה. בוחרים לחייב בדירהם ולא בשקלים (בלי "המרה מיידית"), כדי לא לשלם עמלת המרה מנופחת. לא להחליף כסף בדלפקי ההמרה בשדה, השער שם גרוע.',map:AUH},
    {t:'20:30',ic:'car',title:'איסוף הרכב ב-Enterprise',d:'פורד אוורסט או דומה. צריך את כרטיס האשראי של הנהג (פיקדון 3,000 AED) ורישיון. מצלמים את הרכב מכל הצדדים לפני שיוצאים, ומרכיבים את הבוסטר של ליה מהמזוודה.',map:AUH},
@@ -1041,9 +1042,9 @@ const DAYS=[
    {t:'08:00',ic:'food',title:'ארוחת בוקר',d:''},
    {t:'09:00',ic:'bed',title:"צ'ק-אאוט ונוסעים לשדה",d:'האי יאס ממש ליד שדה התעופה, כ-15 דקות.',map:HOTEL2},
    {t:'09:30',ic:'car',title:'תדלוק והחזרת הרכב עד 10:00',d:'ל-Enterprise בטרמינל של שדה התעופה (כמו באיסוף). מצלמים את הרכב שוב בהחזרה.',map:AUH},
-   {t:'11:25',ic:'plane',title:"צ'ק-אין ובידוק",live:FR('ey597'),d:'שלוש שעות לפני הטיסה.'},
-   {t:'14:25',ic:'plane',title:'המראה EY597',live:FR('ey597'),d:'שלום אמירויות! 👋'},
-   {t:'16:05',ic:'star',title:'נחיתה בנתב"ג',d:'ברוכים השבים! 🕎 נר שמיני: היום ערב שבת, אז מדליקים לפני כניסת השבת. השקיעה בערך ב-16:35, אז זה צפוף.',tz:'שעון ישראל'}
+   {t:'11:20',ic:'plane',title:"צ'ק-אין ובידוק",live:FR('ey597'),d:'שלוש שעות לפני הטיסה.'},
+   {t:'14:20',ic:'plane',title:'המראה EY597',live:FR('ey597'),d:'שלום אמירויות! 👋'},
+   {t:'16:25',ic:'star',title:'נחיתה בנתב"ג',d:'ברוכים השבים! 🕎 נר שמיני: היום ערב שבת, וכניסת השבת בתל אביב בערך ב-16:17, עוד לפני הנחיתה. אז את נר שמיני לא נספיק להדליק בעצמנו לפני שבת. מי שמקפיד: לבקש ממישהו בבית להדליק, או לשאול רב.',tz:'שעון ישראל'}
   ]}
 ];
 
@@ -1072,7 +1073,7 @@ const ALTS={
   {ic:'star',title:'CLYMB Abu Dhabi',d:'קיר טיפוס ענק ומנהרת רוח לצניחה חופשית, בקניון יאס.',map:'CLYMB Abu Dhabi',trade:[G('מושלם לנועם'),W('יש גיל ומשקל מינימלי'),N('באי יאס')]}
  ]
 };
-const CALX={ d1_1:{end:'17:25'}, d11_4:{end:'18:05'} };
+const CALX={ d1_1:{end:'17:25'}, d11_4:{end:'18:25'} };
 
 /* ---------- PRE-BOOKING ---------- */
 const GS=q=>'https://www.google.com/search?q='+encodeURIComponent(q);
@@ -1145,7 +1146,7 @@ function renderBookList(){
 /* ---------- MEALS ---------- */
 const MEALS=[
  {day:'שלישי 1.12',rows:[
-  {k:'בטיסה',t:'14:25',d:'ארוחה באתיחאד. ארוחות ילדים מאושרות לרומי ולליה.'},
+  {k:'בטיסה',t:'13:50',d:'ארוחה באתיחאד. ארוחות ילדים מאושרות לרומי ולליה.'},
   {k:'משהו קטן בלילה',t:'~22:30',d:'שירות חדרים במלון, או חטיף שהבאנו. מחר כבר ארוחת בוקר.'}]},
  {day:'רביעי 2.12 · יום הלאום',rows:[
   {k:'ארוחת בוקר',t:'08:30',d:'במלון.'},
@@ -1418,17 +1419,17 @@ function renderDay(id){
 }
 
 /* ---------- COUNTDOWN ---------- */
-const DEPART=new Date('2026-12-01T14:25:00+02:00');
+const DEPART=new Date('2026-12-01T13:50:00+02:00');
 const LIA=new Date('2026-12-09T00:00:00+04:00');
-const LAND_HOME=new Date('2026-12-11T16:05:00+02:00');
+const LAND_HOME=new Date('2026-12-11T16:25:00+02:00');
 const NOAM=new Date('2026-12-12T00:00:00+02:00');
 const pad=n=>String(Math.max(0,n)).padStart(2,'0');
 function split(ms){ms=Math.max(0,ms);const s=Math.floor(ms/1000);return[Math.floor(s/86400),Math.floor(s%86400/3600),Math.floor(s%3600/60),s%60]}
 function tick(){
   const now=new Date();let target,label,note;
-  if(now<DEPART){target=DEPART;label='עד ההמראה לאמירויות ✈️';note='שלישי 1.12 · 14:25 שעון ישראל';}
+  if(now<DEPART){target=DEPART;label='עד ההמראה לאמירויות ✈️';note='שלישי 1.12 · 13:50 שעון ישראל';}
   else if(now<LIA){target=LIA;label='עד יום ההולדת של ליה 🎂';note='רביעי 9.12';}
-  else if(now<LAND_HOME){target=LAND_HOME;label='עד הנחיתה בבית 🏠';note='שישי 11.12 · 16:05 שעון ישראל';}
+  else if(now<LAND_HOME){target=LAND_HOME;label='עד הנחיתה בבית 🏠';note='שישי 11.12 · 16:25 שעון ישראל';}
   else if(now<NOAM){target=NOAM;label='עד יום ההולדת ה-13 של נועם 🥳';note='שבת 12.12';}
   else{target=now;label='הטיול הסתיים, איזה טיול! 🏆';note='מזל טוב לבר המצווה, נועם!';}
   const [d,h,m,s]=split(target-now);
@@ -1465,7 +1466,7 @@ function renderMissions(){
   const upd=()=>{const w=r.children[0].offsetWidth+12;let k=Math.round(Math.abs(r.scrollLeft)/w);k=Math.max(0,Math.min(n-1,k));[...d.children].forEach((x,i)=>x.classList.toggle('on',i===k))};
   r.addEventListener('scroll',upd,{passive:true});upd();
 })();
-const APP_VER='20261127-2355';
+const APP_VER='20261128-0005';
 function verLabel(){if(!APP_VER)return 'פיתוח';const m=APP_VER.match(/^(\d{4})(\d\d)(\d\d)-(\d\d)(\d\d)$/);return m?(+m[3])+'.'+(+m[2])+' בשעה '+m[4]+':'+m[5]:APP_VER}
 async function hardRefresh(){
   const bt=document.getElementById('refBtn');if(bt)bt.textContent='מתעדכן…';toast('🔄 מתעדכן…');
