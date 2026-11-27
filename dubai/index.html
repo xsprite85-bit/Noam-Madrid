@@ -652,7 +652,7 @@ body{background:#0a4a94!important}
 
     <h2><svg class="i"><use href="#plane"/></svg>טיסות</h2>
     <div class="panel">
-      <div class="alert" style="margin:0 0 8px">⏰ אל על עדכנו (27.11): ההלוך הוקדם ל-13:50, והחזור זז ל-14:20 עם נחיתה ב-16:25.</div>
+      <div class="alert" style="margin:0 0 8px">⏰ אל על עדכנו (27.11): ההלוך הוקדם ל-13:50, והחזור זז ל-14:20 עם נחיתה ב-16:25. בכרטיסים שבמסמכים (מ-28.10) עוד מופיעות השעות הישנות. מספרי הכרטיסים לא השתנו, והשעות הנכונות במסמך "מסלול הטיסות המעודכן".</div>
       <h3>✈️ הלוך · שלישי 1.12</h3>
       <div class="row"><span>טיסה</span><span class="ltr">EY608 · Etihad</span></div>
       <div class="row"><span>להיות בנתב"ג (טרמינל 3) עד</span><span class="ltr">10:50</span></div>
@@ -1466,7 +1466,7 @@ function renderMissions(){
   const upd=()=>{const w=r.children[0].offsetWidth+12;let k=Math.round(Math.abs(r.scrollLeft)/w);k=Math.max(0,Math.min(n-1,k));[...d.children].forEach((x,i)=>x.classList.toggle('on',i===k))};
   r.addEventListener('scroll',upd,{passive:true});upd();
 })();
-const APP_VER='20261128-0005';
+const APP_VER='20261128-0015';
 function verLabel(){if(!APP_VER)return 'פיתוח';const m=APP_VER.match(/^(\d{4})(\d\d)(\d\d)-(\d\d)(\d\d)$/);return m?(+m[3])+'.'+(+m[2])+' בשעה '+m[4]+':'+m[5]:APP_VER}
 async function hardRefresh(){
   const bt=document.getElementById('refBtn');if(bt)bt.textContent='מתעדכן…';toast('🔄 מתעדכן…');
@@ -1743,6 +1743,7 @@ function renderList(elId,key,items){
 
 /* ---------- DOCUMENT VAULT (AES-GCM, family code) ---------- */
 const DOCS=[
+ ['itin','🗓️','מסלול הטיסות המעודכן · אל על 23.11 (השעות הנכונות)','zmmhe2-itinerary-updated.pdf'],
  ['t-noam','✈️','כרטיס טיסה · נועם','noam-ticket.pdf'],
  ['t-liraz','✈️','כרטיס טיסה · לירז','liraz-ticket.pdf'],
  ['t-sahar','✈️','כרטיס טיסה · סהר','sahar-ticket.pdf'],
