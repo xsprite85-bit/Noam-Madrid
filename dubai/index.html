@@ -190,6 +190,7 @@ h3{margin:0 0 6px;font-size:17px}
 /* CHECKLIST */
 .cl label{display:flex;gap:10px;align-items:center;padding:9px 0;border-bottom:1px solid #e6eaf3;font-size:15px}
 .cl label:last-child{border:none}
+.cl h4.clh{margin:14px 0 2px;font-size:15px;color:var(--navy);border-bottom:2px solid #d9c79a;padding-bottom:4px}
 .cl input{width:20px;height:20px;accent-color:var(--navy)}
 
 /* NAV */
@@ -847,6 +848,7 @@ body{background:#0a4a94!important}
 
     <div class="panel cl" id="packList">
       <h3>🎒 רשימת אריזה</h3>
+      <div class="note">משותפת לכל המשפחה: מה שמסמנים בטלפון אחד מסומן אצל כולם.</div>
     </div>
   <button class="surbtn" id="surBtn">💌 הברכה של אבא ואמא</button>
   <div class="panel dark" style="text-align:center;margin-top:14px"><div class="note" id="verInfo" style="margin-bottom:10px"></div><button class="btn gold" id="refBtn" style="display:inline-flex">🔄 רענון האפליקציה</button> <button class="btn ghost" onclick="pickWho()" style="display:inline-flex">👤 החלפת משתמש</button><div class="note" style="margin-top:8px;font-size:12px">מוחק את העותק השמור ומוריד את הגרסה העדכנית. ההתקדמות והשיאים נשמרים.</div></div>
@@ -1229,7 +1231,7 @@ const PHRASES=[
 ];
 
 const MATCH_LIST=['להזמין עוגה (במלון או בקונדיטוריה ביאס), ולוודא שמתאימה לאלרגיה של ליה','בלונים ושלט "יום הולדת שמח" במזוודה','מתנה, מוסתרת היטב 🎁','נרות יום הולדת ומצית','לבקש מהמלון קישוט בחדר או עוגה בארוחת הבוקר','להזמין שולחן לארוחת הערב ולספר שיש יום הולדת','ללמוד את השיר: "עִיד מִילַאד סַעִיד"'];
-const PACK_LIST=['💉 אפיפן לליה (עדיף שניים), בתיק היד ולא במזוודה, עם מכתב רופא באנגלית','🥜 להודיע לאתיחאד מראש על אלרגיה לבוטנים, ולהזכיר בעלייה למטוס','דרכונים, בתוקף לפחות 6 חודשים','כרטיסי הטיסה ושוברים (באפליקציה)','רישיון נהיגה (לבדוק עם Enterprise אם צריך גם רישיון בינלאומי)','כרטיס אשראי של הנהג, עם מסגרת פנויה לפיקדון','🪑 בוסטר לליה, בתוך המזוודה','מתאם חשמל בריטי (סוג G)','📞 לעדכן את Dusit Thani שמגיעים בערך ב-22:30','מטען נייד ומטען לרכב','בגדי ים, כובעים וקרם הגנה','בגד ארוך וכיסוי ראש למסגד','מעיל קל למזגנים ולערב במדבר','🕎 חנוכייה לנסיעה','🕯️ נרות חנוכה: קופסה של 44 (בטיול מדליקים 35, כולל שמש)','מצית אחד בתיק היד או בכיס, לא במזוודה','מתנה ונרות ליום ההולדת של ליה','משחקים ושירים לנסיעות ברכב','אישור ביטוח נסיעות (באפליקציה, בשוברים)','תרופות קבועות','♿ כרטיס נכה, ואישור באנגלית: בהרבה אטרקציות יש כניסה מהירה או הנחה (People of Determination)','📱 להתקין את אפליקציית Layla לכסף'];
+const PACK_LIST=["#📄 מסמכים וכסף", "דרכונים, בתוקף לפחות 6 חודשים", "רישיון נהיגה רגיל ורישיון בינלאומי", "🖨️ הדפסות: כרטיסי טיסה, ביטוח (הראל ו-RentalCover), שוברי מלונות ורכב", "כרטיס אשראי של הנהג (פיקדון 3,000 AED) ומזומן", "♿ כרטיס נכה ואישור באנגלית (כניסה מהירה והנחות)", "📱 להתקין את אפליקציית Layla לכסף", "#💊 תרופות (בתיק היד)", "💉 אפיפן לליה (עדיף שניים) ומכתב רופא באנגלית", "אקמול ילדים", "אקמול מבוגרים", "נורופן", "מדחום", "פלסטרים", "חומר חיטוי", "מזרקים (?)", "אנטיביוטיקה", "תרופות קבועות", "#👕 בגדים (לכל אחד)", "8 חולצות קצרות", "2 חולצות ארוכות דקות", "3 מכנסיים קצרים", "3 מכנסיים ארוכים", "2 סווטשירטים", "1 מכנס חם", "2 פיג׳מות", "11 תחתונים", "9 זוגות גרביים", "1 מעיל קל (למזגנים ולערב)", "בגד ארוך וכיסוי ראש למסגד", "חולצה לטיסה", "#🏖️ ים ושמש", "בגדי ים", "כובע ים", "כובע", "משקפי שמש", "משקפות שחייה", "מצופים", "כפכפים", "קרם הגנה", "מגבות", "#🧴 רחצה וטיפוח", "משחות ומברשות שיניים", "מסרק", "גומיות", "איפור", "דאודורנט (?)", "#🔌 חשמל", "מתאם חשמל בריטי (סוג G)", "מטענים", "סוללה ניידת", "מטען לרכב", "אוזניות", "#🎒 לטיסה ולדרך", "מים", "חטיפים (בלי בוטנים!)", "כריות לטיסה", "בגדי החלפה בתיק היד", "שקיות", "מגבונים (?)", "פעילויות לילדים", "ספרים", "משחקים ושירים לנסיעות ברכב", "#🧳 ציוד", "🪑 בוסטר לליה, בתוך המזוודה", "עגלה", "סל תינוק (?)", "#🕎 חנוכה ויום הולדת", "🕎 חנוכייה לנסיעה", "🕯️ נרות חנוכה: קופסה של 44", "מצית אחד בתיק היד או בכיס, לא במזוודה", "מתנה ונרות ליום ההולדת של ליה", "#✅ לפני היציאה", "🥜 להודיע לאתיחאד על האלרגיה לבוטנים, ולהזכיר בעלייה למטוס", "📞 לעדכן את Dusit Thani שמגיעים בערך ב-22:30", "🚌 להסיר באל על את קטעי האוטובוס EY5424 ו-EY5417"];
 
 /* ---------- ICON helper ---------- */
 const ico=(id,cls='')=>`<svg class="i ${cls}"><use href="#${id}"/></svg>`;
@@ -1466,7 +1468,7 @@ function renderMissions(){
   const upd=()=>{const w=r.children[0].offsetWidth+12;let k=Math.round(Math.abs(r.scrollLeft)/w);k=Math.max(0,Math.min(n-1,k));[...d.children].forEach((x,i)=>x.classList.toggle('on',i===k))};
   r.addEventListener('scroll',upd,{passive:true});upd();
 })();
-const APP_VER='20261128-0015';
+const APP_VER='20261128-1430';
 function verLabel(){if(!APP_VER)return 'פיתוח';const m=APP_VER.match(/^(\d{4})(\d\d)(\d\d)-(\d\d)(\d\d)$/);return m?(+m[3])+'.'+(+m[2])+' בשעה '+m[4]+':'+m[5]:APP_VER}
 async function hardRefresh(){
   const bt=document.getElementById('refBtn');if(bt)bt.textContent='מתעדכן…';toast('🔄 מתעדכן…');
@@ -1716,7 +1718,7 @@ function renderMeals(){
 /* ---------- CHECKLISTS ---------- */
 function renderList(elId,key,items){
   const st=store.get(key,{});const el=document.getElementById(elId);
-  el.insertAdjacentHTML('beforeend',items.map((t,i)=>`<label><input type="checkbox" data-i="${i}" ${st[i]?'checked':''}>${t}</label>`).join(''));
+  el.insertAdjacentHTML('beforeend',items.map((t,i)=>t[0]==='#'?`<h4 class="clh">${t.slice(1)}</h4>`:`<label><input type="checkbox" data-i="${i}" ${st[i]?'checked':''}>${t}</label>`).join(''));
   el.querySelectorAll('input').forEach(c=>c.onchange=()=>{const st=store.get(key,{});if(c.checked)st[c.dataset.i]=1;else delete st[c.dataset.i];store.set(key,st);if(key==='pl'||key==='ml')syncSet('l:'+key+':'+c.dataset.i,c.checked?'1':'0')});
 }
 

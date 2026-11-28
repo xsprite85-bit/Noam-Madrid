@@ -1,4 +1,4 @@
-const V='nd-v12';
+const V='nd-v13';
 const CORE=['./','./index.html','./manifest.webmanifest','./bg.jpg','./car.jpg','./icon-192.png','./icon-512.png','./icon-maskable-512.png','./apple-touch-icon.png'];
 const FONT_HOSTS=['fonts.googleapis.com','fonts.gstatic.com'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(V).then(c=>c.addAll(CORE)).then(()=>self.skipWaiting()))});
