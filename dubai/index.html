@@ -190,6 +190,18 @@ h3{margin:0 0 6px;font-size:17px}
 /* CHECKLIST */
 .cl label{display:flex;gap:10px;align-items:center;padding:9px 0;border-bottom:1px solid #e6eaf3;font-size:15px}
 .cl label:last-child{border:none}
+.packbtn{display:flex;width:100%;justify-content:space-between;align-items:center;gap:8px;margin:10px 0 12px;padding:13px 16px;border:0;border-radius:16px;background:linear-gradient(135deg,#d9b25f,#b8893a);color:#1d2a44;font:700 17px inherit;font-family:inherit;box-shadow:0 4px 14px rgba(0,0,0,.18);cursor:pointer}
+.packbtn .pkc{font-size:13px;font-weight:600;background:rgba(255,255,255,.55);padding:3px 10px;border-radius:99px}
+.pwin{position:fixed;inset:0;z-index:55;background:#f6f3ea;display:flex;flex-direction:column}
+.pwin[hidden]{display:none}
+.pwh{display:flex;gap:12px;align-items:center;padding:calc(12px + env(safe-area-inset-top)) 16px 10px;background:var(--navy);color:#fff}
+.pwh b{display:block;font-size:20px}.pwh small{display:block;font-size:12px;opacity:.8;margin-top:2px}
+.pwx{flex:none;width:40px;height:40px;border-radius:50%;border:0;background:rgba(255,255,255,.15);color:#fff;font-size:18px}
+.pwbar{height:6px;background:#e3dcc8}.pwfill{height:100%;width:0;background:linear-gradient(90deg,#2a9d6f,#57c48f);transition:width .3s}
+.pwcnt{text-align:center;font-size:14px;font-weight:600;color:#3d4a66;padding:8px}
+.pwbody{flex:1;overflow-y:auto;padding:0 12px calc(24px + env(safe-area-inset-bottom))}
+.pwbody .panel{margin:0}
+.cl label:has(input:checked){color:#8a93a6;text-decoration:line-through}
 .cl h4.clh{margin:14px 0 2px;font-size:15px;color:var(--navy);border-bottom:2px solid #d9c79a;padding-bottom:4px}
 .cl input{width:20px;height:20px;accent-color:var(--navy)}
 
@@ -487,6 +499,7 @@ body{background:#0a4a94!important}
   <section class="view on" id="v-plan">
     <h2><svg class="i"><use href="#cal"/></svg>הלוז היומי <small style="font-size:12px;font-weight:400;color:var(--muted)">· אפשר גם להחליק ימינה ושמאלה</small></h2>
     <div class="chips" id="chips"></div>
+    <button class="packbtn" onclick="openPack()">🧳 צ׳קליסט אריזה <span class="pkc"></span></button>
     <div id="day"></div>
   </section>
 
@@ -846,10 +859,7 @@ body{background:#0a4a94!important}
       <div class="note">לא מצלמים אנשים מקומיים בלי רשות, ולא מצלמים מבני ממשל, צבא או שדות תעופה מבחוץ. מים מהברז בטוחים, אבל רוב האנשים שותים מבקבוק.</div>
     </div>
 
-    <div class="panel cl" id="packList">
-      <h3>🎒 רשימת אריזה</h3>
-      <div class="note">משותפת לכל המשפחה: מה שמסמנים בטלפון אחד מסומן אצל כולם.</div>
-    </div>
+    <button class="packbtn" onclick="openPack()">🧳 צ׳קליסט אריזה <span class="pkc"></span></button>
   <button class="surbtn" id="surBtn">💌 הברכה של אבא ואמא</button>
   <div class="panel dark" style="text-align:center;margin-top:14px"><div class="note" id="verInfo" style="margin-bottom:10px"></div><button class="btn gold" id="refBtn" style="display:inline-flex">🔄 רענון האפליקציה</button> <button class="btn ghost" onclick="pickWho()" style="display:inline-flex">👤 החלפת משתמש</button><div class="note" style="margin-top:8px;font-size:12px">מוחק את העותק השמור ומוריד את הגרסה העדכנית. ההתקדמות והשיאים נשמרים.</div></div>
   </section>
@@ -889,6 +899,11 @@ body{background:#0a4a94!important}
   <div class="foot">נבנה באהבה לבר המצווה של נועם 🐪<br>כל השעות לפי שעון האמירויות, אלא אם כתוב אחרת.<br><span id="verLine" style="opacity:.6"></span></div>
 </main>
 
+<div id="packWin" class="pwin" dir="rtl" hidden>
+  <div class="pwh"><button class="pwx" onclick="closePack()" aria-label="סגירה">✕</button><div><b>🧳 צ׳קליסט אריזה</b><small>משותף לכל המשפחה: מה שמסמנים בטלפון אחד מסומן אצל כולם</small></div></div>
+  <div class="pwbar"><div class="pwfill" id="pwFill"></div></div><div class="pwcnt" id="pwCnt"></div>
+  <div class="pwbody"><div class="panel cl" id="packList"></div></div>
+</div>
 <nav class="bnav">
   <div class="in">
     <button data-v="plan" class="on"><svg class="i"><use href="#cal"/></svg>לוז</button>
@@ -1119,7 +1134,7 @@ function applyShared(data){
     else if(k.startsWith('l:')){const [,lk,i]=k.split(':');const st=store.get(lk,{});if(!!st[i]!==v){if(v)st[i]=1;else delete st[i];store.set(lk,st);ch=true;
       const box=document.querySelector('#'+(lk==='pl'?'packList':'matchList')+' input[data-i="'+i+'"]');if(box)box.checked=v}}
   });
-  if(ch){store.set('booked',booked);renderBookList();if(window.__day&&!document.querySelector('.ov,.gm'))renderDay(window.__day)}
+  if(ch){store.set('booked',booked);renderBookList();if(typeof packUpd==='function')packUpd();if(window.__day&&!document.querySelector('.ov,.gm'))renderDay(window.__day)}
   syncAt=Date.now();syncStatus();
 }
 function syncStatus(){const el=document.getElementById('syncStat');if(!el)return;
@@ -1468,7 +1483,7 @@ function renderMissions(){
   const upd=()=>{const w=r.children[0].offsetWidth+12;let k=Math.round(Math.abs(r.scrollLeft)/w);k=Math.max(0,Math.min(n-1,k));[...d.children].forEach((x,i)=>x.classList.toggle('on',i===k))};
   r.addEventListener('scroll',upd,{passive:true});upd();
 })();
-const APP_VER='20261128-1430';
+const APP_VER='20261128-1440';
 function verLabel(){if(!APP_VER)return 'פיתוח';const m=APP_VER.match(/^(\d{4})(\d\d)(\d\d)-(\d\d)(\d\d)$/);return m?(+m[3])+'.'+(+m[2])+' בשעה '+m[4]+':'+m[5]:APP_VER}
 async function hardRefresh(){
   const bt=document.getElementById('refBtn');if(bt)bt.textContent='מתעדכן…';toast('🔄 מתעדכן…');
@@ -1722,6 +1737,14 @@ function renderList(elId,key,items){
   el.querySelectorAll('input').forEach(c=>c.onchange=()=>{const st=store.get(key,{});if(c.checked)st[c.dataset.i]=1;else delete st[c.dataset.i];store.set(key,st);if(key==='pl'||key==='ml')syncSet('l:'+key+':'+c.dataset.i,c.checked?'1':'0')});
 }
 
+
+/* ---------- PACKING WINDOW ---------- */
+function packCount(){const st=store.get('pl',{});const ix=PACK_LIST.map((t,i)=>t[0]==='#'?-1:i).filter(i=>i>=0);const done=ix.filter(i=>st[i]).length;return [done,ix.length]}
+function packUpd(){const [d,n]=packCount();document.querySelectorAll('.pkc').forEach(e=>e.textContent=d+'/'+n);const f=document.getElementById('pwFill');if(f)f.style.width=(n?d/n*100:0)+'%';const c=document.getElementById('pwCnt');if(c)c.textContent=d===n?'הכול ארוז! 🎉':'ארזנו '+d+' מתוך '+n}
+function openPack(){document.getElementById('packWin').hidden=false;document.body.style.overflow='hidden';packUpd();if(location.hash!=='#pack')history.pushState(null,'','#pack')}
+function closePack(){document.getElementById('packWin').hidden=true;document.body.style.overflow='';if(location.hash==='#pack')history.back()}
+window.addEventListener('popstate',()=>{if(location.hash!=='#pack'){document.getElementById('packWin').hidden=true;document.body.style.overflow=''}});
+document.addEventListener('change',e=>{if(e.target.closest&&e.target.closest('#packList'))packUpd()});
 /* ---------- TRANSLATOR ---------- */
 (function(){
   const st={sl:'iw',tl:'es'};
@@ -2490,7 +2513,7 @@ function syncInit(){
   window.addEventListener('pageshow',e=>{if(e.persisted)goToday()});
   setInterval(()=>{if(uaeToday()!==lastDate)goToday()},60000);
   renderMissions();renderPhrases();renderMeals();
-  renderList('matchList','ml',MATCH_LIST);renderList('packList','pl',PACK_LIST);renderDocs();renderMenorah();setInterval(renderMenorah,60000);applyWho();convInit();renderBookList();syncStart();if(!store.get('who',''))setTimeout(()=>{if(!document.querySelector('.ov'))pickWho()},900);
+  renderList('matchList','ml',MATCH_LIST);renderList('packList','pl',PACK_LIST);packUpd();if(location.hash==='#pack')openPack();renderDocs();renderMenorah();setInterval(renderMenorah,60000);applyWho();convInit();renderBookList();syncStart();if(!store.get('who',''))setTimeout(()=>{if(!document.querySelector('.ov'))pickWho()},900);
   tick();setInterval(tick,1000);
 })();
 </script>
